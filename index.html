@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Valery Gorbunov Portfolio</title>
+  <style>
+    /* Basic Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: 'MS Sans Serif', Arial, sans-serif;
+      font-size: 12px;
+      color: black;
+    }
+    /* Windows XP Bliss Background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, #7ec850 50%, #87ceeb 50%);
+    }
+    /* Additional hills */
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: 0;
+      left: -25%;
+      width: 150%;
+      height: 50%;
+      background: radial-gradient(circle at 50% 100%, #7ec850, #7ec850 60%, transparent 60%), radial-gradient(circle at 20% 100%, #7ec850, #7ec850 50%, transparent 50%);
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    /* Loading Screen */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #C0C0C0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    #loading-screen h1 {
+      color: black;
+    }
+    /* Desktop Icons */
+    .desktop-icon {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 60px;
+      margin: 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .desktop-icon .icon {
+      width: 32px;
+      height: 32px;
+      background-color: #C0C0C0;
+      border: 1px solid #000;
+      position: relative;
+    }
+    /* Portfolio Icon */
+    #portfolio-icon .icon::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 8px;
+      width: 16px;
+      height: 12px;
+      background-color: #00FF00; /* Green rectangle */
+      border: 1px solid #000;
+    }
+    /* Game Icon */
+    #game-icon .icon::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      width: 16px;
+      height: 16px;
+      background-color: #FFD700; /* Gold square */
+      border: 1px solid #000;
+    }
+    .desktop-icon span {
+      margin-top: 5px;
+      color: white;
+      text-shadow: 1px 1px black;
+      text-align: center;
+    }
+    /* Window */
+    .window {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 2px solid #000;
+      border-top-color: #fff;
+      border-left-color: #fff;
+      width: 600px;
+      background-color: #c0c0c0;
+      cursor: default;
+      z-index: 1;
+      display: none;
+      overflow: hidden;
+    }
+    .title-bar {
+      background: linear-gradient(#000080, #000060);
+      color: white;
+      padding: 2px 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: move;
+      user-select: none;
+    }
+    .title-bar-text {
+      font-weight: bold;
+    }
+    .title-bar-controls {
+      display: flex;
+    }
+    .title-bar-controls button {
+      background-color: #c0c0c0;
+      border: 1px solid #fff;
+      width: 16px;
+      height: 14px;
+      margin-left: 2px;
+      padding: 0;
+      position: relative;
+      cursor: pointer;
+    }
+    /* Window Control Icons */
+    .title-bar-controls button.minimize-button::before {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 3px;
+      width: 10px;
+      height: 2px;
+      background-color: black;
+    }
+    .title-bar-controls button.maximize-button::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 10px;
+      height: 8px;
+      border: 1px solid black;
+    }
+    .title-bar-controls button.close-button::before,
+    .title-bar-controls button.close-button::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 7px;
+      width: 2px;
+      height: 8px;
+      background-color: black;
+    }
+    .title-bar-controls button.close-button::before {
+      transform: rotate(45deg);
+    }
+    .title-bar-controls button.close-button::after {
+      transform: rotate(-45deg);
+    }
+    .content {
+      padding: 10px;
+      overflow: auto; /* Allows scrolling inside the content area */
+      max-height: calc(100% - 30px);
+    }
+    h1, h2, h3 {
+      margin: 10px 0;
+    }
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    .skills, .experience, .education, .portfolio {
+      margin-bottom: 20px;
+    }
+    .experience-item {
+      margin-bottom: 10px;
+    }
+    a {
+      color: blue;
+      text-decoration: underline;
+    }
+    /* Taskbar */
+    #taskbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 30px;
+      background-color: #c0c0c0;
+      border-top: 2px solid #fff;
+      border-left: 2px solid #fff;
+      display: flex;
+      align-items: center;
+      z-index: 5;
+    }
+    #start-button {
+      background-color: #c0c0c0;
+      border: 2px solid #fff;
+      border-top-color: #000;
+      border-left-color: #000;
+      padding: 5px 10px;
+      cursor: pointer;
+      margin-left: 5px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    #start-button::before {
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 16px;
+      height: 16px;
+      background-color: #000080;
+      border: 1px solid #fff;
+    }
+    #start-button span {
+      margin-left: 20px;
+    }
+    #taskbar-buttons {
+      display: flex;
+      align-items: center;
+      margin-left: 5px;
+    }
+    .taskbar-button {
+      background-color: #c0c0c0;
+      border: 2px solid #fff;
+      border-top-color: #000;
+      border-left-color: #000;
+      padding: 5px 10px;
+      cursor: pointer;
+      margin-right: 2px;
+      display: flex;
+      align-items: center;
+    }
+    .taskbar-button.active {
+      border-top-color: #fff;
+      border-left-color: #fff;
+      border-bottom-color: #000;
+      border-right-color: #000;
+    }
+    /* Start Menu */
+    #start-menu {
+      position: fixed;
+      bottom: 30px;
+      left: 0;
+      background-color: #c0c0c0;
+      border: 2px solid #000;
+      border-top-color: #fff;
+      border-left-color: #fff;
+      width: 200px;
+      display: none;
+      padding: 10px;
+      z-index: 10;
+    }
+    #start-menu p {
+      margin: 0;
+    }
+    /* Prevent selection */
+    .unselectable {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <h1>Loading...</h1>
+  </div>
+  <!-- Desktop Icons -->
+  <div class="desktop-icon unselectable" id="portfolio-icon" style="top: 50px; left: 50px;">
+    <div class="icon"></div>
+    <span>Portfolio</span>
+  </div>
+  <div class="desktop-icon unselectable" id="game-icon" style="top: 130px; left: 50px;">
+    <div class="icon"></div>
+    <span>Snake Game</span>
+  </div>
+  <!-- Taskbar -->
+  <div id="taskbar">
+    <div id="start-button">
+      <span>Start</span>
+    </div>
+    <div id="taskbar-buttons"></div>
+  </div>
+  <!-- Start Menu -->
+  <div id="start-menu">
+    <p>Hello! I'm Valery, passionate about creating stunning visual effects and immersive environments. Thanks for visiting my portfolio!</p>
+  </div>
+  <!-- Portfolio Window -->
+  <div class="window" id="portfolio-window">
+    <div class="title-bar" id="portfolio-title-bar">
+      <div class="title-bar-text">Portfolio - Valery Gorbunov</div>
+      <div class="title-bar-controls">
+        <button class="minimize-button"></button>
+        <button class="maximize-button"></button>
+        <button class="close-button"></button>
+      </div>
+    </div>
+    <div class="content">
+      <!-- Portfolio Content -->
+      <h1>Valery Gorbunov</h1>
+      <p>VFX artist with experience in lighting and cinematics.</p>
+      <p><strong>Location:</strong> Sosenskoye, Moscow City, Russia</p>
+      <p><strong>Contact:</strong> Telegram: <a href="https://t.me/VGFOR">@VGFOR</a>, Email: <a href="mailto:xxater@gmail.com">xxater@gmail.com</a></p>
+      <div class="summary">
+        <h2>Summary</h2>
+        <p>Unreal Engine artist experienced in environment art, lighting, VFX, and cinematics.</p>
+      </div>
+      <div class="skills">
+        <h2>Skills</h2>
+        <ul>
+          <li>Unreal Engine</li>
+          <li>ZBrush</li>
+          <li>Maya</li>
+          <li>Blender</li>
+          <li>Substance Designer/Painter</li>
+          <li>Houdini</li>
+          <li>Embergen</li>
+          <li>Photoshop</li>
+          <li>After Effects</li>
+        </ul>
+      </div>
+      <div class="experience">
+        <h2>Experience</h2>
+        <!-- Experience Items -->
+        <!-- (Your experience content here) -->
+      </div>
+      <div class="education">
+        <h2>Education</h2>
+        <p><strong>Higher School of Economics</strong></p>
+        <p>Bachelor's degree in Game Design and Interactive Applications (2016 - 2021)</p>
+      </div>
+      <div class="portfolio">
+        <h2>Portfolio</h2>
+        <p>Replace the images and videos below with your own work.</p>
+        <!-- Placeholder images -->
+        <div style="width:100%; height:200px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; margin-bottom:10px;">
+          <span>Image 1 Placeholder</span>
+        </div>
+        <div style="width:100%; height:200px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; margin-bottom:10px;">
+          <span>Image 2 Placeholder</span>
+        </div>
+        <!-- Placeholder video -->
+        <div style="width:100%; height:200px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000;">
+          <span>Video Placeholder</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Game Window -->
+  <div class="window" id="game-window">
+    <div class="title-bar" id="game-title-bar">
+      <div class="title-bar-text">Snake Game</div>
+      <div class="title-bar-controls">
+        <button class="minimize-button"></button>
+        <button class="maximize-button"></button>
+        <button class="close-button"></button>
+      </div>
+    </div>
+    <div class="content" style="padding: 0;">
+      <canvas id="game-canvas" width="400" height="400"></canvas>
+    </div>
+  </div>
+
+  <script>
+    // Loading screen
+    window.onload = function() {
+      setTimeout(function() {
+        document.getElementById('loading-screen').style.display = 'none';
+        document.body.style.overflow = 'auto'; // Restore scrolling if needed
+      }, 2000);
+    };
+
+    // Start button functionality
+    var startButton = document.getElementById('start-button');
+    var startMenu = document.getElementById('start-menu');
+    var isStartMenuOpen = false;
+
+    startButton.addEventListener('click', function() {
+      isStartMenuOpen = !isStartMenuOpen;
+      startMenu.style.display = isStartMenuOpen ? 'block' : 'none';
+    });
+
+    // Close the start menu when clicking outside
+    document.addEventListener('click', function(event) {
+      var isClickInside = startButton.contains(event.target) || startMenu.contains(event.target);
+      if (!isClickInside) {
+        startMenu.style.display = 'none';
+        isStartMenuOpen = false;
+      }
+    });
+
+    // Desktop icon to open the Portfolio window
+    var portfolioIcon = document.getElementById('portfolio-icon');
+    var portfolioWindow = document.getElementById('portfolio-window');
+    var taskbarButtons = document.getElementById('taskbar-buttons');
+
+    portfolioIcon.addEventListener('dblclick', function() {
+      openWindow(portfolioWindow, 'Portfolio - Valery Gorbunov', 'portfolio-taskbar-button');
+    });
+
+    // Desktop icon to open the Game window
+    var gameIcon = document.getElementById('game-icon');
+    var gameWindow = document.getElementById('game-window');
+
+    gameIcon.addEventListener('dblclick', function() {
+      openWindow(gameWindow, 'Snake Game', 'game-taskbar-button');
+      startGame();
+    });
+
+    // Window controls
+    function addWindowControls(windowElement, titleBarId, taskbarId, windowTitle) {
+      var minimizeButton = windowElement.querySelector('.minimize-button');
+      var maximizeButton = windowElement.querySelector('.maximize-button');
+      var closeButton = windowElement.querySelector('.close-button');
+      var isMaximized = false;
+      var prevPosition = {};
+      var prevSize = {};
+
+      minimizeButton.addEventListener('click', function() {
+        windowElement.style.display = 'none';
+        var taskbarButton = document.getElementById(taskbarId);
+        if (taskbarButton) taskbarButton.classList.remove('active');
+        if (windowElement === gameWindow) {
+          stopGame();
+        }
+      });
+
+      maximizeButton.addEventListener('click', function() {
+        if (!isMaximized) {
+          // Save previous position and size
+          prevPosition = {
+            top: windowElement.style.top,
+            left: windowElement.style.left
+          };
+          prevSize = {
+            width: windowElement.style.width,
+            height: windowElement.style.height
+          };
+          // Maximize
+          windowElement.style.top = '0';
+          windowElement.style.left = '0';
+          windowElement.style.width = '100%';
+          windowElement.style.height = 'calc(100% - 30px)';
+          windowElement.querySelector('.content').style.maxHeight = 'calc(100% - 30px)';
+          isMaximized = true;
+        } else {
+          // Restore previous position and size
+          windowElement.style.top = prevPosition.top;
+          windowElement.style.left = prevPosition.left;
+          windowElement.style.width = prevSize.width;
+          windowElement.style.height = prevSize.height;
+          windowElement.querySelector('.content').style.maxHeight = 'calc(100% - 30px)';
+          isMaximized = false;
+        }
+      });
+
+      closeButton.addEventListener('click', function() {
+        windowElement.style.display = 'none';
+        removeTaskbarButton(taskbarId);
+        if (windowElement === gameWindow) {
+          stopGame();
+        }
+      });
+
+      // Make the window draggable
+      var isMouseDown = false;
+      var offset = [0, 0];
+      var titleBar = document.getElementById(titleBarId);
+
+      titleBar.addEventListener('mousedown', function(e) {
+        isMouseDown = true;
+        offset = [
+          windowElement.offsetLeft - e.clientX,
+          windowElement.offsetTop - e.clientY
+        ];
+        windowElement.classList.add('unselectable');
+      }, true);
+
+      document.addEventListener('mouseup', function() {
+        isMouseDown = false;
+        windowElement.classList.remove('unselectable');
+      }, true);
+
+      document.addEventListener('mousemove', function(e) {
+        if (isMouseDown) {
+          windowElement.style.left = (e.clientX + offset[0]) + 'px';
+          windowElement.style.top = (e.clientY + offset[1]) + 'px';
+        }
+      }, true);
+
+      // Bring window to front when clicked
+      windowElement.addEventListener('mousedown', function() {
+        windowElement.style.zIndex = ++zIndexCounter;
+      });
+    }
+
+    // Initialize windows
+    addWindowControls(portfolioWindow, 'portfolio-title-bar', 'portfolio-taskbar-button', 'Portfolio - Valery Gorbunov');
+    addWindowControls(gameWindow, 'game-title-bar', 'game-taskbar-button', 'Snake Game');
+
+    // Taskbar button functionality
+    function addTaskbarButton(title, id, windowElement) {
+      // Check if button already exists
+      if (document.getElementById(id)) return;
+
+      var button = document.createElement('div');
+      button.className = 'taskbar-button active';
+      button.id = id;
+      button.textContent = title;
+      taskbarButtons.appendChild(button);
+
+      button.addEventListener('click', function() {
+        if (windowElement.style.display === 'none') {
+          windowElement.style.display = 'block';
+          button.classList.add('active');
+          if (windowElement === gameWindow) {
+            startGame();
+          }
+        } else {
+          windowElement.style.display = 'none';
+          button.classList.remove('active');
+          if (windowElement === gameWindow) {
+            stopGame();
+          }
+        }
+      });
+    }
+
+    function removeTaskbarButton(id) {
+      var button = document.getElementById(id);
+      if (button) {
+        taskbarButtons.removeChild(button);
+      }
+    }
+
+    function openWindow(windowElement, title, taskbarId) {
+      windowElement.style.display = 'block';
+      addTaskbarButton(title, taskbarId, windowElement);
+      windowElement.style.zIndex = ++zIndexCounter;
+    }
+
+    var zIndexCounter = 1;
+
+    // Snake Game Implementation
+    var gameInterval;
+    var xVelocity = 0;
+    var yVelocity = 0;
+    var snake = [];
+    var apple = {};
+    var score = 0;
+
+    function keyDown(e) {
+      switch (e.keyCode) {
+        case 37: // Left
+          if (xVelocity === 0) {
+            xVelocity = -1;
+            yVelocity = 0;
+          }
+          break;
+        case 38: // Up
+          if (yVelocity === 0) {
+            xVelocity = 0;
+            yVelocity = -1;
+          }
+          break;
+        case 39: // Right
+          if (xVelocity === 0) {
+            xVelocity = 1;
+            yVelocity = 0;
+          }
+          break;
+        case 40: // Down
+          if (yVelocity === 0) {
+            xVelocity = 0;
+            yVelocity = 1;
+          }
+          break;
+      }
+    }
+
+    function startGame() {
+      var canvas = document.getElementById('game-canvas');
+      var ctx = canvas.getContext('2d');
+      var gridSize = 20;
+      var tileCount = canvas.width / gridSize;
+      xVelocity = 0;
+      yVelocity = 0;
+      snake = [{ x: 10, y: 10 }];
+      apple = { x: 5, y: 5 };
+      score = 0;
+
+      document.addEventListener('keydown', keyDown);
+
+      function gameLoop() {
+        var head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
+
+        // Wrap around the edges
+        if (head.x < 0) head.x = tileCount - 1;
+        if (head.x >= tileCount) head.x = 0;
+        if (head.y < 0) head.y = tileCount - 1;
+        if (head.y >= tileCount) head.y = 0;
+
+        // Check for collision with self
+        for (var i = 0; i < snake.length; i++) {
+          if (snake[i].x === head.x && snake[i].y === head.y) {
+            // Game over
+            alert('Game Over! Your score: ' + score);
+            stopGame();
+            return;
+          }
+        }
+
+        snake.unshift(head);
+
+        // Check for apple
+        if (head.x === apple.x && head.y === apple.y) {
+          score++;
+          // Place new apple
+          apple.x = Math.floor(Math.random() * tileCount);
+          apple.y = Math.floor(Math.random() * tileCount);
+        } else {
+          snake.pop();
+        }
+
+        // Draw everything
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = '#0F0';
+        for (var i = 0; i < snake.length; i++) {
+          ctx.fillRect(snake[i].x * gridSize, snake[i].y * gridSize, gridSize - 2, gridSize - 2);
+        }
+
+        ctx.fillStyle = '#F00';
+        ctx.fillRect(apple.x * gridSize, apple.y * gridSize, gridSize - 2, gridSize - 2);
+      }
+
+      gameInterval = setInterval(gameLoop, 100);
+    }
+
+    function stopGame() {
+      clearInterval(gameInterval);
+      document.removeEventListener('keydown', keyDown);
+    }
+  </script>
+</body>
+</html>
