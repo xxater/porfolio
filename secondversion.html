@@ -228,7 +228,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 70px;
+      height: 80px;
       background-color: #C0C0C0;
       border-top: 2px solid #fff;
       border-left: 2px solid #fff;
@@ -313,7 +313,7 @@
     /* Start Menu */
     #start-menu {
       position: fixed;
-      bottom: 80px;
+      bottom: 90px;
       left: 10px;
       background-color: #C0C0C0;
       border: 2px solid #000;
@@ -378,6 +378,10 @@
       .taskbar-button {
         padding: 8px 14px;
         font-size: 14px;
+      }
+      #flap-button {
+        padding: 12px 24px;
+        font-size: 18px;
       }
     }
 
@@ -873,7 +877,7 @@
         pipes.push({
           x: flappyCanvas.width,
           top: topPipeHeight,
-          bottom: flappyCanvas.height - (flappyCanvas.height - bottomPipeY)
+          bottom: bottomPipeY
         });
         lastPipeTime = currentTime;
       }
