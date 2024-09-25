@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Valery Gorbunov Portfolio</title>
+  <style>
+    /* Reset and Basic Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'MS Sans Serif', Arial, sans-serif;
+      font-size: 14px;
+      color: black;
+      background-color: #008080; /* Windows 98 Teal */
+      overflow: hidden;
+      position: relative;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Loading Screen */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #008080;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      flex-direction: column;
+    }
+    #loading-screen h1 {
+      color: white;
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px black;
+    }
+    #loading-screen .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #ffffff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Desktop Icons */
+    .desktop-icon {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 70px;
+      margin: 15px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.2s;
+    }
+    .desktop-icon:hover {
+      transform: scale(1.1);
+    }
+    .desktop-icon .icon {
+      width: 64px;
+      height: 64px;
+      background-color: #C0C0C0;
+      border: 2px solid #000;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 5px;
+      position: relative;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+    .desktop-icon .icon svg {
+      width: 32px;
+      height: 32px;
+      fill: #000;
+    }
+    .desktop-icon span {
+      color: black;
+      font-size: 12px;
+      text-align: center;
+      word-break: break-word;
+      text-shadow: 1px 1px white;
+    }
+
+    /* Specific Icons */
+    /* Portfolio Icon */
+    #portfolio-icon .icon svg {
+      fill: #0000FF; /* Blue */
+    }
+
+    /* Flappy Game Icon */
+    #flappy-icon .icon svg {
+      fill: #FF4500; /* Orange Red */
+    }
+
+    /* Window Styles */
+    .window {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 2px solid #000;
+      border-top-color: #fff;
+      border-left-color: #fff;
+      width: 90%;
+      max-width: 600px;
+      background-color: #C0C0C0;
+      cursor: default;
+      z-index: 10;
+      display: none;
+      overflow: hidden;
+      border-radius: 4px;
+      box-shadow: 4px 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+    .title-bar {
+      background: linear-gradient(#000080, #000060);
+      color: white;
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: move;
+      user-select: none;
+      font-weight: bold;
+      font-size: 16px;
+      border-bottom: 2px solid #fff;
+    }
+    .title-bar-controls {
+      display: flex;
+    }
+    .title-bar-controls button {
+      background-color: #C0C0C0;
+      border: 1px solid #fff;
+      width: 20px;
+      height: 20px;
+      margin-left: 4px;
+      padding: 0;
+      position: relative;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background-color 0.2s;
+    }
+    .title-bar-controls button:hover {
+      background-color: #A9A9A9;
+    }
+    /* Window Control Icons */
+    .title-bar-controls button.minimize-button::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 4px;
+      width: 12px;
+      height: 2px;
+      background-color: black;
+    }
+    .title-bar-controls button.maximize-button::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 12px;
+      height: 12px;
+      border: 1px solid black;
+    }
+    .title-bar-controls button.close-button::before,
+    .title-bar-controls button.close-button::after {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 8px;
+      width: 2px;
+      height: 12px;
+      background-color: black;
+    }
+    .title-bar-controls button.close-button::before {
+      transform: rotate(45deg);
+    }
+    .title-bar-controls button.close-button::after {
+      transform: rotate(-45deg);
+    }
+    .content {
+      padding: 15px;
+      overflow: auto;
+      max-height: calc(100vh - 80px);
+      background-color: #D3D3D3;
+    }
+    h1, h2, h3 {
+      margin: 10px 0;
+    }
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    .skills, .experience, .education, .portfolio {
+      margin-bottom: 20px;
+    }
+    .experience-item {
+      margin-bottom: 15px;
+      background-color: #FFFFFF;
+      padding: 10px;
+      border-radius: 4px;
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+    a {
+      color: blue;
+      text-decoration: underline;
+    }
+
+    /* Taskbar */
+    #taskbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background-color: #C0C0C0;
+      border-top: 2px solid #fff;
+      border-left: 2px solid #fff;
+      display: flex;
+      align-items: center;
+      z-index: 20;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
+    }
+    #start-button {
+      background-color: #C0C0C0;
+      border: 2px solid #fff;
+      border-top-color: #000;
+      border-left-color: #000;
+      padding: 8px 12px;
+      cursor: pointer;
+      margin-left: 10px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      border-radius: 2px;
+      user-select: none;
+      transition: background-color 0.2s;
+    }
+    #start-button:hover {
+      background-color: #A9A9A9;
+    }
+    #start-button::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background-color: #000080;
+      border: 2px solid #fff;
+      margin-right: 8px;
+      border-radius: 4px;
+      box-shadow: inset 0 0 0 1px #fff;
+    }
+    #start-button span {
+      font-size: 16px;
+      color: white;
+      text-shadow: 1px 1px black;
+    }
+    #taskbar-buttons {
+      display: flex;
+      align-items: center;
+      margin-left: 15px;
+      overflow-x: auto;
+      scrollbar-width: none; /* Firefox */
+    }
+    #taskbar-buttons::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+    .taskbar-button {
+      background-color: #C0C0C0;
+      border: 2px solid #fff;
+      border-top-color: #000;
+      border-left-color: #000;
+      padding: 8px 14px;
+      cursor: pointer;
+      margin-right: 8px;
+      display: flex;
+      align-items: center;
+      border-radius: 2px;
+      user-select: none;
+      white-space: nowrap;
+      font-size: 14px;
+      transition: background-color 0.2s, transform 0.2s;
+    }
+    .taskbar-button:hover {
+      background-color: #A9A9A9;
+      transform: scale(1.05);
+    }
+    .taskbar-button.active {
+      border-top-color: #fff;
+      border-left-color: #fff;
+      border-bottom-color: #000;
+      border-right-color: #000;
+      background-color: #696969;
+      color: white;
+    }
+
+    /* Start Menu */
+    #start-menu {
+      position: fixed;
+      bottom: 80px;
+      left: 10px;
+      background-color: #C0C0C0;
+      border: 2px solid #000;
+      border-top-color: #fff;
+      border-left-color: #fff;
+      width: 240px;
+      display: none;
+      padding: 15px;
+      z-index: 25;
+      border-radius: 4px;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    }
+    #start-menu p {
+      margin: 0 0 15px 0;
+      font-size: 14px;
+      color: black;
+      text-shadow: 1px 1px white;
+    }
+    #start-menu a {
+      display: block;
+      margin: 8px 0;
+      color: blue;
+      text-decoration: underline;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    #start-menu a:hover {
+      color: darkblue;
+    }
+
+    /* Prevent selection */
+    .unselectable {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .desktop-icon {
+        width: 60px;
+        margin: 10px;
+      }
+      .desktop-icon .icon {
+        width: 48px;
+        height: 48px;
+      }
+      .desktop-icon span {
+        font-size: 11px;
+      }
+      .window {
+        width: 95%;
+        height: 90%;
+      }
+      #taskbar {
+        height: 80px;
+      }
+      #start-button {
+        padding: 10px 14px;
+      }
+      .taskbar-button {
+        padding: 8px 14px;
+        font-size: 14px;
+      }
+    }
+
+    /* Smooth Window Transitions */
+    .window.show {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, -60%); }
+      to { opacity: 1; transform: translate(-50%, -50%); }
+    }
+
+    /* Flappy Game Specific Styles */
+    #flappy-canvas {
+      touch-action: manipulation; /* Prevent default touch behaviors */
+    }
+    #flap-button {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #FF4500;
+      color: white;
+      cursor: pointer;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+      transition: background-color 0.2s, transform 0.2s;
+    }
+    #flap-button:hover {
+      background-color: #E03E00;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <h1>Loading...</h1>
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Desktop Icons -->
+  <div class="desktop-icon unselectable" id="portfolio-icon" style="top: 20%; left: 10%;">
+    <div class="icon">
+      <!-- Portfolio SVG Icon -->
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 8h48v40H8z" stroke="#000" stroke-width="2" fill="#0000FF"/>
+        <path d="M16 16h32v8H16z" fill="#FFFFFF"/>
+        <path d="M16 32h32v8H16z" fill="#FFFFFF"/>
+        <path d="M16 48h32v8H16z" fill="#FFFFFF"/>
+      </svg>
+    </div>
+    <span>Portfolio</span>
+  </div>
+  <div class="desktop-icon unselectable" id="flappy-icon" style="top: 20%; left: 30%;">
+    <div class="icon">
+      <!-- Flappy Game SVG Icon -->
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <path d="M32 4C17.664 4 6 15.664 6 30s11.664 26 26 26 26-11.664 26-26S46.336 4 32 4zm0 48c-12.15 0-22-9.85-22-22S19.85 8 32 8s22 9.85 22 22-9.85 22-22 22z" fill="#FF4500"/>
+        <circle cx="32" cy="32" r="8" fill="#FFFFFF"/>
+        <path d="M32 16v8l8 8-8 8v8" stroke="#000" stroke-width="2" fill="none"/>
+      </svg>
+    </div>
+    <span>Flappy Game</span>
+  </div>
+
+  <!-- Taskbar -->
+  <div id="taskbar">
+    <div id="start-button">
+      <span>Start</span>
+    </div>
+    <div id="taskbar-buttons"></div>
+  </div>
+
+  <!-- Start Menu -->
+  <div id="start-menu">
+    <p>Hello! I'm Valery, passionate about creating stunning visual effects and immersive environments. Thanks for visiting my portfolio!</p>
+    <a href="#" id="portfolio-start-menu">Open Portfolio</a>
+    <a href="#" id="flappy-start-menu">Play Flappy Game</a>
+    <a href="mailto:xxater@gmail.com">Contact Me</a>
+  </div>
+
+  <!-- Portfolio Window -->
+  <div class="window" id="portfolio-window">
+    <div class="title-bar" id="portfolio-title-bar">
+      <div class="title-bar-text">Portfolio - Valery Gorbunov</div>
+      <div class="title-bar-controls">
+        <button class="minimize-button" aria-label="Minimize"></button>
+        <button class="maximize-button" aria-label="Maximize"></button>
+        <button class="close-button" aria-label="Close"></button>
+      </div>
+    </div>
+    <div class="content">
+      <!-- Portfolio Content -->
+      <h1>Valery Gorbunov</h1>
+      <p>VFX artist with experience in lighting and cinematics.</p>
+      <p><strong>Location:</strong> Sosenskoye, Moscow City, Russia</p>
+      <p><strong>Contact:</strong> Telegram: <a href="https://t.me/VGFOR">@VGFOR</a>, Email: <a href="mailto:xxater@gmail.com">xxater@gmail.com</a></p>
+      <div class="summary">
+        <h2>Summary</h2>
+        <p>Unreal Engine artist experienced in environment art, lighting, VFX, and cinematics.</p>
+      </div>
+      <div class="skills">
+        <h2>Skills</h2>
+        <ul>
+          <li>Unreal Engine</li>
+          <li>ZBrush</li>
+          <li>Maya</li>
+          <li>Blender</li>
+          <li>Substance Designer/Painter</li>
+          <li>Houdini</li>
+          <li>Embergen</li>
+          <li>Photoshop</li>
+          <li>After Effects</li>
+        </ul>
+      </div>
+      <div class="experience">
+        <h2>Experience</h2>
+        <!-- Experience Items -->
+        <div class="experience-item">
+          <strong>Various</strong><br>
+          VFX Artist<br>
+          February 2023 - Present (1 year 8 months)<br>
+          VFX work. Creating VFX for UE5 projects.
+        </div>
+        <div class="experience-item">
+          <strong>QORPO - Game Studio</strong><br>
+          VFX Artist/Lighting Artist<br>
+          November 2022 - February 2023 (4 months)<br>
+          Created VFX in Embergen, Houdini, and UE5.
+        </div>
+        <div class="experience-item">
+          <strong>Girand</strong><br>
+          Producer/Team Lead<br>
+          April 2022 - October 2022 (7 months)<br>
+          GIRAND: IN THE LOST CITY. NFT game. I was responsible for VFX, producing, cinematics, and team guidance.
+        </div>
+        <div class="experience-item">
+          <strong>Stage 23</strong><br>
+          Lead VFX Artist, Technical Artist<br>
+          January 2021 - June 2022 (1 year 6 months)<br>
+          Moscow, Moscow City, Russia.
+        </div>
+        <div class="experience-item">
+          <strong>Mundfish</strong><br>
+          VFX Artist/Cinematic Artist<br>
+          October 2020 - January 2021 (4 months)<br>
+          Moscow, Moscow City, Russia.<br>
+          Responsibilities included camera work and VFX creation.
+        </div>
+        <div class="experience-item">
+          <strong>QTE</strong><br>
+          Mail.ru Group<br>
+          Cinematic Artist<br>
+          March 2019 - September 2020 (1 year 7 months)<br>
+          Moscow, Moscow City, Russia.<br>
+          Worked with Unreal Engine and CryEngine.<br>
+          - Cinematography<br>
+          - VFX<br>
+          - Modeling<br>
+          - Texturing<br>
+          - Animation
+        </div>
+        <div class="experience-item">
+          <strong>Coderaptor</strong><br>
+          Environment Artist, Technical Artist, VFX Artist<br>
+          May 2018 - February 2019 (10 months)<br>
+          Moscow, Moscow City, Russia.<br>
+          Technical art pipeline. VFX, environment art. Materials, lighting, blueprints.
+        </div>
+        <div class="experience-item">
+          <strong>CodeClass School</strong><br>
+          Teaching Unreal Engine/Unity<br>
+          December 2017 - January 2019 (1 year 2 months)<br>
+          Moscow, Moscow City, Russia.<br>
+          Interactive technologies.
+        </div>
+        <div class="experience-item">
+          <strong>Level Designer</strong><br>
+          December 2017 - May 2018 (6 months)<br>
+          Москва, Россия.
+        </div>
+      </div>
+      <div class="education">
+        <h2>Education</h2>
+        <p><strong>Higher School of Economics</strong></p>
+        <p>Bachelor's degree in Game Design and Interactive Applications (2016 - 2021)</p>
+      </div>
+      <div class="portfolio">
+        <h2>Portfolio</h2>
+        <p>Replace the images and videos below with your own work.</p>
+        <!-- Placeholder images -->
+        <div style="width:100%; height:150px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; margin-bottom:10px; border-radius:4px;">
+          <span>Image 1 Placeholder</span>
+        </div>
+        <div style="width:100%; height:150px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; margin-bottom:10px; border-radius:4px;">
+          <span>Image 2 Placeholder</span>
+        </div>
+        <!-- Placeholder video -->
+        <div style="width:100%; height:150px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; border-radius:4px;">
+          <span>Video Placeholder</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flappy Game Window -->
+  <div class="window" id="flappy-window">
+    <div class="title-bar" id="flappy-title-bar">
+      <div class="title-bar-text">Flappy Game</div>
+      <div class="title-bar-controls">
+        <button class="minimize-button" aria-label="Minimize"></button>
+        <button class="maximize-button" aria-label="Maximize"></button>
+        <button class="close-button" aria-label="Close"></button>
+      </div>
+    </div>
+    <div class="content" style="padding: 0;">
+      <canvas id="flappy-canvas" width="400" height="600" style="width:100%; height:auto; display:block; margin:0 auto; border-radius:4px; box-shadow: 2px 2px 10px rgba(0,0,0,0.5);"></canvas>
+      <button id="flap-button">Flap</button>
+    </div>
+  </div>
+
+  <!-- Taskbar Buttons Template (Hidden) -->
+  <template id="taskbar-button-template">
+    <div class="taskbar-button" data-window-id="">
+      <span></span>
+    </div>
+  </template>
+
+  <script>
+    // Loading screen
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        document.getElementById('loading-screen').style.display = 'none';
+        document.body.style.overflow = 'auto'; // Restore scrolling if needed
+      }, 1500);
+    });
+
+    // Start button functionality
+    const startButton = document.getElementById('start-button');
+    const startMenu = document.getElementById('start-menu');
+    let isStartMenuOpen = false;
+
+    startButton.addEventListener('click', function(event) {
+      event.stopPropagation();
+      isStartMenuOpen = !isStartMenuOpen;
+      startMenu.style.display = isStartMenuOpen ? 'block' : 'none';
+    });
+
+    // Start Menu Links
+    document.getElementById('portfolio-start-menu').addEventListener('click', function(event) {
+      event.preventDefault();
+      openWindow(portfolioWindow, 'Portfolio - Valery Gorbunov', 'portfolio-taskbar-button');
+    });
+
+    document.getElementById('flappy-start-menu').addEventListener('click', function(event) {
+      event.preventDefault();
+      openWindow(flappyWindow, 'Flappy Game', 'flappy-taskbar-button');
+      startFlappyGame();
+    });
+
+    // Close the start menu when clicking outside
+    document.addEventListener('click', function(event) {
+      if (!startButton.contains(event.target) && !startMenu.contains(event.target)) {
+        startMenu.style.display = 'none';
+        isStartMenuOpen = false;
+      }
+    });
+
+    // Desktop Icons to open windows
+    const portfolioIcon = document.getElementById('portfolio-icon');
+    const flappyIcon = document.getElementById('flappy-icon');
+    const portfolioWindow = document.getElementById('portfolio-window');
+    const flappyWindow = document.getElementById('flappy-window');
+    const taskbarButtons = document.getElementById('taskbar-buttons');
+
+    portfolioIcon.addEventListener('dblclick', function() {
+      openWindow(portfolioWindow, 'Portfolio - Valery Gorbunov', 'portfolio-taskbar-button');
+    });
+
+    flappyIcon.addEventListener('dblclick', function() {
+      openWindow(flappyWindow, 'Flappy Game', 'flappy-taskbar-button');
+      startFlappyGame();
+    });
+
+    // Window controls
+    let zIndexCounter = 10;
+
+    function addWindowControls(windowElement, titleBarId, taskbarId, windowTitle) {
+      const minimizeButton = windowElement.querySelector('.minimize-button');
+      const maximizeButton = windowElement.querySelector('.maximize-button');
+      const closeButton = windowElement.querySelector('.close-button');
+      let isMaximized = false;
+      let prevPosition = {};
+      let prevSize = {};
+
+      minimizeButton.addEventListener('click', function() {
+        windowElement.style.display = 'none';
+        removeTaskbarButton(taskbarId);
+      });
+
+      maximizeButton.addEventListener('click', function() {
+        if (!isMaximized) {
+          prevPosition = {
+            top: windowElement.style.top,
+            left: windowElement.style.left,
+            transform: windowElement.style.transform
+          };
+          prevSize = {
+            width: windowElement.style.width,
+            height: windowElement.style.height
+          };
+          windowElement.style.top = '0';
+          windowElement.style.left = '0';
+          windowElement.style.transform = 'none';
+          windowElement.style.width = '100%';
+          windowElement.style.height = '100%';
+          isMaximized = true;
+        } else {
+          windowElement.style.top = prevPosition.top;
+          windowElement.style.left = prevPosition.left;
+          windowElement.style.transform = prevPosition.transform;
+          windowElement.style.width = prevSize.width;
+          windowElement.style.height = prevSize.height;
+          isMaximized = false;
+        }
+      });
+
+      closeButton.addEventListener('click', function() {
+        windowElement.style.display = 'none';
+        removeTaskbarButton(taskbarId);
+        if (windowElement === flappyWindow) {
+          stopFlappyGame();
+        }
+      });
+
+      // Make the window draggable
+      const titleBar = windowElement.querySelector('.title-bar');
+      let isDragging = false;
+      let dragOffset = { x: 0, y: 0 };
+
+      titleBar.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        dragOffset.x = e.clientX - windowElement.offsetLeft;
+        dragOffset.y = e.clientY - windowElement.offsetTop;
+        windowElement.style.zIndex = ++zIndexCounter;
+      });
+
+      document.addEventListener('mousemove', function(e) {
+        if (isDragging) {
+          windowElement.style.left = (e.clientX - dragOffset.x) + 'px';
+          windowElement.style.top = (e.clientY - dragOffset.y) + 'px';
+          windowElement.style.transform = 'none';
+        }
+      });
+
+      document.addEventListener('mouseup', function() {
+        isDragging = false;
+      });
+
+      // Bring window to front when clicked
+      windowElement.addEventListener('mousedown', function() {
+        windowElement.style.zIndex = ++zIndexCounter;
+      });
+    }
+
+    // Initialize window controls
+    addWindowControls(portfolioWindow, 'portfolio-title-bar', 'portfolio-taskbar-button', 'Portfolio - Valery Gorbunov');
+    addWindowControls(flappyWindow, 'flappy-title-bar', 'flappy-taskbar-button', 'Flappy Game');
+
+    // Taskbar button functionality
+    function addTaskbarButton(title, id, windowElement) {
+      if (document.getElementById(id)) return;
+
+      const template = document.getElementById('taskbar-button-template').content.cloneNode(true);
+      const button = template.querySelector('.taskbar-button');
+      button.setAttribute('id', id);
+      button.dataset.windowId = id;
+      button.querySelector('span').textContent = title;
+      taskbarButtons.appendChild(button);
+
+      button.addEventListener('click', function() {
+        if (windowElement.style.display === 'none') {
+          windowElement.style.display = 'block';
+          button.classList.add('active');
+          windowElement.style.zIndex = ++zIndexCounter;
+        } else {
+          windowElement.style.display = 'none';
+          button.classList.remove('active');
+          if (windowElement === flappyWindow) {
+            stopFlappyGame();
+          }
+        }
+      });
+    }
+
+    function removeTaskbarButton(id) {
+      const button = document.getElementById(id);
+      if (button) {
+        taskbarButtons.removeChild(button);
+      }
+    }
+
+    function openWindow(windowElement, title, taskbarId) {
+      windowElement.style.display = 'block';
+      addTaskbarButton(title, taskbarId, windowElement);
+      windowElement.style.zIndex = ++zIndexCounter;
+    }
+
+    /* ------------------- Flappy Game Implementation ------------------- */
+    const flappyCanvas = document.getElementById('flappy-canvas');
+    const flappyCtx = flappyCanvas.getContext('2d');
+    let flappyAnimationFrame;
+    let gameActive = false;
+    let gameOver = false;
+
+    const bird = {
+      x: 50,
+      y: 150,
+      radius: 12,
+      gravity: 0.6,
+      velocity: 0,
+      lift: -12,
+      color: '#FFD700' // Gold
+    };
+
+    const pipes = [];
+    const pipeWidth = 60;
+    const pipeGap = 150;
+    let pipeInterval = 1500; // milliseconds
+    let lastPipeTime = Date.now();
+
+    const flapButton = document.getElementById('flap-button');
+
+    // Touch and Click Events
+    flapButton.addEventListener('click', flap);
+    flappyCanvas.addEventListener('click', flap);
+    document.addEventListener('keydown', function(e) {
+      if (e.code === 'Space') {
+        flap();
+      }
+    });
+
+    function flap() {
+      if (gameActive && !gameOver) {
+        bird.velocity = bird.lift;
+      }
+    }
+
+    function startFlappyGame() {
+      resetGame();
+      gameActive = true;
+      gameOver = false;
+      flappyAnimationFrame = requestAnimationFrame(updateFlappyGame);
+    }
+
+    function stopFlappyGame() {
+      gameActive = false;
+      cancelAnimationFrame(flappyAnimationFrame);
+    }
+
+    function resetGame() {
+      bird.y = 150;
+      bird.velocity = 0;
+      pipes.length = 0;
+      lastPipeTime = Date.now();
+      gameOver = false;
+    }
+
+    function updateFlappyGame() {
+      flappyCtx.clearRect(0, 0, flappyCanvas.width, flappyCanvas.height);
+
+      // Update Bird
+      bird.velocity += bird.gravity;
+      bird.y += bird.velocity;
+
+      // Draw Bird
+      flappyCtx.beginPath();
+      flappyCtx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
+      flappyCtx.fillStyle = bird.color;
+      flappyCtx.fill();
+      flappyCtx.closePath();
+
+      // Generate Pipes
+      const currentTime = Date.now();
+      if (currentTime - lastPipeTime > pipeInterval) {
+        const topPipeHeight = Math.floor(Math.random() * (flappyCanvas.height - pipeGap - 100)) + 50;
+        const bottomPipeY = topPipeHeight + pipeGap;
+        pipes.push({
+          x: flappyCanvas.width,
+          top: topPipeHeight,
+          bottom: flappyCanvas.height - (flappyCanvas.height - bottomPipeY)
+        });
+        lastPipeTime = currentTime;
+      }
+
+      // Update and Draw Pipes
+      for (let i = pipes.length - 1; i >= 0; i--) {
+        const pipe = pipes[i];
+        pipe.x -= 2;
+
+        // Draw Top Pipe
+        flappyCtx.fillStyle = '#228B22'; // Forest Green
+        flappyCtx.fillRect(pipe.x, 0, pipeWidth, pipe.top);
+
+        // Draw Bottom Pipe
+        flappyCtx.fillStyle = '#228B22'; // Forest Green
+        flappyCtx.fillRect(pipe.x, pipe.bottom, pipeWidth, flappyCanvas.height - pipe.bottom);
+
+        // Collision Detection
+        if (bird.x + bird.radius > pipe.x && bird.x - bird.radius < pipe.x + pipeWidth) {
+          if (bird.y - bird.radius < pipe.top || bird.y + bird.radius > pipe.bottom) {
+            endGame();
+          }
+        }
+
+        // Remove off-screen pipes
+        if (pipe.x + pipeWidth < 0) {
+          pipes.splice(i, 1);
+        }
+      }
+
+      // Check for collision with ground or ceiling
+      if (bird.y + bird.radius > flappyCanvas.height || bird.y - bird.radius < 0) {
+        endGame();
+      }
+
+      if (!gameOver) {
+        flappyAnimationFrame = requestAnimationFrame(updateFlappyGame);
+      }
+    }
+
+    function endGame() {
+      gameOver = true;
+      gameActive = false;
+      alert('Game Over!');
+      stopFlappyGame();
+    }
+  </script>
+</body>
+</html>
