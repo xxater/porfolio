@@ -84,10 +84,9 @@
       position: relative;
       box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
     }
-    .desktop-icon .icon svg {
-      width: 32px;
-      height: 32px;
-      fill: #000;
+    .desktop-icon .icon img {
+      width: 48px;
+      height: 48px;
     }
     .desktop-icon span {
       color: black;
@@ -95,17 +94,6 @@
       text-align: center;
       word-break: break-word;
       text-shadow: 1px 1px white;
-    }
-
-    /* Specific Icons */
-    /* Portfolio Icon */
-    #portfolio-icon .icon svg {
-      fill: #0000FF; /* Blue */
-    }
-
-    /* Pinball Icon */
-    #pinball-icon .icon svg {
-      fill: #FF4500; /* Orange Red */
     }
 
     /* Window Styles */
@@ -228,7 +216,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 50px;
+      height: 80px;
       background-color: #C0C0C0;
       border-top: 2px solid #fff;
       border-left: 2px solid #fff;
@@ -255,16 +243,10 @@
     #start-button:hover {
       background-color: #A9A9A9;
     }
-    #start-button::before {
-      content: '';
-      display: inline-block;
+    #start-button img {
       width: 20px;
       height: 20px;
-      background-color: #000080;
-      border: 2px solid #fff;
       margin-right: 8px;
-      border-radius: 4px;
-      box-shadow: inset 0 0 0 1px #fff;
     }
     #start-button span {
       font-size: 16px;
@@ -286,7 +268,7 @@
       border: 2px solid #fff;
       border-top-color: #000;
       border-left-color: #000;
-      padding: 8px 12px;
+      padding: 8px 14px;
       cursor: pointer;
       margin-right: 8px;
       display: flex;
@@ -313,7 +295,7 @@
     /* Start Menu */
     #start-menu {
       position: fixed;
-      bottom: 60px;
+      bottom: 90px;
       left: 10px;
       background-color: #C0C0C0;
       border: 2px solid #000;
@@ -362,6 +344,10 @@
         width: 48px;
         height: 48px;
       }
+      .desktop-icon img {
+        width: 36px;
+        height: 36px;
+      }
       .desktop-icon span {
         font-size: 11px;
       }
@@ -370,7 +356,7 @@
         height: 90%;
       }
       #taskbar {
-        height: 60px;
+        height: 80px;
       }
       #start-button {
         padding: 10px 14px;
@@ -378,6 +364,10 @@
       .taskbar-button {
         padding: 8px 14px;
         font-size: 14px;
+      }
+      #flap-button {
+        padding: 12px 24px;
+        font-size: 18px;
       }
     }
 
@@ -391,6 +381,29 @@
       to { opacity: 1; transform: translate(-50%, -50%); }
     }
 
+    /* Flappy Game Specific Styles */
+    #flappy-canvas {
+      touch-action: manipulation; /* Prevent default touch behaviors */
+    }
+    #flap-button {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #FF4500;
+      color: white;
+      cursor: pointer;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+      transition: background-color 0.2s, transform 0.2s;
+    }
+    #flap-button:hover {
+      background-color: #E03E00;
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
@@ -403,31 +416,23 @@
   <!-- Desktop Icons -->
   <div class="desktop-icon unselectable" id="portfolio-icon" style="top: 20%; left: 10%;">
     <div class="icon">
-      <!-- Portfolio SVG Icon -->
-      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-        <path d="M8 8h48v40H8z" stroke="#000" stroke-width="2" fill="#0000FF"/>
-        <path d="M16 16h32v8H16z" fill="#FFFFFF"/>
-        <path d="M16 32h32v8H16z" fill="#FFFFFF"/>
-        <path d="M16 48h32v8H16z" fill="#FFFFFF"/>
-      </svg>
+      <!-- Portfolio Shortcut Icon -->
+      <img src="https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs-4.png" alt="Portfolio Icon">
     </div>
     <span>Portfolio</span>
   </div>
-  <div class="desktop-icon unselectable" id="pinball-icon" style="top: 20%; left: 30%;">
+  <div class="desktop-icon unselectable" id="flappy-icon" style="top: 20%; left: 30%;">
     <div class="icon">
-      <!-- Pinball SVG Icon -->
-      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-        <path d="M32 4C17.664 4 6 15.664 6 30s11.664 26 26 26 26-11.664 26-26S46.336 4 32 4zm0 48c-12.15 0-22-9.85-22-22S19.85 8 32 8s22 9.85 22 22-9.85 22-22 22z" fill="#FF4500"/>
-        <circle cx="32" cy="32" r="8" fill="#FFFFFF"/>
-        <path d="M32 16v8l8 8-8 8v8" stroke="#000" stroke-width="2" fill="none"/>
-      </svg>
+      <!-- Flappy Game Shortcut Icon -->
+      <img src="https://win98icons.alexmeub.com/icons/png/minesweeper-1.png" alt="Flappy Game Icon">
     </div>
-    <span>Pinball Game</span>
+    <span>Flappy Game</span>
   </div>
 
   <!-- Taskbar -->
   <div id="taskbar">
     <div id="start-button">
+      <img src="https://win98icons.alexmeub.com/icons/png/windows-0.png" alt="Start Icon">
       <span>Start</span>
     </div>
     <div id="taskbar-buttons"></div>
@@ -437,7 +442,7 @@
   <div id="start-menu">
     <p>Hello! I'm Valery, passionate about creating stunning visual effects and immersive environments. Thanks for visiting my portfolio!</p>
     <a href="#" id="portfolio-start-menu">Open Portfolio</a>
-    <a href="#" id="pinball-start-menu">Play Pinball</a>
+    <a href="#" id="flappy-start-menu">Play Flappy Game</a>
     <a href="mailto:xxater@gmail.com">Contact Me</a>
   </div>
 
@@ -565,18 +570,19 @@
     </div>
   </div>
 
-  <!-- Pinball Game Window -->
-  <div class="window" id="pinball-window">
-    <div class="title-bar" id="pinball-title-bar">
-      <div class="title-bar-text">Pinball Game</div>
+  <!-- Flappy Game Window -->
+  <div class="window" id="flappy-window">
+    <div class="title-bar" id="flappy-title-bar">
+      <div class="title-bar-text">Flappy Game</div>
       <div class="title-bar-controls">
         <button class="minimize-button" aria-label="Minimize"></button>
         <button class="maximize-button" aria-label="Maximize"></button>
         <button class="close-button" aria-label="Close"></button>
       </div>
     </div>
-    <div class="content" style="padding: 0;">
-      <canvas id="pinball-canvas" width="400" height="600" style="width:100%; height:auto; display:block; margin:0 auto; border-radius:4px; box-shadow: 2px 2px 10px rgba(0,0,0,0.5);"></canvas>
+    <div class="content" style="padding: 0; position: relative;">
+      <canvas id="flappy-canvas" width="400" height="600" style="width:100%; height:auto; display:block; margin:0 auto; border-radius:4px; box-shadow: 2px 2px 10px rgba(0,0,0,0.5);"></canvas>
+      <button id="flap-button">Flap</button>
     </div>
   </div>
 
@@ -613,10 +619,10 @@
       openWindow(portfolioWindow, 'Portfolio - Valery Gorbunov', 'portfolio-taskbar-button');
     });
 
-    document.getElementById('pinball-start-menu').addEventListener('click', function(event) {
+    document.getElementById('flappy-start-menu').addEventListener('click', function(event) {
       event.preventDefault();
-      openWindow(pinballWindow, 'Pinball Game', 'pinball-taskbar-button');
-      startPinballGame();
+      openWindow(flappyWindow, 'Flappy Game', 'flappy-taskbar-button');
+      startFlappyGame();
     });
 
     // Close the start menu when clicking outside
@@ -629,18 +635,18 @@
 
     // Desktop Icons to open windows
     const portfolioIcon = document.getElementById('portfolio-icon');
-    const pinballIcon = document.getElementById('pinball-icon');
+    const flappyIcon = document.getElementById('flappy-icon');
     const portfolioWindow = document.getElementById('portfolio-window');
-    const pinballWindow = document.getElementById('pinball-window');
+    const flappyWindow = document.getElementById('flappy-window');
     const taskbarButtons = document.getElementById('taskbar-buttons');
 
     portfolioIcon.addEventListener('dblclick', function() {
       openWindow(portfolioWindow, 'Portfolio - Valery Gorbunov', 'portfolio-taskbar-button');
     });
 
-    pinballIcon.addEventListener('dblclick', function() {
-      openWindow(pinballWindow, 'Pinball Game', 'pinball-taskbar-button');
-      startPinballGame();
+    flappyIcon.addEventListener('dblclick', function() {
+      openWindow(flappyWindow, 'Flappy Game', 'flappy-taskbar-button');
+      startFlappyGame();
     });
 
     // Window controls
@@ -689,8 +695,8 @@
       closeButton.addEventListener('click', function() {
         windowElement.style.display = 'none';
         removeTaskbarButton(taskbarId);
-        if (windowElement === pinballWindow) {
-          stopPinballGame();
+        if (windowElement === flappyWindow) {
+          stopFlappyGame();
         }
       });
 
@@ -726,7 +732,7 @@
 
     // Initialize window controls
     addWindowControls(portfolioWindow, 'portfolio-title-bar', 'portfolio-taskbar-button', 'Portfolio - Valery Gorbunov');
-    addWindowControls(pinballWindow, 'pinball-title-bar', 'pinball-taskbar-button', 'Pinball Game');
+    addWindowControls(flappyWindow, 'flappy-title-bar', 'flappy-taskbar-button', 'Flappy Game');
 
     // Taskbar button functionality
     function addTaskbarButton(title, id, windowElement) {
@@ -747,8 +753,8 @@
         } else {
           windowElement.style.display = 'none';
           button.classList.remove('active');
-          if (windowElement === pinballWindow) {
-            stopPinballGame();
+          if (windowElement === flappyWindow) {
+            stopFlappyGame();
           }
         }
       });
@@ -767,98 +773,160 @@
       windowElement.style.zIndex = ++zIndexCounter;
     }
 
-    /* ------------------- Pinball Game Implementation ------------------- */
-    const pinballCanvas = document.getElementById('pinball-canvas');
-    const pinballCtx = pinballCanvas.getContext('2d');
-    let pinballAnimationFrame;
-    let ball = { x: 200, y: 300, radius: 10, dx: 2, dy: -2 };
-    let paddles = [
-      { x: 50, y: 580, width: 80, height: 10, dx: 5 },
-      { x: 170, y: 580, width: 80, height: 10, dx: 5 }
-    ];
-    let keys = {};
+    /* ------------------- Flappy Game Implementation ------------------- */
+    const flappyCanvas = document.getElementById('flappy-canvas');
+    const flappyCtx = flappyCanvas.getContext('2d');
+    let flappyAnimationFrame;
+    let gameActive = false;
+    let gameOver = false;
+    let score = 0;
 
-    function startPinballGame() {
-      ball = { x: pinballCanvas.width / 2, y: pinballCanvas.height / 2, radius: 10, dx: 3, dy: -3 };
-      paddles = [
-        { x: 50, y: pinballCanvas.height - 20, width: 80, height: 10, dx: 5 },
-        { x: 170, y: pinballCanvas.height - 20, width: 80, height: 10, dx: 5 }
-      ];
-      keys = {};
-      document.addEventListener('keydown', keyDownPinball);
-      document.addEventListener('keyup', keyUpPinball);
-      pinballAnimationFrame = requestAnimationFrame(drawPinball);
-    }
+    const bird = {
+      x: 50,
+      y: 150,
+      radius: 12,
+      gravity: 0.6,
+      velocity: 0,
+      lift: -12,
+      color: '#FFD700', // Gold
+      draw: function() {
+        flappyCtx.fillStyle = this.color;
+        flappyCtx.beginPath();
+        // Draw a simple bird: circle with a triangle wing
+        flappyCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        flappyCtx.fill();
+        flappyCtx.closePath();
 
-    function stopPinballGame() {
-      cancelAnimationFrame(pinballAnimationFrame);
-      document.removeEventListener('keydown', keyDownPinball);
-      document.removeEventListener('keyup', keyUpPinball);
-    }
-
-    function keyDownPinball(e) {
-      keys[e.key] = true;
-    }
-
-    function keyUpPinball(e) {
-      keys[e.key] = false;
-    }
-
-    function drawPinball() {
-      pinballCtx.clearRect(0, 0, pinballCanvas.width, pinballCanvas.height);
-
-      // Draw ball
-      pinballCtx.beginPath();
-      pinballCtx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-      pinballCtx.fillStyle = "#FF0000";
-      pinballCtx.fill();
-      pinballCtx.closePath();
-
-      // Draw paddles
-      paddles.forEach(paddle => {
-        pinballCtx.beginPath();
-        pinballCtx.rect(paddle.x, paddle.y, paddle.width, paddle.height);
-        pinballCtx.fillStyle = "#0000FF";
-        pinballCtx.fill();
-        pinballCtx.closePath();
-      });
-
-      // Move paddles
-      paddles.forEach(paddle => {
-        if (keys['ArrowLeft'] && paddle.x > 0) {
-          paddle.x -= paddle.dx;
-        }
-        if (keys['ArrowRight'] && paddle.x < pinballCanvas.width - paddle.width) {
-          paddle.x += paddle.dx;
-        }
-      });
-
-      // Move ball
-      ball.x += ball.dx;
-      ball.y += ball.dy;
-
-      // Collision with walls
-      if (ball.x + ball.dx > pinballCanvas.width - ball.radius || ball.x + ball.dx < ball.radius) {
-        ball.dx = -ball.dx;
+        flappyCtx.fillStyle = '#FFA500'; // Orange for wing
+        flappyCtx.beginPath();
+        flappyCtx.moveTo(this.x, this.y);
+        flappyCtx.lineTo(this.x - this.radius, this.y - this.radius);
+        flappyCtx.lineTo(this.x, this.y - this.radius / 2);
+        flappyCtx.fill();
+        flappyCtx.closePath();
       }
-      if (ball.y + ball.dy < ball.radius) {
-        ball.dy = -ball.dy;
-      } else if (ball.y + ball.dy > pinballCanvas.height - ball.radius) {
-        // Check collision with paddles
-        let hitPaddle = paddles.some(paddle => {
-          return ball.x > paddle.x && ball.x < paddle.x + paddle.width &&
-                 ball.y + ball.radius > paddle.y && ball.y < paddle.y + paddle.height;
+    };
+
+    const pipes = [];
+    const pipeWidth = 60;
+    const pipeGap = 150;
+    let pipeInterval = 1500; // milliseconds
+    let lastPipeTime = Date.now();
+
+    const flapButton = document.getElementById('flap-button');
+
+    // Touch and Click Events
+    flapButton.addEventListener('click', flap);
+    flappyCanvas.addEventListener('click', flap);
+    document.addEventListener('keydown', function(e) {
+      if (e.code === 'Space') {
+        flap();
+      }
+    });
+
+    function flap() {
+      if (gameActive && !gameOver) {
+        bird.velocity = bird.lift;
+      }
+    }
+
+    function startFlappyGame() {
+      resetGame();
+      gameActive = true;
+      gameOver = false;
+      flappyAnimationFrame = requestAnimationFrame(updateFlappyGame);
+    }
+
+    function stopFlappyGame() {
+      gameActive = false;
+      cancelAnimationFrame(flappyAnimationFrame);
+    }
+
+    function resetGame() {
+      bird.y = 150;
+      bird.velocity = 0;
+      pipes.length = 0;
+      lastPipeTime = Date.now();
+      gameOver = false;
+      score = 0;
+    }
+
+    function updateFlappyGame() {
+      flappyCtx.clearRect(0, 0, flappyCanvas.width, flappyCanvas.height);
+
+      // Update Bird
+      bird.velocity += bird.gravity;
+      bird.y += bird.velocity;
+
+      // Draw Bird
+      bird.draw();
+
+      // Draw Score
+      flappyCtx.fillStyle = 'black';
+      flappyCtx.font = '20px Arial';
+      flappyCtx.fillText(`Score: ${score}`, 10, 30);
+
+      // Generate Pipes
+      const currentTime = Date.now();
+      if (currentTime - lastPipeTime > pipeInterval) {
+        const topPipeHeight = Math.floor(Math.random() * (flappyCanvas.height - pipeGap - 100)) + 50;
+        const bottomPipeY = topPipeHeight + pipeGap;
+        pipes.push({
+          x: flappyCanvas.width,
+          top: topPipeHeight,
+          bottom: bottomPipeY,
+          passed: false
         });
-        if (hitPaddle) {
-          ball.dy = -ball.dy;
-        } else {
-          alert('Game Over!');
-          stopPinballGame();
-          return;
+        lastPipeTime = currentTime;
+      }
+
+      // Update and Draw Pipes
+      for (let i = pipes.length - 1; i >= 0; i--) {
+        const pipe = pipes[i];
+        pipe.x -= 2;
+
+        // Draw Top Pipe
+        flappyCtx.fillStyle = '#228B22'; // Forest Green
+        flappyCtx.fillRect(pipe.x, 0, pipeWidth, pipe.top);
+
+        // Draw Bottom Pipe
+        flappyCtx.fillStyle = '#228B22'; // Forest Green
+        flappyCtx.fillRect(pipe.x, pipe.bottom, pipeWidth, flappyCanvas.height - pipe.bottom);
+
+        // Collision Detection
+        if (bird.x + bird.radius > pipe.x && bird.x - bird.radius < pipe.x + pipeWidth) {
+          if (bird.y - bird.radius < pipe.top || bird.y + bird.radius > pipe.bottom) {
+            endGame();
+          }
+        }
+
+        // Update Score
+        if (!pipe.passed && pipe.x + pipeWidth < bird.x) {
+          pipe.passed = true;
+          score += 1;
+        }
+
+        // Remove off-screen pipes
+        if (pipe.x + pipeWidth < 0) {
+          pipes.splice(i, 1);
         }
       }
 
-      pinballAnimationFrame = requestAnimationFrame(drawPinball);
+      // Check for collision with ground or ceiling
+      if (bird.y + bird.radius > flappyCanvas.height || bird.y - bird.radius < 0) {
+        endGame();
+      }
+
+      if (!gameOver) {
+        flappyAnimationFrame = requestAnimationFrame(updateFlappyGame);
+      }
+    }
+
+    function endGame() {
+      gameOver = true;
+      gameActive = false;
+      alert(`Game Over! Your Score: ${score}`);
+      stopFlappyGame();
     }
   </script>
 </body>
