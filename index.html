@@ -1,39 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Valery Gorbunov Portfolio</title>
   <style>
-    /* Basic Styles */
-    body {
+    /* Reset and Basic Styles */
+    * {
       margin: 0;
       padding: 0;
-      overflow: hidden;
-      font-family: 'MS Sans Serif', Arial, sans-serif;
-      font-size: 12px;
-      color: black;
+      box-sizing: border-box;
     }
-    /* Windows XP Bliss Background */
-    body::before {
-      content: '';
+    body {
+      font-family: 'MS Sans Serif', Arial, sans-serif;
+      font-size: 14px;
+      color: black;
+      overflow: hidden;
+      position: relative;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Windows 98 Style Background Inspired by Windows XP Bliss */
+    .background {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       background: linear-gradient(to top, #7ec850 50%, #87ceeb 50%);
+      z-index: -2;
     }
-    /* Additional hills */
-    body::after {
+    .background::after {
       content: '';
-      position: fixed;
+      position: absolute;
       bottom: 0;
       left: -25%;
       width: 150%;
       height: 50%;
-      background: radial-gradient(circle at 50% 100%, #7ec850, #7ec850 60%, transparent 60%), radial-gradient(circle at 20% 100%, #7ec850, #7ec850 50%, transparent 50%);
+      background: radial-gradient(circle at 50% 100%, #7ec850, #7ec850 60%, transparent 60%),
+                  radial-gradient(circle at 20% 100%, #7ec850, #7ec850 50%, transparent 50%);
       background-repeat: no-repeat;
       background-size: cover;
     }
+
     /* Loading Screen */
     #loading-screen {
       position: fixed;
@@ -46,10 +56,26 @@
       justify-content: center;
       align-items: center;
       z-index: 9999;
+      flex-direction: column;
     }
     #loading-screen h1 {
       color: black;
+      font-size: 24px;
+      margin-bottom: 20px;
     }
+    #loading-screen .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #000;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
     /* Desktop Icons */
     .desktop-icon {
       position: absolute;
@@ -63,60 +89,65 @@
       user-select: none;
     }
     .desktop-icon .icon {
-      width: 32px;
-      height: 32px;
+      width: 48px;
+      height: 48px;
       background-color: #C0C0C0;
-      border: 1px solid #000;
+      border: 2px solid #000;
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 5px;
       position: relative;
+    }
+    .desktop-icon .icon::before {
+      content: '';
+      width: 24px;
+      height: 24px;
+      background-size: contain;
     }
     /* Portfolio Icon */
     #portfolio-icon .icon::before {
-      content: '';
-      position: absolute;
-      top: 4px;
-      left: 8px;
-      width: 16px;
-      height: 12px;
-      background-color: #00FF00; /* Green rectangle */
-      border: 1px solid #000;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB4PSI0IiB5PSI0IiBmaWxsPSIjMDBGRjAwIi8+PC9zdmc+');
     }
     /* Game Icon */
     #game-icon .icon::before {
-      content: '';
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      width: 16px;
-      height: 16px;
-      background-color: #FFD700; /* Gold square */
-      border: 1px solid #000;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTEiIGZpbGw9IiNGREQwMDAiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+');
+    }
+    /* Pinball Icon */
+    #pinball-icon .icon::before {
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGxpbmUgeDE9IjEyIiB5MT0iMCIgeDI9IjEyIiB5Mj0iMjQiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjQiIHkxPSI0IiB4Mj0iMjAiIHkyPSIwIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg==');
     }
     .desktop-icon span {
-      margin-top: 5px;
       color: white;
       text-shadow: 1px 1px black;
+      font-size: 12px;
       text-align: center;
+      word-break: break-word;
     }
-    /* Window */
+
+    /* Window Styles */
     .window {
       position: absolute;
-      top: 50px;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate(-50%, -50%);
       border: 2px solid #000;
       border-top-color: #fff;
       border-left-color: #fff;
-      width: 600px;
+      width: 90%;
+      max-width: 600px;
       background-color: #c0c0c0;
       cursor: default;
-      z-index: 1;
+      z-index: 10;
       display: none;
       overflow: hidden;
+      border-radius: 4px;
     }
     .title-bar {
       background: linear-gradient(#000080, #000060);
       color: white;
-      padding: 2px 5px;
+      padding: 8px 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -125,6 +156,7 @@
     }
     .title-bar-text {
       font-weight: bold;
+      font-size: 16px;
     }
     .title-bar-controls {
       display: flex;
@@ -132,40 +164,41 @@
     .title-bar-controls button {
       background-color: #c0c0c0;
       border: 1px solid #fff;
-      width: 16px;
-      height: 14px;
-      margin-left: 2px;
+      width: 20px;
+      height: 20px;
+      margin-left: 4px;
       padding: 0;
       position: relative;
       cursor: pointer;
+      border-radius: 2px;
     }
     /* Window Control Icons */
     .title-bar-controls button.minimize-button::before {
       content: '';
       position: absolute;
-      top: 6px;
-      left: 3px;
-      width: 10px;
+      top: 8px;
+      left: 4px;
+      width: 12px;
       height: 2px;
       background-color: black;
     }
     .title-bar-controls button.maximize-button::before {
       content: '';
       position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 10px;
-      height: 8px;
+      top: 4px;
+      left: 4px;
+      width: 12px;
+      height: 12px;
       border: 1px solid black;
     }
     .title-bar-controls button.close-button::before,
     .title-bar-controls button.close-button::after {
       content: '';
       position: absolute;
-      top: 3px;
-      left: 7px;
+      top: 4px;
+      left: 8px;
       width: 2px;
-      height: 8px;
+      height: 12px;
       background-color: black;
     }
     .title-bar-controls button.close-button::before {
@@ -176,8 +209,8 @@
     }
     .content {
       padding: 10px;
-      overflow: auto; /* Allows scrolling inside the content area */
-      max-height: calc(100% - 30px);
+      overflow: auto;
+      max-height: calc(100vh - 80px);
     }
     h1, h2, h3 {
       margin: 10px 0;
@@ -196,60 +229,68 @@
       color: blue;
       text-decoration: underline;
     }
+
     /* Taskbar */
     #taskbar {
       position: fixed;
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 30px;
+      height: 40px;
       background-color: #c0c0c0;
       border-top: 2px solid #fff;
       border-left: 2px solid #fff;
       display: flex;
       align-items: center;
-      z-index: 5;
+      z-index: 20;
     }
     #start-button {
       background-color: #c0c0c0;
       border: 2px solid #fff;
       border-top-color: #000;
       border-left-color: #000;
-      padding: 5px 10px;
+      padding: 8px 12px;
       cursor: pointer;
       margin-left: 5px;
       display: flex;
       align-items: center;
       position: relative;
+      border-radius: 2px;
+      user-select: none;
     }
     #start-button::before {
       content: '';
-      position: absolute;
-      top: 5px;
-      left: 5px;
+      display: inline-block;
       width: 16px;
       height: 16px;
       background-color: #000080;
       border: 1px solid #fff;
+      margin-right: 8px;
+      border-radius: 2px;
     }
     #start-button span {
-      margin-left: 20px;
+      font-size: 14px;
     }
     #taskbar-buttons {
       display: flex;
       align-items: center;
-      margin-left: 5px;
+      margin-left: 10px;
+      overflow-x: auto;
     }
     .taskbar-button {
       background-color: #c0c0c0;
       border: 2px solid #fff;
       border-top-color: #000;
       border-left-color: #000;
-      padding: 5px 10px;
+      padding: 6px 10px;
       cursor: pointer;
-      margin-right: 2px;
+      margin-right: 4px;
       display: flex;
       align-items: center;
+      border-radius: 2px;
+      user-select: none;
+      white-space: nowrap;
+      font-size: 14px;
     }
     .taskbar-button.active {
       border-top-color: #fff;
@@ -257,23 +298,33 @@
       border-bottom-color: #000;
       border-right-color: #000;
     }
+
     /* Start Menu */
     #start-menu {
       position: fixed;
-      bottom: 30px;
-      left: 0;
+      bottom: 40px;
+      left: 5px;
       background-color: #c0c0c0;
       border: 2px solid #000;
       border-top-color: #fff;
       border-left-color: #fff;
-      width: 200px;
+      width: 220px;
       display: none;
       padding: 10px;
-      z-index: 10;
+      z-index: 25;
+      border-radius: 4px;
     }
     #start-menu p {
-      margin: 0;
+      margin: 0 0 10px 0;
+      font-size: 14px;
     }
+    #start-menu a {
+      display: block;
+      margin: 5px 0;
+      color: blue;
+      text-decoration: underline;
+    }
+
     /* Prevent selection */
     .unselectable {
       -webkit-user-select: none;
@@ -281,22 +332,65 @@
       -ms-user-select: none;
       user-select: none;
     }
+
+    /* Scrollbar Styling for Taskbar Buttons */
+    #taskbar-buttons {
+      scrollbar-width: none; /* Firefox */
+    }
+    #taskbar-buttons::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .desktop-icon {
+        width: 50px;
+        margin: 8px;
+      }
+      .desktop-icon .icon {
+        width: 40px;
+        height: 40px;
+      }
+      .desktop-icon span {
+        font-size: 10px;
+      }
+      .window {
+        width: 95%;
+        height: 90%;
+      }
+      #taskbar {
+        height: 50px;
+      }
+      #start-button {
+        padding: 10px 14px;
+      }
+      .taskbar-button {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Background -->
+  <div class="background"></div>
+
   <!-- Loading Screen -->
   <div id="loading-screen">
     <h1>Loading...</h1>
+    <div class="spinner"></div>
   </div>
+
   <!-- Desktop Icons -->
-  <div class="desktop-icon unselectable" id="portfolio-icon" style="top: 50px; left: 50px;">
+  <div class="desktop-icon unselectable" id="portfolio-icon" style="top: 20%; left: 10%;">
     <div class="icon"></div>
     <span>Portfolio</span>
   </div>
-  <div class="desktop-icon unselectable" id="game-icon" style="top: 130px; left: 50px;">
+  <div class="desktop-icon unselectable" id="pinball-icon" style="top: 20%; left: 30%;">
     <div class="icon"></div>
-    <span>Snake Game</span>
+    <span>Pinball Game</span>
   </div>
+
   <!-- Taskbar -->
   <div id="taskbar">
     <div id="start-button">
@@ -304,10 +398,15 @@
     </div>
     <div id="taskbar-buttons"></div>
   </div>
+
   <!-- Start Menu -->
   <div id="start-menu">
     <p>Hello! I'm Valery, passionate about creating stunning visual effects and immersive environments. Thanks for visiting my portfolio!</p>
+    <a href="#" id="portfolio-start-menu">Open Portfolio</a>
+    <a href="#" id="pinball-start-menu">Play Pinball</a>
+    <a href="mailto:xxater@gmail.com">Contact Me</a>
   </div>
+
   <!-- Portfolio Window -->
   <div class="window" id="portfolio-window">
     <div class="title-bar" id="portfolio-title-bar">
@@ -345,7 +444,11 @@
       <div class="experience">
         <h2>Experience</h2>
         <!-- Experience Items -->
-        <!-- (Your experience content here) -->
+        <div class="experience-item">
+          <strong>VFX Artist</strong> at <em>Company XYZ</em> (2021 - Present)
+          <p>Responsibilities included creating dynamic visual effects for various projects...</p>
+        </div>
+        <!-- Add more experience items as needed -->
       </div>
       <div class="education">
         <h2>Education</h2>
@@ -356,23 +459,24 @@
         <h2>Portfolio</h2>
         <p>Replace the images and videos below with your own work.</p>
         <!-- Placeholder images -->
-        <div style="width:100%; height:200px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; margin-bottom:10px;">
+        <div style="width:100%; height:150px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; margin-bottom:10px; border-radius:4px;">
           <span>Image 1 Placeholder</span>
         </div>
-        <div style="width:100%; height:200px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; margin-bottom:10px;">
+        <div style="width:100%; height:150px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; margin-bottom:10px; border-radius:4px;">
           <span>Image 2 Placeholder</span>
         </div>
         <!-- Placeholder video -->
-        <div style="width:100%; height:200px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000;">
+        <div style="width:100%; height:150px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; border-radius:4px;">
           <span>Video Placeholder</span>
         </div>
       </div>
     </div>
   </div>
-  <!-- Game Window -->
-  <div class="window" id="game-window">
-    <div class="title-bar" id="game-title-bar">
-      <div class="title-bar-text">Snake Game</div>
+
+  <!-- Pinball Game Window -->
+  <div class="window" id="pinball-window">
+    <div class="title-bar" id="pinball-title-bar">
+      <div class="title-bar-text">Pinball Game</div>
       <div class="title-bar-controls">
         <button class="minimize-button"></button>
         <button class="maximize-button"></button>
@@ -380,99 +484,112 @@
       </div>
     </div>
     <div class="content" style="padding: 0;">
-      <canvas id="game-canvas" width="400" height="400"></canvas>
+      <canvas id="pinball-canvas" width="400" height="600"></canvas>
     </div>
   </div>
 
+  <!-- Taskbar Buttons Template (Hidden) -->
+  <template id="taskbar-button-template">
+    <div class="taskbar-button" data-window-id="">
+      <span></span>
+    </div>
+  </template>
+
   <script>
     // Loading screen
-    window.onload = function() {
+    window.addEventListener('load', function() {
       setTimeout(function() {
         document.getElementById('loading-screen').style.display = 'none';
         document.body.style.overflow = 'auto'; // Restore scrolling if needed
-      }, 2000);
-    };
+      }, 1500);
+    });
 
     // Start button functionality
-    var startButton = document.getElementById('start-button');
-    var startMenu = document.getElementById('start-menu');
-    var isStartMenuOpen = false;
+    const startButton = document.getElementById('start-button');
+    const startMenu = document.getElementById('start-menu');
+    let isStartMenuOpen = false;
 
-    startButton.addEventListener('click', function() {
+    startButton.addEventListener('click', function(event) {
+      event.stopPropagation();
       isStartMenuOpen = !isStartMenuOpen;
       startMenu.style.display = isStartMenuOpen ? 'block' : 'none';
     });
 
+    // Start Menu Links
+    document.getElementById('portfolio-start-menu').addEventListener('click', function(event) {
+      event.preventDefault();
+      openWindow(portfolioWindow, 'Portfolio - Valery Gorbunov', 'portfolio-taskbar-button');
+    });
+
+    document.getElementById('pinball-start-menu').addEventListener('click', function(event) {
+      event.preventDefault();
+      openWindow(pinballWindow, 'Pinball Game', 'pinball-taskbar-button');
+      startPinballGame();
+    });
+
     // Close the start menu when clicking outside
     document.addEventListener('click', function(event) {
-      var isClickInside = startButton.contains(event.target) || startMenu.contains(event.target);
-      if (!isClickInside) {
+      if (!startButton.contains(event.target) && !startMenu.contains(event.target)) {
         startMenu.style.display = 'none';
         isStartMenuOpen = false;
       }
     });
 
-    // Desktop icon to open the Portfolio window
-    var portfolioIcon = document.getElementById('portfolio-icon');
-    var portfolioWindow = document.getElementById('portfolio-window');
-    var taskbarButtons = document.getElementById('taskbar-buttons');
+    // Desktop Icons to open windows
+    const portfolioIcon = document.getElementById('portfolio-icon');
+    const pinballIcon = document.getElementById('pinball-icon');
+    const portfolioWindow = document.getElementById('portfolio-window');
+    const pinballWindow = document.getElementById('pinball-window');
+    const taskbarButtons = document.getElementById('taskbar-buttons');
 
     portfolioIcon.addEventListener('dblclick', function() {
       openWindow(portfolioWindow, 'Portfolio - Valery Gorbunov', 'portfolio-taskbar-button');
     });
 
-    // Desktop icon to open the Game window
-    var gameIcon = document.getElementById('game-icon');
-    var gameWindow = document.getElementById('game-window');
-
-    gameIcon.addEventListener('dblclick', function() {
-      openWindow(gameWindow, 'Snake Game', 'game-taskbar-button');
-      startGame();
+    pinballIcon.addEventListener('dblclick', function() {
+      openWindow(pinballWindow, 'Pinball Game', 'pinball-taskbar-button');
+      startPinballGame();
     });
 
     // Window controls
+    let zIndexCounter = 10;
+
     function addWindowControls(windowElement, titleBarId, taskbarId, windowTitle) {
-      var minimizeButton = windowElement.querySelector('.minimize-button');
-      var maximizeButton = windowElement.querySelector('.maximize-button');
-      var closeButton = windowElement.querySelector('.close-button');
-      var isMaximized = false;
-      var prevPosition = {};
-      var prevSize = {};
+      const minimizeButton = windowElement.querySelector('.minimize-button');
+      const maximizeButton = windowElement.querySelector('.maximize-button');
+      const closeButton = windowElement.querySelector('.close-button');
+      let isMaximized = false;
+      let prevPosition = {};
+      let prevSize = {};
 
       minimizeButton.addEventListener('click', function() {
         windowElement.style.display = 'none';
-        var taskbarButton = document.getElementById(taskbarId);
-        if (taskbarButton) taskbarButton.classList.remove('active');
-        if (windowElement === gameWindow) {
-          stopGame();
-        }
+        removeTaskbarButton(taskbarId);
       });
 
       maximizeButton.addEventListener('click', function() {
         if (!isMaximized) {
-          // Save previous position and size
           prevPosition = {
             top: windowElement.style.top,
-            left: windowElement.style.left
+            left: windowElement.style.left,
+            transform: windowElement.style.transform
           };
           prevSize = {
             width: windowElement.style.width,
             height: windowElement.style.height
           };
-          // Maximize
           windowElement.style.top = '0';
           windowElement.style.left = '0';
+          windowElement.style.transform = 'none';
           windowElement.style.width = '100%';
-          windowElement.style.height = 'calc(100% - 30px)';
-          windowElement.querySelector('.content').style.maxHeight = 'calc(100% - 30px)';
+          windowElement.style.height = '100%';
           isMaximized = true;
         } else {
-          // Restore previous position and size
           windowElement.style.top = prevPosition.top;
           windowElement.style.left = prevPosition.left;
+          windowElement.style.transform = prevPosition.transform;
           windowElement.style.width = prevSize.width;
           windowElement.style.height = prevSize.height;
-          windowElement.querySelector('.content').style.maxHeight = 'calc(100% - 30px)';
           isMaximized = false;
         }
       });
@@ -480,36 +597,34 @@
       closeButton.addEventListener('click', function() {
         windowElement.style.display = 'none';
         removeTaskbarButton(taskbarId);
-        if (windowElement === gameWindow) {
-          stopGame();
+        if (windowElement === pinballWindow) {
+          stopPinballGame();
         }
       });
 
       // Make the window draggable
-      var isMouseDown = false;
-      var offset = [0, 0];
-      var titleBar = document.getElementById(titleBarId);
+      const titleBar = windowElement.querySelector('.title-bar');
+      let isDragging = false;
+      let dragOffset = { x: 0, y: 0 };
 
       titleBar.addEventListener('mousedown', function(e) {
-        isMouseDown = true;
-        offset = [
-          windowElement.offsetLeft - e.clientX,
-          windowElement.offsetTop - e.clientY
-        ];
-        windowElement.classList.add('unselectable');
-      }, true);
-
-      document.addEventListener('mouseup', function() {
-        isMouseDown = false;
-        windowElement.classList.remove('unselectable');
-      }, true);
+        isDragging = true;
+        dragOffset.x = e.clientX - windowElement.offsetLeft;
+        dragOffset.y = e.clientY - windowElement.offsetTop;
+        windowElement.style.zIndex = ++zIndexCounter;
+      });
 
       document.addEventListener('mousemove', function(e) {
-        if (isMouseDown) {
-          windowElement.style.left = (e.clientX + offset[0]) + 'px';
-          windowElement.style.top = (e.clientY + offset[1]) + 'px';
+        if (isDragging) {
+          windowElement.style.left = (e.clientX - dragOffset.x) + 'px';
+          windowElement.style.top = (e.clientY - dragOffset.y) + 'px';
+          windowElement.style.transform = 'none';
         }
-      }, true);
+      });
+
+      document.addEventListener('mouseup', function() {
+        isDragging = false;
+      });
 
       // Bring window to front when clicked
       windowElement.addEventListener('mousedown', function() {
@@ -517,40 +632,37 @@
       });
     }
 
-    // Initialize windows
+    // Initialize window controls
     addWindowControls(portfolioWindow, 'portfolio-title-bar', 'portfolio-taskbar-button', 'Portfolio - Valery Gorbunov');
-    addWindowControls(gameWindow, 'game-title-bar', 'game-taskbar-button', 'Snake Game');
+    addWindowControls(pinballWindow, 'pinball-title-bar', 'pinball-taskbar-button', 'Pinball Game');
 
     // Taskbar button functionality
     function addTaskbarButton(title, id, windowElement) {
-      // Check if button already exists
       if (document.getElementById(id)) return;
 
-      var button = document.createElement('div');
-      button.className = 'taskbar-button active';
-      button.id = id;
-      button.textContent = title;
+      const template = document.getElementById('taskbar-button-template').content.cloneNode(true);
+      const button = template.querySelector('.taskbar-button');
+      button.setAttribute('id', id);
+      button.dataset.windowId = id;
+      button.querySelector('span').textContent = title;
       taskbarButtons.appendChild(button);
 
       button.addEventListener('click', function() {
         if (windowElement.style.display === 'none') {
           windowElement.style.display = 'block';
           button.classList.add('active');
-          if (windowElement === gameWindow) {
-            startGame();
-          }
         } else {
           windowElement.style.display = 'none';
           button.classList.remove('active');
-          if (windowElement === gameWindow) {
-            stopGame();
+          if (windowElement === pinballWindow) {
+            stopPinballGame();
           }
         }
       });
     }
 
     function removeTaskbarButton(id) {
-      var button = document.getElementById(id);
+      const button = document.getElementById(id);
       if (button) {
         taskbarButtons.removeChild(button);
       }
@@ -562,108 +674,98 @@
       windowElement.style.zIndex = ++zIndexCounter;
     }
 
-    var zIndexCounter = 1;
+    /* ------------------- Pinball Game Implementation ------------------- */
+    const pinballCanvas = document.getElementById('pinball-canvas');
+    const ctx = pinballCanvas.getContext('2d');
+    let pinballInterval;
+    let ball = { x: 200, y: 300, radius: 10, dx: 2, dy: -2 };
+    let paddles = [
+      { x: 50, y: 580, width: 80, height: 10, dx: 5 },
+      { x: 170, y: 580, width: 80, height: 10, dx: 5 }
+    ];
+    let keys = {};
 
-    // Snake Game Implementation
-    var gameInterval;
-    var xVelocity = 0;
-    var yVelocity = 0;
-    var snake = [];
-    var apple = {};
-    var score = 0;
-
-    function keyDown(e) {
-      switch (e.keyCode) {
-        case 37: // Left
-          if (xVelocity === 0) {
-            xVelocity = -1;
-            yVelocity = 0;
-          }
-          break;
-        case 38: // Up
-          if (yVelocity === 0) {
-            xVelocity = 0;
-            yVelocity = -1;
-          }
-          break;
-        case 39: // Right
-          if (xVelocity === 0) {
-            xVelocity = 1;
-            yVelocity = 0;
-          }
-          break;
-        case 40: // Down
-          if (yVelocity === 0) {
-            xVelocity = 0;
-            yVelocity = 1;
-          }
-          break;
-      }
+    function startPinballGame() {
+      ball = { x: 200, y: 300, radius: 10, dx: 2, dy: -2 };
+      paddles = [
+        { x: 50, y: 580, width: 80, height: 10, dx: 5 },
+        { x: 170, y: 580, width: 80, height: 10, dx: 5 }
+      ];
+      keys = {};
+      document.addEventListener('keydown', keyDownPinball);
+      document.addEventListener('keyup', keyUpPinball);
+      pinballInterval = requestAnimationFrame(drawPinball);
     }
 
-    function startGame() {
-      var canvas = document.getElementById('game-canvas');
-      var ctx = canvas.getContext('2d');
-      var gridSize = 20;
-      var tileCount = canvas.width / gridSize;
-      xVelocity = 0;
-      yVelocity = 0;
-      snake = [{ x: 10, y: 10 }];
-      apple = { x: 5, y: 5 };
-      score = 0;
+    function stopPinballGame() {
+      cancelAnimationFrame(pinballInterval);
+      document.removeEventListener('keydown', keyDownPinball);
+      document.removeEventListener('keyup', keyUpPinball);
+    }
 
-      document.addEventListener('keydown', keyDown);
+    function keyDownPinball(e) {
+      keys[e.key] = true;
+    }
 
-      function gameLoop() {
-        var head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
+    function keyUpPinball(e) {
+      keys[e.key] = false;
+    }
 
-        // Wrap around the edges
-        if (head.x < 0) head.x = tileCount - 1;
-        if (head.x >= tileCount) head.x = 0;
-        if (head.y < 0) head.y = tileCount - 1;
-        if (head.y >= tileCount) head.y = 0;
+    function drawPinball() {
+      ctx.clearRect(0, 0, pinballCanvas.width, pinballCanvas.height);
 
-        // Check for collision with self
-        for (var i = 0; i < snake.length; i++) {
-          if (snake[i].x === head.x && snake[i].y === head.y) {
-            // Game over
-            alert('Game Over! Your score: ' + score);
-            stopGame();
-            return;
-          }
+      // Draw ball
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+      ctx.fillStyle = "#FF0000";
+      ctx.fill();
+      ctx.closePath();
+
+      // Draw paddles
+      paddles.forEach(paddle => {
+        ctx.beginPath();
+        ctx.rect(paddle.x, paddle.y, paddle.width, paddle.height);
+        ctx.fillStyle = "#0000FF";
+        ctx.fill();
+        ctx.closePath();
+      });
+
+      // Move paddles
+      paddles.forEach(paddle => {
+        if (keys['ArrowLeft'] && paddle.x > 0) {
+          paddle.x -= paddle.dx;
         }
+        if (keys['ArrowRight'] && paddle.x < pinballCanvas.width - paddle.width) {
+          paddle.x += paddle.dx;
+        }
+      });
 
-        snake.unshift(head);
+      // Move ball
+      ball.x += ball.dx;
+      ball.y += ball.dy;
 
-        // Check for apple
-        if (head.x === apple.x && head.y === apple.y) {
-          score++;
-          // Place new apple
-          apple.x = Math.floor(Math.random() * tileCount);
-          apple.y = Math.floor(Math.random() * tileCount);
+      // Collision with walls
+      if (ball.x + ball.dx > pinballCanvas.width - ball.radius || ball.x + ball.dx < ball.radius) {
+        ball.dx = -ball.dx;
+      }
+      if (ball.y + ball.dy < ball.radius) {
+        ball.dy = -ball.dy;
+      } else if (ball.y + ball.dy > pinballCanvas.height - ball.radius) {
+        // Check collision with paddles
+        let hitPaddle = paddles.some(paddle => {
+          return ball.x > paddle.x && ball.x < paddle.x + paddle.width &&
+                 ball.y + ball.radius > paddle.y && ball.y < paddle.y + paddle.height;
+        });
+        if (hitPaddle) {
+          ball.dy = -ball.dy;
         } else {
-          snake.pop();
+          alert('Game Over!');
+          stopPinballGame();
+          return;
         }
-
-        // Draw everything
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = '#0F0';
-        for (var i = 0; i < snake.length; i++) {
-          ctx.fillRect(snake[i].x * gridSize, snake[i].y * gridSize, gridSize - 2, gridSize - 2);
-        }
-
-        ctx.fillStyle = '#F00';
-        ctx.fillRect(apple.x * gridSize, apple.y * gridSize, gridSize - 2, gridSize - 2);
       }
 
-      gameInterval = setInterval(gameLoop, 100);
-    }
-
-    function stopGame() {
-      clearInterval(gameInterval);
-      document.removeEventListener('keydown', keyDown);
+      pinballInterval = requestAnimationFrame(drawPinball);
     }
   </script>
 </body>
