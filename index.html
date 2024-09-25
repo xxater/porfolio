@@ -15,33 +15,11 @@
       font-family: 'MS Sans Serif', Arial, sans-serif;
       font-size: 14px;
       color: black;
+      background-color: #008080; /* Windows 98 Teal */
       overflow: hidden;
       position: relative;
       height: 100vh;
       width: 100vw;
-    }
-
-    /* Windows 98 Style Background Inspired by Windows XP Bliss */
-    .background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(to top, #7ec850 50%, #87ceeb 50%);
-      z-index: -2;
-    }
-    .background::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: -25%;
-      width: 150%;
-      height: 50%;
-      background: radial-gradient(circle at 50% 100%, #7ec850, #7ec850 60%, transparent 60%),
-                  radial-gradient(circle at 20% 100%, #7ec850, #7ec850 50%, transparent 50%);
-      background-repeat: no-repeat;
-      background-size: cover;
     }
 
     /* Loading Screen */
@@ -51,7 +29,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: #C0C0C0;
+      background-color: #008080;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -59,13 +37,14 @@
       flex-direction: column;
     }
     #loading-screen h1 {
-      color: black;
+      color: white;
       font-size: 24px;
       margin-bottom: 20px;
+      text-shadow: 1px 1px black;
     }
     #loading-screen .spinner {
       border: 4px solid #f3f3f3;
-      border-top: 4px solid #000;
+      border-top: 4px solid #ffffff;
       border-radius: 50%;
       width: 40px;
       height: 40px;
@@ -83,47 +62,50 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      width: 60px;
-      margin: 10px;
+      width: 70px;
+      margin: 15px;
       cursor: pointer;
       user-select: none;
+      transition: transform 0.2s;
+    }
+    .desktop-icon:hover {
+      transform: scale(1.1);
     }
     .desktop-icon .icon {
-      width: 48px;
-      height: 48px;
+      width: 64px;
+      height: 64px;
       background-color: #C0C0C0;
       border: 2px solid #000;
-      border-radius: 4px;
+      border-radius: 8px;
       display: flex;
       justify-content: center;
       align-items: center;
       margin-bottom: 5px;
       position: relative;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
     }
-    .desktop-icon .icon::before {
-      content: '';
-      width: 24px;
-      height: 24px;
-      background-size: contain;
-    }
-    /* Portfolio Icon */
-    #portfolio-icon .icon::before {
-      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB4PSI0IiB5PSI0IiBmaWxsPSIjMDBGRjAwIi8+PC9zdmc+');
-    }
-    /* Game Icon */
-    #game-icon .icon::before {
-      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTEiIGZpbGw9IiNGREQwMDAiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+');
-    }
-    /* Pinball Icon */
-    #pinball-icon .icon::before {
-      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGxpbmUgeDE9IjEyIiB5MT0iMCIgeDI9IjEyIiB5Mj0iMjQiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjQiIHkxPSI0IiB4Mj0iMjAiIHkyPSIwIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg==');
+    .desktop-icon .icon svg {
+      width: 32px;
+      height: 32px;
+      fill: #000;
     }
     .desktop-icon span {
-      color: white;
-      text-shadow: 1px 1px black;
+      color: black;
       font-size: 12px;
       text-align: center;
       word-break: break-word;
+      text-shadow: 1px 1px white;
+    }
+
+    /* Specific Icons */
+    /* Portfolio Icon */
+    #portfolio-icon .icon svg {
+      fill: #0000FF; /* Blue */
+    }
+
+    /* Pinball Icon */
+    #pinball-icon .icon svg {
+      fill: #FF4500; /* Orange Red */
     }
 
     /* Window Styles */
@@ -137,12 +119,14 @@
       border-left-color: #fff;
       width: 90%;
       max-width: 600px;
-      background-color: #c0c0c0;
+      background-color: #C0C0C0;
       cursor: default;
       z-index: 10;
       display: none;
       overflow: hidden;
       border-radius: 4px;
+      box-shadow: 4px 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
     }
     .title-bar {
       background: linear-gradient(#000080, #000060);
@@ -153,16 +137,15 @@
       align-items: center;
       cursor: move;
       user-select: none;
-    }
-    .title-bar-text {
       font-weight: bold;
       font-size: 16px;
+      border-bottom: 2px solid #fff;
     }
     .title-bar-controls {
       display: flex;
     }
     .title-bar-controls button {
-      background-color: #c0c0c0;
+      background-color: #C0C0C0;
       border: 1px solid #fff;
       width: 20px;
       height: 20px;
@@ -171,6 +154,10 @@
       position: relative;
       cursor: pointer;
       border-radius: 2px;
+      transition: background-color 0.2s;
+    }
+    .title-bar-controls button:hover {
+      background-color: #A9A9A9;
     }
     /* Window Control Icons */
     .title-bar-controls button.minimize-button::before {
@@ -208,9 +195,10 @@
       transform: rotate(-45deg);
     }
     .content {
-      padding: 10px;
+      padding: 15px;
       overflow: auto;
       max-height: calc(100vh - 80px);
+      background-color: #D3D3D3;
     }
     h1, h2, h3 {
       margin: 10px 0;
@@ -223,7 +211,11 @@
       margin-bottom: 20px;
     }
     .experience-item {
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      background-color: #FFFFFF;
+      padding: 10px;
+      border-radius: 4px;
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
     }
     a {
       color: blue;
@@ -236,93 +228,120 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 40px;
-      background-color: #c0c0c0;
+      height: 50px;
+      background-color: #C0C0C0;
       border-top: 2px solid #fff;
       border-left: 2px solid #fff;
       display: flex;
       align-items: center;
       z-index: 20;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
     }
     #start-button {
-      background-color: #c0c0c0;
+      background-color: #C0C0C0;
       border: 2px solid #fff;
       border-top-color: #000;
       border-left-color: #000;
       padding: 8px 12px;
       cursor: pointer;
-      margin-left: 5px;
+      margin-left: 10px;
       display: flex;
       align-items: center;
       position: relative;
       border-radius: 2px;
       user-select: none;
+      transition: background-color 0.2s;
+    }
+    #start-button:hover {
+      background-color: #A9A9A9;
     }
     #start-button::before {
       content: '';
       display: inline-block;
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
       background-color: #000080;
-      border: 1px solid #fff;
+      border: 2px solid #fff;
       margin-right: 8px;
-      border-radius: 2px;
+      border-radius: 4px;
+      box-shadow: inset 0 0 0 1px #fff;
     }
     #start-button span {
-      font-size: 14px;
+      font-size: 16px;
+      color: white;
+      text-shadow: 1px 1px black;
     }
     #taskbar-buttons {
       display: flex;
       align-items: center;
-      margin-left: 10px;
+      margin-left: 15px;
       overflow-x: auto;
+      scrollbar-width: none; /* Firefox */
+    }
+    #taskbar-buttons::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
     }
     .taskbar-button {
-      background-color: #c0c0c0;
+      background-color: #C0C0C0;
       border: 2px solid #fff;
       border-top-color: #000;
       border-left-color: #000;
-      padding: 6px 10px;
+      padding: 8px 12px;
       cursor: pointer;
-      margin-right: 4px;
+      margin-right: 8px;
       display: flex;
       align-items: center;
       border-radius: 2px;
       user-select: none;
       white-space: nowrap;
       font-size: 14px;
+      transition: background-color 0.2s, transform 0.2s;
+    }
+    .taskbar-button:hover {
+      background-color: #A9A9A9;
+      transform: scale(1.05);
     }
     .taskbar-button.active {
       border-top-color: #fff;
       border-left-color: #fff;
       border-bottom-color: #000;
       border-right-color: #000;
+      background-color: #696969;
+      color: white;
     }
 
     /* Start Menu */
     #start-menu {
       position: fixed;
-      bottom: 40px;
-      left: 5px;
-      background-color: #c0c0c0;
+      bottom: 60px;
+      left: 10px;
+      background-color: #C0C0C0;
       border: 2px solid #000;
       border-top-color: #fff;
       border-left-color: #fff;
-      width: 220px;
+      width: 240px;
       display: none;
-      padding: 10px;
+      padding: 15px;
       z-index: 25;
       border-radius: 4px;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
     }
     #start-menu p {
-      margin: 0 0 10px 0;
+      margin: 0 0 15px 0;
       font-size: 14px;
+      color: black;
+      text-shadow: 1px 1px white;
     }
     #start-menu a {
       display: block;
-      margin: 5px 0;
+      margin: 8px 0;
       color: blue;
       text-decoration: underline;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    #start-menu a:hover {
+      color: darkblue;
     }
 
     /* Prevent selection */
@@ -333,48 +352,48 @@
       user-select: none;
     }
 
-    /* Scrollbar Styling for Taskbar Buttons */
-    #taskbar-buttons {
-      scrollbar-width: none; /* Firefox */
-    }
-    #taskbar-buttons::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera */
-    }
-
     /* Responsive Adjustments */
     @media (max-width: 768px) {
       .desktop-icon {
-        width: 50px;
-        margin: 8px;
+        width: 60px;
+        margin: 10px;
       }
       .desktop-icon .icon {
-        width: 40px;
-        height: 40px;
+        width: 48px;
+        height: 48px;
       }
       .desktop-icon span {
-        font-size: 10px;
+        font-size: 11px;
       }
       .window {
         width: 95%;
         height: 90%;
       }
       #taskbar {
-        height: 50px;
+        height: 60px;
       }
       #start-button {
         padding: 10px 14px;
       }
       .taskbar-button {
-        padding: 8px 12px;
-        font-size: 12px;
+        padding: 8px 14px;
+        font-size: 14px;
       }
     }
+
+    /* Smooth Window Transitions */
+    .window.show {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, -60%); }
+      to { opacity: 1; transform: translate(-50%, -50%); }
+    }
+
   </style>
 </head>
 <body>
-  <!-- Background -->
-  <div class="background"></div>
-
   <!-- Loading Screen -->
   <div id="loading-screen">
     <h1>Loading...</h1>
@@ -383,11 +402,26 @@
 
   <!-- Desktop Icons -->
   <div class="desktop-icon unselectable" id="portfolio-icon" style="top: 20%; left: 10%;">
-    <div class="icon"></div>
+    <div class="icon">
+      <!-- Portfolio SVG Icon -->
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 8h48v40H8z" stroke="#000" stroke-width="2" fill="#0000FF"/>
+        <path d="M16 16h32v8H16z" fill="#FFFFFF"/>
+        <path d="M16 32h32v8H16z" fill="#FFFFFF"/>
+        <path d="M16 48h32v8H16z" fill="#FFFFFF"/>
+      </svg>
+    </div>
     <span>Portfolio</span>
   </div>
   <div class="desktop-icon unselectable" id="pinball-icon" style="top: 20%; left: 30%;">
-    <div class="icon"></div>
+    <div class="icon">
+      <!-- Pinball SVG Icon -->
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <path d="M32 4C17.664 4 6 15.664 6 30s11.664 26 26 26 26-11.664 26-26S46.336 4 32 4zm0 48c-12.15 0-22-9.85-22-22S19.85 8 32 8s22 9.85 22 22-9.85 22-22 22z" fill="#FF4500"/>
+        <circle cx="32" cy="32" r="8" fill="#FFFFFF"/>
+        <path d="M32 16v8l8 8-8 8v8" stroke="#000" stroke-width="2" fill="none"/>
+      </svg>
+    </div>
     <span>Pinball Game</span>
   </div>
 
@@ -412,9 +446,9 @@
     <div class="title-bar" id="portfolio-title-bar">
       <div class="title-bar-text">Portfolio - Valery Gorbunov</div>
       <div class="title-bar-controls">
-        <button class="minimize-button"></button>
-        <button class="maximize-button"></button>
-        <button class="close-button"></button>
+        <button class="minimize-button" aria-label="Minimize"></button>
+        <button class="maximize-button" aria-label="Maximize"></button>
+        <button class="close-button" aria-label="Close"></button>
       </div>
     </div>
     <div class="content">
@@ -445,10 +479,68 @@
         <h2>Experience</h2>
         <!-- Experience Items -->
         <div class="experience-item">
-          <strong>VFX Artist</strong> at <em>Company XYZ</em> (2021 - Present)
-          <p>Responsibilities included creating dynamic visual effects for various projects...</p>
+          <strong>Various</strong><br>
+          VFX Artist<br>
+          February 2023 - Present (1 year 8 months)<br>
+          VFX work. Creating VFX for UE5 projects.
         </div>
-        <!-- Add more experience items as needed -->
+        <div class="experience-item">
+          <strong>QORPO - Game Studio</strong><br>
+          VFX Artist/Lighting Artist<br>
+          November 2022 - February 2023 (4 months)<br>
+          Created VFX in Embergen, Houdini, and UE5.
+        </div>
+        <div class="experience-item">
+          <strong>Girand</strong><br>
+          Producer/Team Lead<br>
+          April 2022 - October 2022 (7 months)<br>
+          GIRAND: IN THE LOST CITY. NFT game. I was responsible for VFX, producing, cinematics, and team guidance.
+        </div>
+        <div class="experience-item">
+          <strong>Stage 23</strong><br>
+          Lead VFX Artist, Technical Artist<br>
+          January 2021 - June 2022 (1 year 6 months)<br>
+          Moscow, Moscow City, Russia.
+        </div>
+        <div class="experience-item">
+          <strong>Mundfish</strong><br>
+          VFX Artist/Cinematic Artist<br>
+          October 2020 - January 2021 (4 months)<br>
+          Moscow, Moscow City, Russia.<br>
+          Responsibilities included camera work and VFX creation.
+        </div>
+        <div class="experience-item">
+          <strong>QTE</strong><br>
+          Mail.ru Group<br>
+          Cinematic Artist<br>
+          March 2019 - September 2020 (1 year 7 months)<br>
+          Moscow, Moscow City, Russia.<br>
+          Worked with Unreal Engine and CryEngine.<br>
+          - Cinematography<br>
+          - VFX<br>
+          - Modeling<br>
+          - Texturing<br>
+          - Animation
+        </div>
+        <div class="experience-item">
+          <strong>Coderaptor</strong><br>
+          Environment Artist, Technical Artist, VFX Artist<br>
+          May 2018 - February 2019 (10 months)<br>
+          Moscow, Moscow City, Russia.<br>
+          Technical art pipeline. VFX, environment art. Materials, lighting, blueprints.
+        </div>
+        <div class="experience-item">
+          <strong>CodeClass School</strong><br>
+          Teaching Unreal Engine/Unity<br>
+          December 2017 - January 2019 (1 year 2 months)<br>
+          Moscow, Moscow City, Russia.<br>
+          Interactive technologies.
+        </div>
+        <div class="experience-item">
+          <strong>Level Designer</strong><br>
+          December 2017 - May 2018 (6 months)<br>
+          Москва, Россия.
+        </div>
       </div>
       <div class="education">
         <h2>Education</h2>
@@ -478,13 +570,13 @@
     <div class="title-bar" id="pinball-title-bar">
       <div class="title-bar-text">Pinball Game</div>
       <div class="title-bar-controls">
-        <button class="minimize-button"></button>
-        <button class="maximize-button"></button>
-        <button class="close-button"></button>
+        <button class="minimize-button" aria-label="Minimize"></button>
+        <button class="maximize-button" aria-label="Maximize"></button>
+        <button class="close-button" aria-label="Close"></button>
       </div>
     </div>
     <div class="content" style="padding: 0;">
-      <canvas id="pinball-canvas" width="400" height="600"></canvas>
+      <canvas id="pinball-canvas" width="400" height="600" style="width:100%; height:auto; display:block; margin:0 auto; border-radius:4px; box-shadow: 2px 2px 10px rgba(0,0,0,0.5);"></canvas>
     </div>
   </div>
 
@@ -651,6 +743,7 @@
         if (windowElement.style.display === 'none') {
           windowElement.style.display = 'block';
           button.classList.add('active');
+          windowElement.style.zIndex = ++zIndexCounter;
         } else {
           windowElement.style.display = 'none';
           button.classList.remove('active');
@@ -676,8 +769,8 @@
 
     /* ------------------- Pinball Game Implementation ------------------- */
     const pinballCanvas = document.getElementById('pinball-canvas');
-    const ctx = pinballCanvas.getContext('2d');
-    let pinballInterval;
+    const pinballCtx = pinballCanvas.getContext('2d');
+    let pinballAnimationFrame;
     let ball = { x: 200, y: 300, radius: 10, dx: 2, dy: -2 };
     let paddles = [
       { x: 50, y: 580, width: 80, height: 10, dx: 5 },
@@ -686,19 +779,19 @@
     let keys = {};
 
     function startPinballGame() {
-      ball = { x: 200, y: 300, radius: 10, dx: 2, dy: -2 };
+      ball = { x: pinballCanvas.width / 2, y: pinballCanvas.height / 2, radius: 10, dx: 3, dy: -3 };
       paddles = [
-        { x: 50, y: 580, width: 80, height: 10, dx: 5 },
-        { x: 170, y: 580, width: 80, height: 10, dx: 5 }
+        { x: 50, y: pinballCanvas.height - 20, width: 80, height: 10, dx: 5 },
+        { x: 170, y: pinballCanvas.height - 20, width: 80, height: 10, dx: 5 }
       ];
       keys = {};
       document.addEventListener('keydown', keyDownPinball);
       document.addEventListener('keyup', keyUpPinball);
-      pinballInterval = requestAnimationFrame(drawPinball);
+      pinballAnimationFrame = requestAnimationFrame(drawPinball);
     }
 
     function stopPinballGame() {
-      cancelAnimationFrame(pinballInterval);
+      cancelAnimationFrame(pinballAnimationFrame);
       document.removeEventListener('keydown', keyDownPinball);
       document.removeEventListener('keyup', keyUpPinball);
     }
@@ -712,22 +805,22 @@
     }
 
     function drawPinball() {
-      ctx.clearRect(0, 0, pinballCanvas.width, pinballCanvas.height);
+      pinballCtx.clearRect(0, 0, pinballCanvas.width, pinballCanvas.height);
 
       // Draw ball
-      ctx.beginPath();
-      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-      ctx.fillStyle = "#FF0000";
-      ctx.fill();
-      ctx.closePath();
+      pinballCtx.beginPath();
+      pinballCtx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+      pinballCtx.fillStyle = "#FF0000";
+      pinballCtx.fill();
+      pinballCtx.closePath();
 
       // Draw paddles
       paddles.forEach(paddle => {
-        ctx.beginPath();
-        ctx.rect(paddle.x, paddle.y, paddle.width, paddle.height);
-        ctx.fillStyle = "#0000FF";
-        ctx.fill();
-        ctx.closePath();
+        pinballCtx.beginPath();
+        pinballCtx.rect(paddle.x, paddle.y, paddle.width, paddle.height);
+        pinballCtx.fillStyle = "#0000FF";
+        pinballCtx.fill();
+        pinballCtx.closePath();
       });
 
       // Move paddles
@@ -765,7 +858,7 @@
         }
       }
 
-      pinballInterval = requestAnimationFrame(drawPinball);
+      pinballAnimationFrame = requestAnimationFrame(drawPinball);
     }
   </script>
 </body>
