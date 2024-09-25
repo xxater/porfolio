@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>ICQ Интерфейс</title>
+    <style>
+        body {
+            background-color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .icq-container {
+            width: 400px;
+            background-color: #f5f5f5;
+            border: 2px solid #0086d1;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #0086d1;
+            color: white;
+            padding: 10px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .chat-window {
+            height: 600px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #ffffff;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 80%;
+            position: relative;
+            clear: both;
+        }
+        .message.user1 {
+            background-color: #d1e7ff;
+            float: left;
+        }
+        .message.user2 {
+            background-color: #e1ffd1;
+            float: right;
+        }
+        .timestamp {
+            font-size: 0.8em;
+            color: #555;
+            margin-top: 5px;
+        }
+        .username {
+            font-weight: bold;
+            margin-bottom: 3px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="icq-container">
+        <div class="header">ICQ Chat</div>
+        <div class="chat-window">
+            <!-- Сообщение 1 -->
+            <div class="message user1">
+                <span class="username">Ксеня 🌸 ❤️ 🌸</span>
+                <span>чо та криво выглядит..</span>
+                <div class="timestamp">[25.09.2024 16:08]</div>
+            </div>
+            <!-- Сообщение 2 -->
+            <div class="message user1">
+                <span class="username">Ксеня 🌸 ❤️ 🌸</span>
+                <span>надо подправить</span>
+                <div class="timestamp">[25.09.2024 16:08]</div>
+            </div>
+            <!-- Сообщение 3 -->
+            <div class="message user1">
+                <span class="username">Ксеня 🌸 ❤️ 🌸</span>
+                <span>а то превьюхи нихуя нет на этом бусти</span>
+                <div class="timestamp">[25.09.2024 16:08]</div>
+            </div>
+            <!-- Сообщение 4 -->
+            <div class="message user1">
+                <span class="username">Ксеня 🌸 ❤️ 🌸</span>
+                <span>спасибо за ответ!</span>
+                <div class="timestamp">[25.09.2024 16:09]</div>
+            </div>
+            <!-- Сообщение 5 -->
+            <div class="message user1">
+                <span class="username">Ксеня 🌸 ❤️ 🌸</span>
+                <span>а 1000р много за файл или не?</span>
+                <div class="timestamp">[25.09.2024 16:09]</div>
+            </div>
+            <!-- Сообщение 6 -->
+            <div class="message user1">
+                <span class="username">Ксеня 🌸 ❤️ 🌸</span>
+                <span>там много инфы, которую можно в инете не искать..</span>
+                <div class="timestamp">[25.09.2024 16:09]</div>
+            </div>
+            <!-- Пустое сообщение -->
+            <div class="message user1">
+                <div class="timestamp">[25.09.2024 16:09]</div>
+            </div>
+            <!-- Сообщение от Илюхи -->
+            <div class="message user2">
+                <span class="username">Илюха 👑</span>
+                <span>чисто за файл многовато</span>
+                <div class="timestamp">[25.09.2024 16:09]</div>
+            </div>
+            <!-- Продолжение сообщений... -->
+            <!-- Вы можете продолжить добавлять сообщения по аналогии -->
+            
+            <!-- Пример добавления нескольких сообщений -->
+            <div class="message user2">
+                <span class="username">Илюха 👑</span>
+                <span>т.к. книжка стоит электронная в районе 500р.......</span>
+                <div class="timestamp">[25.09.2024 16:09]</div>
+            </div>
+            <div class="message user1">
+                <span class="username">Ксеня 🌸 ❤️ 🌸</span>
+                <div class="timestamp">[25.09.2024 16:09]</div>
+            </div>
+            <div class="message user2">
+                <span class="username">Илюха 👑</span>
+                <span>но это ты сама смари</span>
+                <div class="timestamp">[25.09.2024 16:10]</div>
+            </div>
+            <!-- Добавьте остальные сообщения аналогично -->
+            
+            <!-- Прокрутка вниз при загрузке страницы -->
+            <script>
+                window.onload = function() {
+                    var chatWindow = document.querySelector('.chat-window');
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                };
+            </script>
+        </div>
+    </div>
+</body>
+</html>
