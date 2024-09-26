@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Windows 98 Style Interaction</title>
+    <style>
+        /* Windows 98 style CSS */
+
+        body {
+            font-family: 'MS Sans Serif', Arial, sans-serif;
+            background-color: #008080;
+            margin: 0;
+            padding: 0;
+        }
+
+        .window {
+            position: absolute;
+            width: 300px;
+            border: 2px solid #000;
+            background-color: #C0C0C0;
+            box-shadow: 2px 2px #808080;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .title-bar {
+            background: linear-gradient(to right, #000080, #0000FF);
+            color: #FFF;
+            padding: 2px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .title-bar-text {
+            padding-left: 5px;
+        }
+
+        .title-bar-controls {
+            display: flex;
+        }
+
+        .title-bar-controls button {
+            width: 16px;
+            height: 14px;
+            background-color: #C0C0C0;
+            border: none;
+            margin-right: 2px;
+            padding: 0;
+        }
+
+        .window-content {
+            padding: 10px;
+            background-color: #C0C0C0;
+        }
+
+        button {
+            font-family: 'MS Sans Serif', Arial, sans-serif;
+            font-size: 14px;
+            padding: 2px 10px;
+            margin: 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #FFF;
+            border: 1px solid #000;
+            height: 20px;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            background-color: #0000FF;
+            height: 100%;
+            width: 0%;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Additional styles for image */
+        .image-container img {
+            max-width: 100%;
+            filter: grayscale(100%);
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Language Selection -->
+    <div id="languageSelection" class="window">
+        <div class="title-bar">
+            <div class="title-bar-text">Select Language</div>
+        </div>
+        <div class="window-content">
+            <p>Please select your language:</p>
+            <button onclick="selectLanguage('en')">English</button>
+            <button onclick="selectLanguage('ru')">Русский</button>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="window hidden">
+        <div class="title-bar">
+            <div class="title-bar-text">Loading...</div>
+        </div>
+        <div class="window-content">
+            <p id="loadingText">Loading...</p>
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-bar-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dialogues -->
+    <!-- First Dialogue -->
+    <div id="dialogue1" class="window hidden">
+        <div class="title-bar">
+            <div class="title-bar-text">Message</div>
+        </div>
+        <div class="window-content">
+            <p id="dialogue1Text"></p>
+            <button onclick="nextDialogue()">OK</button>
+        </div>
+    </div>
+
+    <!-- Second Dialogue -->
+    <div id="dialogue2" class="window hidden">
+        <div class="title-bar">
+            <div class="title-bar-text">Question</div>
+        </div>
+        <div class="window-content">
+            <p id="dialogue2Text"></p>
+            <button onclick="answerQuestion(true)">Yes</button>
+            <button onclick="answerQuestion(false)">No</button>
+        </div>
+    </div>
+
+    <!-- Third Dialogue with Image -->
+    <div id="dialogue3" class="window hidden">
+        <div class="title-bar">
+            <div class="title-bar-text">Question</div>
+        </div>
+        <div class="window-content">
+            <p id="dialogue3Text"></p>
+            <div class="image-container">
+                <img src="https://cdnb.artstation.com/p/assets/images/images/009/316/299/large/ilia-gorbunov-165.jpg?1518290000" alt="Image">
+            </div>
+            <button onclick="nextDialogue()">OK</button>
+        </div>
+    </div>
+
+    <!-- Number Guessing -->
+    <div id="numberGuess" class="window hidden">
+        <div class="title-bar">
+            <div class="title-bar-text">Guess a Number</div>
+        </div>
+        <div class="window-content">
+            <p id="numberGuessText"></p>
+            <input type="number" id="guessedNumber">
+            <button onclick="startAnalysis()">OK</button>
+        </div>
+    </div>
+
+    <!-- Analysis Screen -->
+    <div id="analysisScreen" class="window hidden">
+        <div class="title-bar">
+            <div class="title-bar-text">Analyzing...</div>
+        </div>
+        <div class="window-content">
+            <p id="analysisText"></p>
+        </div>
+    </div>
+
+    <!-- Final Dialogue -->
+    <div id="finalDialogue" class="window hidden">
+        <div class="title-bar">
+            <div class="title-bar-text">Result</div>
+        </div>
+        <div class="window-content">
+            <p id="finalText"></p>
+            <button onclick="endInteraction()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        var language = 'en';
+        var messages = {
+            en: {
+                selectLanguage: 'Please select your language:',
+                loading: 'Loading...',
+                iThinkYouAre: 'I think you are Ilyukha.',
+                youAreBrother: 'You are Valerik\'s brother, that\'s what you\'re famous for.',
+                trueStatement: 'That\'s true.',
+                falseStatement: 'You are mistaken.',
+                didYouDraw: 'Did you draw such a picture, you silly?',
+                guessNumber: 'Please, guess a number and enter it below:',
+                analyzingMessages: [
+                    'Analyzing your date of birth...',
+                    'Calculating your IQ...',
+                    'Reading your mind...',
+                    'Contacting aliens...',
+                    'Counting sheep...',
+                    'Solving world hunger...',
+                    'Loading funny messages...',
+                    'Pretending to work...',
+                    'Calculating the meaning of life...',
+                    'Almost there...'
+                ],
+                iThinkYouGuessed: 'I think you guessed the number ',
+                endMessage: 'Thank you for participating!'
+            },
+            ru: {
+                selectLanguage: 'Пожалуйста, выберите язык:',
+                loading: 'Загрузка...',
+                iThinkYouAre: 'Я думаю, что ты Илюха.',
+                youAreBrother: 'Ты брат Валерика, этим ты знаменит.',
+                trueStatement: 'Это правда.',
+                falseStatement: 'Ты ошибаешься.',
+                didYouDraw: 'Ты рисовал такую картинку, шутник?',
+                guessNumber: 'Пожалуйста, загадайте число и введите его ниже:',
+                analyzingMessages: [
+                    'Анализирую вашу дату рождения...',
+                    'Вычисляю ваш IQ...',
+                    'Читаю ваши мысли...',
+                    'Связываюсь с инопланетянами...',
+                    'Считаю овец...',
+                    'Решаю проблему голода в мире...',
+                    'Загружаю смешные сообщения...',
+                    'Делаю вид, что работаю...',
+                    'Вычисляю смысл жизни...',
+                    'Уже почти готово...'
+                ],
+                iThinkYouGuessed: 'Я думаю, вы загадали число ',
+                endMessage: 'Спасибо за участие!'
+            }
+        };
+
+        function selectLanguage(lang) {
+            language = lang;
+            document.getElementById('languageSelection').classList.add('hidden');
+            startLoading();
+        }
+
+        function startLoading() {
+            document.getElementById('loadingScreen').classList.remove('hidden');
+            var progressFill = document.getElementById('progressFill');
+            var loadingText = document.getElementById('loadingText');
+            var percent = 0;
+            var interval = setInterval(function() {
+                percent += Math.floor(Math.random() * 20);
+                if (percent >= 100) {
+                    percent = 100;
+                    clearInterval(interval);
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                    startDialogue1();
+                }
+                progressFill.style.width = percent + '%';
+                loadingText.innerText = messages[language].loading + ' ' + percent + '%';
+            }, 500);
+        }
+
+        function startDialogue1() {
+            document.getElementById('dialogue1Text').innerText = messages[language].iThinkYouAre;
+            document.getElementById('dialogue1').classList.remove('hidden');
+        }
+
+        function nextDialogue() {
+            if (!document.getElementById('dialogue1').classList.contains('hidden')) {
+                document.getElementById('dialogue1').classList.add('hidden');
+                startDialogue2();
+            } else if (!document.getElementById('dialogue3').classList.contains('hidden')) {
+                document.getElementById('dialogue3').classList.add('hidden');
+                startNumberGuess();
+            }
+        }
+
+        function startDialogue2() {
+            document.getElementById('dialogue2Text').innerText = messages[language].youAreBrother;
+            document.getElementById('dialogue2').classList.remove('hidden');
+        }
+
+        function answerQuestion(answer) {
+            document.getElementById('dialogue2').classList.add('hidden');
+            document.getElementById('dialogue1Text').innerText = answer ? messages[language].trueStatement : messages[language].falseStatement;
+            document.getElementById('dialogue1').classList.remove('hidden');
+            setTimeout(function() {
+                document.getElementById('dialogue1').classList.add('hidden');
+                startDialogue3();
+            }, 2000);
+        }
+
+        function startDialogue3() {
+            document.getElementById('dialogue3Text').innerText = messages[language].didYouDraw;
+            document.getElementById('dialogue3').classList.remove('hidden');
+        }
+
+        function startNumberGuess() {
+            document.getElementById('numberGuessText').innerText = messages[language].guessNumber;
+            document.getElementById('numberGuess').classList.remove('hidden');
+        }
+
+        function startAnalysis() {
+            var guessedNumber = document.getElementById('guessedNumber').value;
+            if (guessedNumber === '') {
+                alert('Please enter a number.');
+                return;
+            }
+            document.getElementById('numberGuess').classList.add('hidden');
+            document.getElementById('analysisScreen').classList.remove('hidden');
+            var analysisText = document.getElementById('analysisText');
+            var messagesArray = messages[language].analyzingMessages;
+            var index = 0;
+            var interval = setInterval(function() {
+                if (index >= messagesArray.length) {
+                    clearInterval(interval);
+                    document.getElementById('analysisScreen').classList.add('hidden');
+                    showFinalResult(guessedNumber);
+                } else {
+                    analysisText.innerText = messagesArray[index];
+                    index++;
+                }
+            }, 1000);
+        }
+
+        function showFinalResult(number) {
+            document.getElementById('finalText').innerText = messages[language].iThinkYouGuessed + number + '.';
+            document.getElementById('finalDialogue').classList.remove('hidden');
+        }
+
+        function endInteraction() {
+            document.getElementById('finalDialogue').classList.add('hidden');
+            alert(messages[language].endMessage);
+        }
+
+    </script>
+</body>
+</html>
