@@ -6,8 +6,8 @@
         body {
             margin: 0;
             overflow: hidden;
-            font-family: "Comic Sans MS", Arial, sans-serif;
-            background-color: #FFC0CB;
+            font-family: "Brush Script MT", cursive;
+            background-color: #FFE4E1;
             color: #000000;
         }
 
@@ -18,16 +18,16 @@
             min-width: 100%; 
             min-height: 100%;
             z-index: -1;
-            filter: brightness(70%);
         }
 
         .header {
-            background-color: #FF69B4;
-            padding: 10px;
+            background: linear-gradient(45deg, #FFB6C1, #FF69B4);
+            padding: 20px;
             text-align: center;
-            font-size: 28px;
+            font-size: 36px;
             font-weight: bold;
             color: #FFFFFF;
+            text-shadow: 2px 2px #FF1493;
             border-bottom: 4px solid #FF1493;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
@@ -35,33 +35,37 @@
         .chat-container {
             position: absolute;
             bottom: 0;
-            left: 0;
-            width: 35%;
+            left: 20px;
+            width: 30%;
             height: 60%;
-            background-color: rgba(255, 182, 193, 0.8);
+            background-color: rgba(255, 255, 255, 0.8);
             border: 3px solid #FF69B4;
-            border-radius: 15px;
+            border-radius: 25px;
             margin: 20px;
             overflow: hidden;
             display: flex;
             flex-direction: column-reverse;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
         }
 
         .chat-messages {
             overflow-y: scroll;
-            padding: 10px;
+            padding: 15px;
             flex-grow: 1;
         }
 
         .message {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             animation: fadeIn 1s ease-in;
+            font-size: 18px;
+            color: #000000;
+            text-shadow: 1px 1px #FFFFFF;
         }
 
         .username {
             font-weight: bold;
-            color: #8B008B;
+            color: #C71585;
         }
 
         .tip {
@@ -69,13 +73,13 @@
             font-weight: bold;
         }
 
-        .love-sign {
+        /* Heart and Emoji animation */
+        .animated-icon {
             position: absolute;
-            bottom: 50px;
-            right: 50px;
-            font-size: 30px;
-            animation: floatUp 2s ease-in-out infinite;
-            color: #FF1493;
+            bottom: 0;
+            font-size: 24px;
+            animation: floatUp 3s ease-in-out forwards;
+            opacity: 0;
         }
 
         @keyframes floatUp {
@@ -85,7 +89,7 @@
             }
             100% {
                 opacity: 0;
-                transform: translateY(-150px) scale(1.5);
+                transform: translateY(-300px) scale(1.5);
             }
         }
 
@@ -98,22 +102,48 @@
         .floating-heart {
             position: absolute;
             bottom: -50px;
-            font-size: 24px;
-            animation: rise 5s infinite;
+            font-size: 30px;
+            animation: rise 7s infinite;
             color: #FF69B4;
+            opacity: 0;
         }
 
         @keyframes rise {
             0% {
                 opacity: 0;
-                transform: translateX(0) translateY(0) scale(0.5);
+                transform: translateX(0) translateY(0) scale(0.5) rotate(0deg);
             }
             50% {
                 opacity: 1;
             }
             100% {
                 opacity: 0;
-                transform: translateX(-100px) translateY(-600px) scale(1.5);
+                transform: translateX(-100px) translateY(-800px) scale(1.5) rotate(360deg);
+            }
+        }
+
+        /* Sparkles */
+        .sparkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, #FFFFFF 0%, rgba(255, 255, 255, 0) 70%);
+            opacity: 0;
+            animation: sparkle 2s infinite;
+        }
+
+        @keyframes sparkle {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0);
             }
         }
     </style>
@@ -135,80 +165,52 @@
 
     <script>
         const messages = [
-            "Mmm Masha, that ass is perfect!",
-            "Wow, Masha, those boobs are just incredible!",
-            "Masha, you’re driving me crazy with that body!",
-            "That ass is something else, Masha! Damn!",
-            "Masha, your curves are just begging to be touched!",
-            "Damn, Masha, what an amazing figure! Those hips!",
-            "Mmm, what a sexy body, Masha! You're on fire!",
-            "Those boobs, Masha, wow! Absolute perfection!",
-            "Masha, you’re so hot, that ass is unreal!",
-            "Masha, your body is a masterpiece! Those curves!",
-            "Damn, that ass is juicy, Masha!",
-            "Masha, your body is making me lose my mind!",
-            "So sexy, Masha, those curves are out of control!",
-            "Mmm Masha, those tits are incredible!",
-            "Masha, that ass could stop traffic!",
-            "Wow, Masha, those curves are driving me wild!",
-            "Masha, your body is the definition of temptation!",
-            "Mmm Masha, that booty is absolutely perfect!",
-            "Masha, you’ve got the sexiest body I’ve ever seen!",
-            "Masha, those boobs are a work of art!",
-            "Masha, you’re an absolute goddess! That body!",
-            "That ass is pure heaven, Masha!",
-            "Masha, I can’t stop staring at your perfect curves!",
-            "Masha, your boobs are unreal! So sexy!",
-            "Masha, what a juicy ass! You’re amazing!",
-            "Masha, that body is a total knockout!",
-            "Damn, Masha, you’re built like a dream!",
-            "Masha, those tits are out of this world!",
-            "Mmm, Masha, that ass is giving me life!",
-            "You’ve got the sexiest body, Masha! Unreal!",
-            "Masha, you’re perfection from head to toe, especially that ass!",
-            "Masha, those boobs are absolutely perfect!",
-            "Mmm, that ass is so tight, Masha!",
-            "Masha, those curves are making me weak!",
-            "Damn, Masha, you’ve got the sexiest figure!",
-            "Masha, those tits are driving me crazy!",
-            "Mmm, Masha, that booty is insane!",
-            "Wow, Masha, those curves are dangerous!",
-            "Masha, your body is pure sex appeal!",
-            "Masha, that ass is a masterpiece!",
-            "Mmm, that body is perfect, Masha!",
-            "Damn, Masha, that booty is on fire!",
-            "Masha, your tits are out of this world!",
-            "Masha, that ass should be illegal!",
-            "Masha, you’ve got the sexiest curves I’ve ever seen!",
-            "Mmm, Masha, those boobs are perfect!",
-            "Masha, that ass is too good to be true!",
-            "Masha, you’re killing me with that body!",
-            "Masha, those tits are perfection!",
-            "Masha, your ass is pure temptation!"
+            "Mmm Masha, that look is captivating!",
+            "Wow, Masha, you are stunning!",
+            "Masha, your smile lights up the room!",
+            "You have an incredible presence, Masha!",
+            "Masha, your elegance is unmatched!",
+            "Absolutely gorgeous, Masha!",
+            "Masha, you are a true inspiration!",
+            "Your charm is irresistible, Masha!",
+            "Masha, you’re a breath of fresh air!",
+            "Masha, your beauty is beyond words!",
+            "You are amazing, Masha!",
+            "Masha, your style is impeccable!",
+            "Enchanting as always, Masha!",
+            "Masha, you shine brighter than the stars!",
+            "You are pure grace, Masha!",
+            "Masha, your aura is mesmerizing!",
+            "Simply exquisite, Masha!",
+            "Masha, you are a true gem!",
+            "Your energy is contagious, Masha!",
+            "Masha, you make everything better!"
         ];
 
         const usernames = [
-            "michaelknight_69♂︎",
-            "john_doe123",
-            "coolguy456",
-            "lover_boy",
-            "bigspender99",
-            "anonymous_user",
-            "tipper_king",
-            "gentleman123",
-            "wildheart",
-            "nightowl",
-            "party_animal",
-            "smooth_operator",
-            "the_real_deal",
-            "funlover",
-            "king_of_hearts",
-            "prince_charming",
-            "ladies_man",
-            "mysterious_guy",
-            "happy_camper",
-            "dreamer"
+            "PrinceCharming💖",
+            "Dreamer🌟",
+            "LoveGuru💘",
+            "HeartThrob😍",
+            "SweetLover🍭",
+            "GentleKnight🛡️",
+            "CupidArrow💘",
+            "RomanticSoul💞",
+            "Admirer🌹",
+            "MysteryMan🕵️‍♂️",
+            "CharmingGuy😉",
+            "FlirtyFan💋",
+            "MagicMan✨",
+            "Enchanted🌠",
+            "StarGazer🌌",
+            "LoverBoy💗",
+            "HeartBreaker💔",
+            "Passionate🔥",
+            "SmoothOperator🎩",
+            "MrWonderful😊"
         ];
+
+        const emojis = ["💖", "🌸", "🦄", "✨", "🌟", "🎀", "💎", "🌹", "🦋", "🍭"];
 
         const chatMessages = document.getElementById('chat-messages');
         const animatedElements = document.getElementById('animated-elements');
@@ -226,32 +228,33 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        setInterval(addMessage, 2000);
+        setInterval(addMessage, 1500);
 
-        // Animated love signs
-        function createLoveSign() {
-            const loveSign = document.createElement('div');
-            loveSign.classList.add('love-sign');
-            loveSign.style.left = (Math.random() * (window.innerWidth - 50)) + 'px';
-            loveSign.style.bottom = '0px';
-            loveSign.innerText = '💖';
+        // Increase love signs to triple the amount
+        function createAnimatedIcons() {
+            for (let i = 0; i < 3; i++) { // Triple the amount
+                const icon = document.createElement('div');
+                icon.classList.add('animated-icon');
+                icon.style.left = (Math.random() * (window.innerWidth - 50)) + 'px';
+                icon.innerText = emojis[Math.floor(Math.random() * emojis.length)];
 
-            document.body.appendChild(loveSign);
+                document.body.appendChild(icon);
 
-            loveSign.animate([
-                { transform: 'translateY(0) scale(1)', opacity: 1 },
-                { transform: 'translateY(-150px) scale(1.5)', opacity: 0 }
-            ], {
-                duration: 2000,
-                easing: 'ease-in-out'
-            });
+                icon.animate([
+                    { transform: 'translateY(0) scale(1)', opacity: 1 },
+                    { transform: 'translateY(-300px) scale(1.5)', opacity: 0 }
+                ], {
+                    duration: 3000,
+                    easing: 'ease-in-out'
+                });
 
-            setTimeout(() => {
-                document.body.removeChild(loveSign);
-            }, 2000);
+                setTimeout(() => {
+                    document.body.removeChild(icon);
+                }, 3000);
+            }
         }
 
-        setInterval(createLoveSign, 1500);
+        setInterval(createAnimatedIcons, 1000);
 
         // Additional floating hearts
         function createFloatingHearts() {
@@ -266,16 +269,40 @@
                 { transform: 'translateY(0)', opacity: 1 },
                 { transform: `translateY(-${window.innerHeight}px)`, opacity: 0 }
             ], {
-                duration: Math.random() * 3000 + 2000,
+                duration: Math.random() * 4000 + 3000,
                 easing: 'linear'
             });
 
             setTimeout(() => {
                 animatedElements.removeChild(heart);
-            }, 5000);
+            }, 7000);
         }
 
-        setInterval(createFloatingHearts, 800);
+        setInterval(createFloatingHearts, 1000);
+
+        // Sparkles
+        function createSparkles() {
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            sparkle.style.left = Math.random() * window.innerWidth + 'px';
+            sparkle.style.top = Math.random() * window.innerHeight + 'px';
+
+            document.body.appendChild(sparkle);
+
+            sparkle.animate([
+                { opacity: 1, transform: 'scale(0)' },
+                { opacity: 0, transform: 'scale(1)' }
+            ], {
+                duration: 2000,
+                easing: 'ease-out'
+            });
+
+            setTimeout(() => {
+                document.body.removeChild(sparkle);
+            }, 2000);
+        }
+
+        setInterval(createSparkles, 500);
     </script>
 </body>
 </html>
