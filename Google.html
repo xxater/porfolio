@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RetroSearch</title>
+    <style>
+        body {
+            background-color: #2b2b2b;
+            color: #f5f5f5;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            margin: 0;
+            padding-top: 100px;
+        }
+        .search-container {
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            border: 2px solid #555;
+            border-radius: 5px;
+            background-color: #1e1e1e;
+            color: #f5f5f5;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .results {
+            margin-top: 20px;
+            width: 80%;
+            max-width: 600px;
+        }
+        .result-item {
+            padding: 10px;
+            border-bottom: 1px solid #555;
+        }
+        .result-item a {
+            color: #1e90ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .result-item a:hover {
+            text-decoration: underline;
+        }
+        @keyframes blink {
+            0% { border-color: #f5f5f5; }
+            50% { border-color: transparent; }
+            100% { border-color: #f5f5f5; }
+        }
+        input[type="text"].typing {
+            border-right: 2px solid transparent;
+            animation: blink 1s step-end infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <input type="text" id="search-bar" placeholder="Search...">
+    </div>
+    <div class="results" id="results"></div>
+
+    <script>
+        const searchBar = document.getElementById('search-bar');
+        const resultsDiv = document.getElementById('results');
+        const query = "Valery Gorbunov";
+        let index = 0;
+        const typingSpeed = 100; // milliseconds
+
+        function typeSearch() {
+            if (index < query.length) {
+                searchBar.value += query.charAt(index);
+                index++;
+                setTimeout(typeSearch, typingSpeed);
+            } else {
+                searchBar.classList.remove('typing');
+                performSearch();
+            }
+        }
+
+        function performSearch() {
+            // Simulated search results based on Valery's profile
+            const results = [
+                {
+                    title: "Valery Gorbunov - VFX Artist Portfolio",
+                    link: "https://valeryvfxportfolio.com",
+                    description: "Explore the stunning visual effects created by Valery Gorbunov using Unreal Engine 5.3."
+                },
+                {
+                    title: "Tutorial: Creating a Campfire with Niagara Fluids in UE 5.3",
+                    link: "https://valeryvfx.com/tutorials/campfire-niagara",
+                    description: "Learn how Valery Gorbunov builds realistic campfires in Unreal Engine with step-by-step guidance."
+                },
+                {
+                    title: "Freelance VFX Services by Valery Gorbunov",
+                    link: "https://valeryvfx.com/services",
+                    description: "Hire Valery for your next project and benefit from his expertise in both semi-realistic and stylized VFX."
+                },
+                {
+                    title: "Post-Soviet Aesthetic Video Game Project",
+                    link: "https://valeryvfx.com/projects/post-soviet-game",
+                    description: "Discover Valery's ambitious video game project that blends VFX with a unique post-Soviet aesthetic."
+                },
+                {
+                    title: "Valery Gorbunov on Unreal Engine Forums",
+                    link: "https://forums.unrealengine.com/user/valerygorbunov",
+                    description: "Join the discussions and see Valery's contributions to the Unreal Engine community."
+                }
+            ];
+
+            results.forEach(item => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item';
+
+                const title = document.createElement('a');
+                title.href = item.link;
+                title.textContent = item.title;
+                title.target = "_blank";
+
+                const link = document.createElement('div');
+                link.textContent = item.link;
+
+                const description = document.createElement('div');
+                description.textContent = item.description;
+
+                resultItem.appendChild(title);
+                resultItem.appendChild(link);
+                resultItem.appendChild(description);
+
+                resultsDiv.appendChild(resultItem);
+            });
+        }
+
+        // Initialize typing effect
+        searchBar.classList.add('typing');
+        typeSearch();
+    </script>
+</body>
+</html>
