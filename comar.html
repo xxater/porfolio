@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>История Комара</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #000428, #004e92);
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+        #mosquito {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="%23fff" d="M32 0l6 14 12-4-8 12 14 6-14 6 8 12-12-4-6 14-6-14-12 4 8-12-14-6 14-6-8-12 12 4z"/></svg>') no-repeat center center;
+            background-size: contain;
+            transform: rotate(-45deg);
+        }
+        .text-block {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 24px;
+            opacity: 0;
+            transition: opacity 2s;
+        }
+        #text1 { top: 10%; }
+        #text2 { top: 20%; }
+        #text3 { top: 30%; }
+        #text4 { top: 40%; }
+        #text5 { top: 50%; }
+        #text6 { top: 60%; }
+        #text7 { top: 70%; }
+        #text8 { top: 80%; }
+    </style>
+</head>
+<body>
+
+    <div id="mosquito"></div>
+
+    <div id="text1" class="text-block">Ща комар меня покусал за локоть</div>
+    <div id="text2" class="text-block">Вы прикиньте</div>
+    <div id="text3" class="text-block">Он летел до 13 этажа</div>
+    <div id="text4" class="text-block">Без надежды на успех</div>
+    <div id="text5" class="text-block">Вопреки всему</div>
+    <div id="text6" class="text-block">Во враждебных условиях</div>
+    <div id="text7" class="text-block">Тупа вверх</div>
+    <div id="text8" class="text-block">Меня вдохновил этот комар, для меня честь поделиться с ним кровью.....</div>
+
+    <script>
+        const mosquito = document.getElementById('mosquito');
+        let position = window.innerHeight;
+        let floor = 13;
+        let interval = setInterval(frame, 20);
+
+        function frame() {
+            if (position <= 0) {
+                clearInterval(interval);
+                showTexts();
+            } else {
+                position -= 2;
+                mosquito.style.top = position + 'px';
+                mosquito.style.left = (window.innerWidth / 2 - 25 + Math.sin(position / 50) * 100) + 'px';
+            }
+        }
+
+        function showTexts() {
+            let texts = document.querySelectorAll('.text-block');
+            texts.forEach((text, index) => {
+                setTimeout(() => {
+                    text.style.opacity = 1;
+                }, index * 2000);
+            });
+        }
+
+        // Initialize mosquito position
+        mosquito.style.top = window.innerHeight + 'px';
+        mosquito.style.left = (window.innerWidth / 2 - 25) + 'px';
+
+        // Adjust on window resize
+        window.addEventListener('resize', () => {
+            mosquito.style.left = (window.innerWidth / 2 - 25) + 'px';
+        });
+    </script>
+
+</body>
+</html>
