@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Windows 98 Style Page</title>
+<style>
+body {
+    background-color: #008080;
+    font-family: 'MS Sans Serif', Arial, sans-serif;
+    color: black;
+}
+.window {
+    width: 300px;
+    border: 2px solid #000080;
+    background-color: #C0C0C0;
+    padding: 10px;
+    margin: 100px auto;
+    position: relative;
+}
+.window-title {
+    background-color: #000080;
+    color: white;
+    padding: 2px 5px;
+    font-weight: bold;
+    position: absolute;
+    top: -20px;
+    left: 0;
+}
+.button {
+    width: 60px;
+    margin: 5px;
+    padding: 2px;
+    background-color: #C0C0C0;
+    border: 1px solid #808080;
+    cursor: pointer;
+}
+.hidden {
+    display: none;
+}
+#loading-bar {
+    width: 0%;
+    height: 20px;
+    background-color: #000080;
+    margin-top: 10px;
+}
+img {
+    width: 100%;
+    filter: grayscale(50%);
+}
+</style>
+</head>
+<body>
+<div id="language-select" class="window">
+    <div class="window-title">Выбор языка</div>
+    <p>Выберите язык / Select language:</p>
+    <button class="button" onclick="selectLanguage('ru')">Русский</button>
+    <button class="button" onclick="selectLanguage('en')">English</button>
+</div>
+
+<div id="loading" class="window hidden">
+    <div class="window-title">Загрузка</div>
+    <p id="loading-text">Загрузка: 0%</p>
+    <div id="loading-bar"></div>
+</div>
+
+<div id="message1" class="window hidden">
+    <div class="window-title">Сообщение</div>
+    <p id="msg1-text"></p>
+    <button class="button" onclick="acceptMessage1()">OK</button>
+</div>
+
+<div id="message2" class="window hidden">
+    <div class="window-title">Вопрос</div>
+    <p id="msg2-text"></p>
+    <button class="button" onclick="answerYes()">Да</button>
+    <button class="button" onclick="answerNo()">Нет</button>
+</div>
+
+<div id="bio" class="window hidden">
+    <div class="window-title">Био</div>
+    <p id="bio-text"></p>
+</div>
+
+<div id="image" class="window hidden">
+    <div class="window-title">Изображение</div>
+    <img src="https://xxater.github.io/porfolio/masha3d.jpg" alt="Masha">
+</div>
+
+<div id="final-message" class="window hidden">
+    <div class="window-title">Сообщение</div>
+    <p id="final-text"></p>
+</div>
+
+<script>
+let language = 'ru';
+
+function selectLanguage(lang) {
+    language = lang;
+    document.getElementById('language-select').classList.add('hidden');
+    document.getElementById('loading').classList.remove('hidden');
+    startLoading();
+}
+
+function startLoading() {
+    let percent = 0;
+    let loadingText = document.getElementById('loading-text');
+    let loadingBar = document.getElementById('loading-bar');
+    let interval = setInterval(function() {
+        percent += 10;
+        loadingText.textContent = (language === 'ru' ? 'Загрузка: ' : 'Loading: ') + percent + '%';
+        loadingBar.style.width = percent + '%';
+        if (percent >= 100) {
+            clearInterval(interval);
+            document.getElementById('loading').classList.add('hidden');
+            showMessage1();
+        }
+    }, 250);
+}
+
+function showMessage1() {
+    document.getElementById('message1').classList.remove('hidden');
+    document.getElementById('msg1-text').textContent = language === 'ru' ? 'Я думаю, что ты Маша.' : 'I think you are Masha.';
+}
+
+function acceptMessage1() {
+    document.getElementById('message1').classList.add('hidden');
+    showMessage2();
+}
+
+function showMessage2() {
+    document.getElementById('message2').classList.remove('hidden');
+    document.getElementById('msg2-text').textContent = language === 'ru' ? 'Ты любимица Валерика?' : 'Are you Valerika\'s favorite?';
+}
+
+function answerYes() {
+    document.getElementById('message2').classList.add('hidden');
+    showBio(language === 'ru' ? 'Это правда.' : 'It\'s true.');
+}
+
+function answerNo() {
+    document.getElementById('message2').classList.add('hidden');
+    showBio(language === 'ru' ? 'Ты сошла с ума!' : 'You have gone crazy!');
+}
+
+function showBio(response) {
+    document.getElementById('bio').classList.remove('hidden');
+    let bioText = language === 'ru' ? `
+    ${response}
+    У тебя такое био на Чатурбейт:
+
+    Привет! Рада видеть тебя здесь! Надеюсь, ты поймёшь мою атмосферу и насладишься временем, проведённым со мной. Я здесь, чтобы вдохновлять тебя, пока ты погружаешься в мою естественную женственность и грацию. Я здесь уже более 4 лет и обожаю выступать. Качество и эстетика очень важны для меня, поэтому я постоянно работаю над тем, чтобы мой стрим выглядел великолепно, уделяя внимание освещению и оборудованию для лучшего просмотра.
+
+    Сейчас я студентка факультета психологии на дневном отделении, что помогает мне быть довольно общительной – могу поговорить практически о чём угодно. Кстати, самая сложная часть моей работы – когда становится скучно, и в чате тишина. Если ты не можешь отправить чаевые, просто напиши сообщение или поддержи разговор. Это уже поднимет мне настроение, и я обязательно отплачу тем же! :)
+
+    Из-за учёбы у меня не так много свободного времени, и когда оно есть, я обычно просто отдыхаю) Но есть вещи, которые я обожаю делать. Я увлекаюсь рукоделием, хожу в спортзал для силовых тренировок, готовлю, смотрю аниме и сериалы (особенно всё, что связано с викингами, ха-ха), играю в видеоигры, путешествую с друзьями и создаю потрясающий визуальный контент. Загляни в мой профиль, если хочешь увидеть красивые фото и видео – там много чего интересного.
+
+    Я также буду рада сделать для тебя индивидуальное видео, которое могу отправить по электронной почте или в личных сообщениях на Fansly (где могу предложить тебе хорошую скидку!). Спасибо, что дочитал до конца! Напиши кодовую фразу "Монте-Кристо" в чате, и я пять раз шлёпну себя по попе ;)
+    ` : `
+    ${response}
+    You have such a bio on Chaturbate:
+
+    Hey there! Welcome aboard! I hope you'll catch my vibe and enjoy hanging out with me. I'm here to inspire you while you soak in my natural femininity and grace. I've been around for over 4 years, and I absolutely love performing here. Quality and aesthetics are super important to me, so I'm always working on making my stream look gorgeous, fussing over lighting and equipment to give you the best viewing experience possible.
+
+    Right now, I'm a full-time psychology student, which helps me be pretty inclusive – I can talk about pretty much anything. By the way, the toughest part of my job is when it gets boring, with dead silence in my chat. If you can't tip, just drop a message or keep the conversation going. That alone will brighten my day, and I'll make sure to return the favor! :)
+
+    Because of school, I don't have a ton of free time, and when I do, I'm usually just... chilling) But there are things I absolutely love doing. I'm really into crafting, hitting the gym for strength training, cooking, watching anime and TV shows (especially anything with Vikings, haha), playing video games, going on adventures with friends, and creating stunning visual content. Feel free to check out my profile if you want to see some beautiful photos and videos for yourself – there's plenty to look at.
+
+    I'd also be thrilled to make a custom video just for you, which I can email or send via DM on Fansly (where I can hook you up with a sweet discount!). Thanks for reading all the way through! Type the code phrase "Monte-Cristo" in the chat, and I'll give my booty five good slaps ;)
+    `;
+    document.getElementById('bio-text').textContent = bioText;
+    setTimeout(showImage, 2000);
+}
+
+function showImage() {
+    document.getElementById('image').classList.remove('hidden');
+    setTimeout(showFinalMessage, 2000);
+}
+
+function showFinalMessage() {
+    document.getElementById('final-message').classList.remove('hidden');
+    document.getElementById('final-text').textContent = language === 'ru' ? 'МАША, Я ТЕБЯ ЛЮБЛЮ!!' : 'MASHA, I LOVE YOU!!';
+}
+</script>
+</body>
+</html>
