@@ -55,6 +55,43 @@
       100% { transform: rotate(360deg); }
     }
 
+    /* Language Selection Modal */
+    #language-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 128, 128, 0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      flex-direction: column;
+    }
+    #language-modal h2 {
+      color: white;
+      font-size: 28px;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px black;
+    }
+    .language-button {
+      padding: 10px 20px;
+      font-size: 18px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #FFD700;
+      color: black;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+      transition: background-color 0.2s, transform 0.2s;
+    }
+    .language-button:hover {
+      background-color: #FFC300;
+      transform: scale(1.05);
+    }
+
     /* Desktop Icons */
     .desktop-icon {
       position: absolute;
@@ -187,6 +224,7 @@
       overflow: auto;
       max-height: calc(100vh - 80px);
       background-color: #D3D3D3;
+      position: relative;
     }
     h1, h2, h3 {
       margin: 10px 0;
@@ -378,9 +416,8 @@
       touch-action: manipulation; /* Prevent default touch behaviors */
       background-color: #87CEEB; /* Sky Blue */
       position: relative;
-    }
-    #flap-button {
-      display: none; /* Removed as per request */
+      width: 100%;
+      height: auto;
     }
     #restart-button {
       display: none; /* Hidden initially */
@@ -466,12 +503,24 @@
       background-color: #FFC300;
       transform: scale(1.05);
     }
+
+    /* Language Text Hidden Initially */
+    .lang-hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
+  <!-- Language Selection Modal -->
+  <div id="language-modal">
+    <h2>Select Language / Выберите язык</h2>
+    <button class="language-button" id="english-button">English</button>
+    <button class="language-button" id="russian-button">Русский</button>
+  </div>
+
   <!-- Loading Screen -->
   <div id="loading-screen">
-    <h1>Loading...</h1>
+    <h1 data-lang-key="loading">Loading...</h1>
     <div class="spinner"></div>
   </div>
 
@@ -481,37 +530,37 @@
       <!-- Portfolio Shortcut Icon -->
       <img src="https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs-4.png" alt="Portfolio Icon">
     </div>
-    <span>Portfolio</span>
+    <span data-lang-key="portfolio">Portfolio</span>
   </div>
   <div class="desktop-icon unselectable" id="flappy-icon" style="top: 20%; left: 30%;">
     <div class="icon">
       <!-- Flappy Game Shortcut Icon -->
       <img src="https://win98icons.alexmeub.com/icons/png/minesweeper-1.png" alt="Flappy Game Icon">
     </div>
-    <span>Flappy Game</span>
+    <span data-lang-key="flappy_game">Flappy Game</span>
   </div>
 
   <!-- Taskbar -->
   <div id="taskbar">
     <div id="start-button">
       <img src="https://win98icons.alexmeub.com/icons/png/windows-0.png" alt="Start Icon">
-      <span>Start</span>
+      <span data-lang-key="start">Start</span>
     </div>
     <div id="taskbar-buttons"></div>
   </div>
 
   <!-- Start Menu -->
   <div id="start-menu">
-    <p>Hello! I'm Valery, passionate about creating stunning visual effects and immersive environments. Thanks for visiting my portfolio!</p>
-    <a href="#" id="portfolio-start-menu">Open Portfolio</a>
-    <a href="#" id="flappy-start-menu">Play Flappy Game</a>
-    <a href="mailto:xxater@gmail.com">Contact Me</a>
+    <p data-lang-key="start_menu_intro">Hello! I'm Valery, passionate about creating stunning visual effects and immersive environments. Thanks for visiting my portfolio!</p>
+    <a href="#" id="portfolio-start-menu" data-lang-key="open_portfolio">Open Portfolio</a>
+    <a href="#" id="flappy-start-menu" data-lang-key="play_flappy">Play Flappy Game</a>
+    <a href="mailto:xxater@gmail.com" data-lang-key="contact_me">Contact Me</a>
   </div>
 
   <!-- Portfolio Window -->
   <div class="window" id="portfolio-window">
     <div class="title-bar" id="portfolio-title-bar">
-      <div class="title-bar-text">Portfolio - Valery Gorbunov</div>
+      <div class="title-bar-text" data-lang-key="portfolio_window_title">Portfolio - Valery Gorbunov</div>
       <div class="title-bar-controls">
         <button class="minimize-button" aria-label="Minimize"></button>
         <button class="maximize-button" aria-label="Maximize"></button>
@@ -523,119 +572,113 @@
       <img src="https://media.licdn.com/dms/image/v2/D5603AQFY9qo828EKGA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1683906673729?e=1732752000&v=beta&t=RVMs7Fx5YQSPx5vEroUJTdas9L9MPpzZmigvup7paaU" alt="Profile Photo" class="profile-photo">
 
       <!-- Celebrate Button -->
-      <button class="celebrate-button" id="celebrate-button">Celebrate</button>
+      <button class="celebrate-button" id="celebrate-button" data-lang-key="celebrate">Celebrate</button>
 
       <!-- Explosion Animation Container -->
       <div class="explosion" id="explosion"></div>
 
       <!-- Portfolio Content -->
-      <h1>Valery Gorbunov</h1>
-      <p>VFX artist with experience in lighting and cinematics.</p>
-      <p><strong>Location:</strong> Sosenskoye, Moscow City, Russia</p>
-      <p><strong>Contact:</strong> Telegram: <a href="https://t.me/VGFOR">@VGFOR</a>, Email: <a href="mailto:xxater@gmail.com">xxater@gmail.com</a></p>
+      <h1 data-lang-key="name">Valery Gorbunov</h1>
+      <p data-lang-key="profession">VFX artist with experience in lighting and cinematics.</p>
+      <p><strong data-lang-key="location_label">Location:</strong> Sosenskoye, Moscow City, Russia</p>
+      <p><strong data-lang-key="contact_label">Contact:</strong> Telegram: <a href="https://t.me/VGFOR">@VGFOR</a>, Email: <a href="mailto:xxater@gmail.com">xxater@gmail.com</a></p>
       <div class="summary">
-        <h2>Summary</h2>
-        <p>Unreal Engine artist experienced in environment art, lighting, VFX, and cinematics.</p>
+        <h2 data-lang-key="summary">Summary</h2>
+        <p data-lang-key="summary_text">Unreal Engine artist experienced in environment art, lighting, VFX, and cinematics.</p>
       </div>
       <div class="skills">
-        <h2>Skills</h2>
+        <h2 data-lang-key="skills">Skills</h2>
         <ul>
-          <li>Unreal Engine</li>
-          <li>ZBrush</li>
-          <li>Maya</li>
-          <li>Blender</li>
-          <li>Substance Designer/Painter</li>
-          <li>Houdini</li>
-          <li>Embergen</li>
-          <li>Photoshop</li>
-          <li>After Effects</li>
+          <li data-lang-key="skill_unreal">Unreal Engine</li>
+          <li data-lang-key="skill_zbrush">ZBrush</li>
+          <li data-lang-key="skill_maya">Maya</li>
+          <li data-lang-key="skill_blender">Blender</li>
+          <li data-lang-key="skill_substance">Substance Designer/Painter</li>
+          <li data-lang-key="skill_houdini">Houdini</li>
+          <li data-lang-key="skill_embergen">Embergen</li>
+          <li data-lang-key="skill_photoshop">Photoshop</li>
+          <li data-lang-key="skill_after_effects">After Effects</li>
         </ul>
       </div>
       <div class="experience">
-        <h2>Experience</h2>
+        <h2 data-lang-key="experience">Experience</h2>
         <!-- Experience Items -->
         <div class="experience-item">
-          <strong>Various</strong><br>
-          VFX Artist<br>
+          <strong data-lang-key="exp_various">Various</strong><br>
+          <span data-lang-key="exp_role">VFX Artist</span><br>
           February 2023 - Present (1 year 8 months)<br>
-          VFX work. Creating VFX for UE5 projects.
+          <span data-lang-key="exp_details">VFX work. Creating VFX for UE5 projects.</span>
         </div>
         <div class="experience-item">
-          <strong>QORPO - Game Studio</strong><br>
-          VFX Artist/Lighting Artist<br>
+          <strong data-lang-key="exp_qorpo">QORPO - Game Studio</strong><br>
+          <span data-lang-key="exp_role_qorpo">VFX Artist/Lighting Artist</span><br>
           November 2022 - February 2023 (4 months)<br>
-          Created VFX in Embergen, Houdini, and UE5.
+          <span data-lang-key="exp_details_qorpo">Created VFX in Embergen, Houdini, and UE5.</span>
         </div>
         <div class="experience-item">
-          <strong>Girand</strong><br>
-          Producer/Team Lead<br>
+          <strong data-lang-key="exp_girand">Girand</strong><br>
+          <span data-lang-key="exp_role_girand">Producer/Team Lead</span><br>
           April 2022 - October 2022 (7 months)<br>
-          GIRAND: IN THE LOST CITY. NFT game. I was responsible for VFX, producing, cinematics, and team guidance.
+          <span data-lang-key="exp_details_girand">GIRAND: IN THE LOST CITY. NFT game. I was responsible for VFX, producing, cinematics, and team guidance.</span>
         </div>
         <div class="experience-item">
-          <strong>Stage 23</strong><br>
-          Lead VFX Artist, Technical Artist<br>
+          <strong data-lang-key="exp_stage23">Stage 23</strong><br>
+          <span data-lang-key="exp_role_stage23">Lead VFX Artist, Technical Artist</span><br>
           January 2021 - June 2022 (1 year 6 months)<br>
           Moscow, Moscow City, Russia.
         </div>
         <div class="experience-item">
-          <strong>Mundfish</strong><br>
-          VFX Artist/Cinematic Artist<br>
+          <strong data-lang-key="exp_mundfish">Mundfish</strong><br>
+          <span data-lang-key="exp_role_mundfish">VFX Artist/Cinematic Artist</span><br>
           October 2020 - January 2021 (4 months)<br>
           Moscow, Moscow City, Russia.<br>
-          Responsibilities included camera work and VFX creation.
+          <span data-lang-key="exp_details_mundfish">Responsibilities included camera work and VFX creation.</span>
         </div>
         <div class="experience-item">
-          <strong>QTE</strong><br>
-          Mail.ru Group<br>
-          Cinematic Artist<br>
+          <strong data-lang-key="exp_qte">QTE</strong><br>
+          <span data-lang-key="exp_role_qte">Cinematic Artist</span><br>
           March 2019 - September 2020 (1 year 7 months)<br>
           Moscow, Moscow City, Russia.<br>
-          Worked with Unreal Engine and CryEngine.<br>
-          - Cinematography<br>
-          - VFX<br>
-          - Modeling<br>
-          - Texturing<br>
-          - Animation
+          <span data-lang-key="exp_details_qte">Worked with Unreal Engine and CryEngine.<br>- Cinematography<br>- VFX<br>- Modeling<br>- Texturing<br>- Animation</span>
         </div>
         <div class="experience-item">
-          <strong>Coderaptor</strong><br>
-          Environment Artist, Technical Artist, VFX Artist<br>
+          <strong data-lang-key="exp_coderaptor">Coderaptor</strong><br>
+          <span data-lang-key="exp_role_coderaptor">Environment Artist, Technical Artist, VFX Artist</span><br>
           May 2018 - February 2019 (10 months)<br>
           Moscow, Moscow City, Russia.<br>
-          Technical art pipeline. VFX, environment art. Materials, lighting, blueprints.
+          <span data-lang-key="exp_details_coderaptor">Technical art pipeline. VFX, environment art. Materials, lighting, blueprints.</span>
         </div>
         <div class="experience-item">
-          <strong>CodeClass School</strong><br>
-          Teaching Unreal Engine/Unity<br>
+          <strong data-lang-key="exp_codeclass">CodeClass School</strong><br>
+          <span data-lang-key="exp_role_codeclass">Teaching Unreal Engine/Unity</span><br>
           December 2017 - January 2019 (1 year 2 months)<br>
           Moscow, Moscow City, Russia.<br>
-          Interactive technologies.
+          <span data-lang-key="exp_details_codeclass">Interactive technologies.</span>
         </div>
         <div class="experience-item">
-          <strong>Level Designer</strong><br>
+          <strong data-lang-key="exp_leveldesigner">Level Designer</strong><br>
           December 2017 - May 2018 (6 months)<br>
           Москва, Россия.
         </div>
       </div>
       <div class="education">
-        <h2>Education</h2>
-        <p><strong>Higher School of Economics</strong></p>
+        <h2 data-lang-key="education">Education</h2>
+        <p><strong data-lang-key="edu_hse">Higher School of Economics</strong></p>
         <p>Bachelor's degree in Game Design and Interactive Applications (2016 - 2021)</p>
       </div>
       <div class="portfolio">
-        <h2>Portfolio</h2>
-        <p>Replace the images and videos below with your own work.</p>
+        <h2 data-lang-key="portfolio_section">Portfolio</h2>
+        <p data-lang-key="portfolio_placeholder">Replace the images and videos below with your own work.</p>
         <!-- Placeholder images -->
         <div style="width:100%; height:150px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; margin-bottom:10px; border-radius:4px;">
-          <span>Image 1 Placeholder</span>
+          <span data-lang-key="portfolio_image1">Image 1 Placeholder</span>
         </div>
         <div style="width:100%; height:150px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; margin-bottom:10px; border-radius:4px;">
-          <span>Image 2 Placeholder</span>
+          <span data-lang-key="portfolio_image2">Image 2 Placeholder</span>
         </div>
         <!-- Placeholder video -->
         <div style="width:100%; height:150px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; border-radius:4px;">
-          <span>Video Placeholder</span>
+          <span data-lang-key="portfolio_video">Video Placeholder</span>
         </div>
       </div>
     </div>
@@ -644,16 +687,16 @@
   <!-- Flappy Game Window -->
   <div class="window" id="flappy-window">
     <div class="title-bar" id="flappy-title-bar">
-      <div class="title-bar-text">Flappy Game</div>
+      <div class="title-bar-text" data-lang-key="flappy_window_title">Flappy Game</div>
       <div class="title-bar-controls">
         <button class="minimize-button" aria-label="Minimize"></button>
         <button class="maximize-button" aria-label="Maximize"></button>
         <button class="close-button" aria-label="Close"></button>
       </div>
     </div>
-    <div class="content" style="padding: 0; position: relative;">
-      <canvas id="flappy-canvas" width="400" height="600" style="width:100%; height:auto; display:block; margin:0 auto; border-radius:4px; box-shadow: 2px 2px 10px rgba(0,0,0,0.5);"></canvas>
-      <button id="restart-button">Restart</button>
+    <div class="content">
+      <canvas id="flappy-canvas" width="400" height="600"></canvas>
+      <button id="restart-button" data-lang-key="restart">Restart</button>
     </div>
   </div>
 
@@ -665,6 +708,167 @@
   </template>
 
   <script>
+    // Language Data
+    const languages = {
+      en: {
+        loading: "Loading...",
+        portfolio: "Portfolio",
+        flappy_game: "Flappy Game",
+        start: "Start",
+        start_menu_intro: "Hello! I'm Valery, passionate about creating stunning visual effects and immersive environments. Thanks for visiting my portfolio!",
+        open_portfolio: "Open Portfolio",
+        play_flappy: "Play Flappy Game",
+        contact_me: "Contact Me",
+        portfolio_window_title: "Portfolio - Valery Gorbunov",
+        name: "Valery Gorbunov",
+        profession: "VFX artist with experience in lighting and cinematics.",
+        location_label: "Location:",
+        contact_label: "Contact:",
+        summary: "Summary",
+        summary_text: "Unreal Engine artist experienced in environment art, lighting, VFX, and cinematics.",
+        skills: "Skills",
+        skill_unreal: "Unreal Engine",
+        skill_zbrush: "ZBrush",
+        skill_maya: "Maya",
+        skill_blender: "Blender",
+        skill_substance: "Substance Designer/Painter",
+        skill_houdini: "Houdini",
+        skill_embergen: "Embergen",
+        skill_photoshop: "Photoshop",
+        skill_after_effects: "After Effects",
+        experience: "Experience",
+        exp_various: "Various",
+        exp_role: "VFX Artist",
+        exp_details: "VFX work. Creating VFX for UE5 projects.",
+        exp_qorpo: "QORPO - Game Studio",
+        exp_role_qorpo: "VFX Artist/Lighting Artist",
+        exp_details_qorpo: "Created VFX in Embergen, Houdini, and UE5.",
+        exp_girand: "Girand",
+        exp_role_girand: "Producer/Team Lead",
+        exp_details_girand: "GIRAND: IN THE LOST CITY. NFT game. I was responsible for VFX, producing, cinematics, and team guidance.",
+        exp_stage23: "Stage 23",
+        exp_role_stage23: "Lead VFX Artist, Technical Artist",
+        exp_mundfish: "Mundfish",
+        exp_role_mundfish: "VFX Artist/Cinematic Artist",
+        exp_details_mundfish: "Responsibilities included camera work and VFX creation.",
+        exp_qte: "QTE",
+        exp_role_qte: "Cinematic Artist",
+        exp_details_qte: "Worked with Unreal Engine and CryEngine.<br>- Cinematography<br>- VFX<br>- Modeling<br>- Texturing<br>- Animation",
+        exp_coderaptor: "Coderaptor",
+        exp_role_coderaptor: "Environment Artist, Technical Artist, VFX Artist",
+        exp_details_coderaptor: "Technical art pipeline. VFX, environment art. Materials, lighting, blueprints.",
+        exp_codeclass: "CodeClass School",
+        exp_role_codeclass: "Teaching Unreal Engine/Unity",
+        exp_details_codeclass: "Interactive technologies.",
+        exp_leveldesigner: "Level Designer",
+        education: "Education",
+        edu_hse: "Higher School of Economics",
+        education_details: "Bachelor's degree in Game Design and Interactive Applications (2016 - 2021)",
+        portfolio_section: "Portfolio",
+        portfolio_placeholder: "Replace the images and videos below with your own work.",
+        portfolio_image1: "Image 1 Placeholder",
+        portfolio_image2: "Image 2 Placeholder",
+        portfolio_video: "Video Placeholder",
+        celebrate: "Celebrate",
+        flappy_window_title: "Flappy Game",
+        restart: "Restart"
+      },
+      ru: {
+        loading: "Загрузка...",
+        portfolio: "Портфолио",
+        flappy_game: "Игра Flappy",
+        start: "Пуск",
+        start_menu_intro: "Привет! Я Валерий, увлечен созданием потрясающих визуальных эффектов и захватывающих окружений. Спасибо за посещение моего портфолио!",
+        open_portfolio: "Открыть Портфолио",
+        play_flappy: "Играть в Flappy",
+        contact_me: "Связаться со мной",
+        portfolio_window_title: "Портфолио - Валерий Горбунов",
+        name: "Валерий Горбунов",
+        profession: "Визуальный художник с опытом в освещении и кинематографике.",
+        location_label: "Местоположение:",
+        contact_label: "Контакт:",
+        summary: "Резюме",
+        summary_text: "Художник Unreal Engine с опытом в области создания окружения, освещения, VFX и кинематографики.",
+        skills: "Навыки",
+        skill_unreal: "Unreal Engine",
+        skill_zbrush: "ZBrush",
+        skill_maya: "Maya",
+        skill_blender: "Blender",
+        skill_substance: "Substance Designer/Painter",
+        skill_houdini: "Houdini",
+        skill_embergen: "Embergen",
+        skill_photoshop: "Photoshop",
+        skill_after_effects: "After Effects",
+        experience: "Опыт",
+        exp_various: "Различный",
+        exp_role: "VFX Художник",
+        exp_details: "Работа над VFX. Создание VFX для проектов UE5.",
+        exp_qorpo: "QORPO - Game Studio",
+        exp_role_qorpo: "VFX Художник/Художник по освещению",
+        exp_details_qorpo: "Создание VFX в Embergen, Houdini и UE5.",
+        exp_girand: "Girand",
+        exp_role_girand: "Продюсер/Лидер команды",
+        exp_details_girand: "GIRAND: IN THE LOST CITY. NFT игра. Я отвечал за VFX, продюсирование, кинематографику и руководство командой.",
+        exp_stage23: "Stage 23",
+        exp_role_stage23: "Ведущий VFX Художник, Технический Художник",
+        exp_mundfish: "Mundfish",
+        exp_role_mundfish: "VFX Художник/Кинематографический Художник",
+        exp_details_mundfish: "Обязанности включали работу с камерой и создание VFX.",
+        exp_qte: "QTE",
+        exp_role_qte: "Кинематографический Художник",
+        exp_details_qte: "Работа с Unreal Engine и CryEngine.<br>- Кинематография<br>- VFX<br>- Моделирование<br>- Текстурирование<br>- Анимация",
+        exp_coderaptor: "Coderaptor",
+        exp_role_coderaptor: "Художник окружения, Технический Художник, VFX Художник",
+        exp_details_coderaptor: "Технический арт-пайплайн. VFX, художник окружения. Материалы, освещение, blueprints.",
+        exp_codeclass: "CodeClass School",
+        exp_role_codeclass: "Преподавание Unreal Engine/Unity",
+        exp_details_codeclass: "Интерактивные технологии.",
+        exp_leveldesigner: "Дизайнер уровней",
+        education: "Образование",
+        edu_hse: "Высшая школа экономики",
+        education_details: "Бакалавр в области геймдизайна и интерактивных приложений (2016 - 2021)",
+        portfolio_section: "Портфолио",
+        portfolio_placeholder: "Замените изображения и видео ниже на свои работы.",
+        portfolio_image1: "Заполнитель изображения 1",
+        portfolio_image2: "Заполнитель изображения 2",
+        portfolio_video: "Заполнитель видео",
+        celebrate: "Праздновать",
+        flappy_window_title: "Игра Flappy",
+        restart: "Перезапустить"
+      }
+    };
+
+    let currentLanguage = 'en';
+
+    // Function to switch language
+    function switchLanguage(lang) {
+      currentLanguage = lang;
+      const elements = document.querySelectorAll('[data-lang-key]');
+      elements.forEach(element => {
+        const key = element.getAttribute('data-lang-key');
+        if (languages[lang][key]) {
+          element.innerHTML = languages[lang][key];
+        }
+      });
+    }
+
+    // Language Selection Modal
+    document.addEventListener('DOMContentLoaded', function() {
+      const languageModal = document.getElementById('language-modal');
+      const englishButton = document.getElementById('english-button');
+      const russianButton = document.getElementById('russian-button');
+
+      englishButton.addEventListener('click', function() {
+        switchLanguage('en');
+        languageModal.style.display = 'none';
+      });
+
+      russianButton.addEventListener('click', function() {
+        switchLanguage('ru');
+        languageModal.style.display = 'none';
+      });
+    });
+
     // Loading screen
     window.addEventListener('load', function() {
       setTimeout(function() {
@@ -687,12 +891,12 @@
     // Start Menu Links
     document.getElementById('portfolio-start-menu').addEventListener('click', function(event) {
       event.preventDefault();
-      openWindow(portfolioWindow, 'Portfolio - Valery Gorbunov', 'portfolio-taskbar-button');
+      openWindow(portfolioWindow, 'portfolio-taskbar-button');
     });
 
     document.getElementById('flappy-start-menu').addEventListener('click', function(event) {
       event.preventDefault();
-      openWindow(flappyWindow, 'Flappy Game', 'flappy-taskbar-button');
+      openWindow(flappyWindow, 'flappy-taskbar-button');
       startFlappyGame();
     });
 
@@ -712,18 +916,18 @@
     const taskbarButtons = document.getElementById('taskbar-buttons');
 
     portfolioIcon.addEventListener('dblclick', function() {
-      openWindow(portfolioWindow, 'Portfolio - Valery Gorbunov', 'portfolio-taskbar-button');
+      openWindow(portfolioWindow, 'portfolio-taskbar-button');
     });
 
     flappyIcon.addEventListener('dblclick', function() {
-      openWindow(flappyWindow, 'Flappy Game', 'flappy-taskbar-button');
+      openWindow(flappyWindow, 'flappy-taskbar-button');
       startFlappyGame();
     });
 
     // Window controls
     let zIndexCounter = 10;
 
-    function addWindowControls(windowElement, titleBarId, taskbarId, windowTitle) {
+    function addWindowControls(windowElement, taskbarId) {
       const minimizeButton = windowElement.querySelector('.minimize-button');
       const maximizeButton = windowElement.querySelector('.maximize-button');
       const closeButton = windowElement.querySelector('.close-button');
@@ -802,8 +1006,8 @@
     }
 
     // Initialize window controls
-    addWindowControls(portfolioWindow, 'portfolio-title-bar', 'portfolio-taskbar-button', 'Portfolio - Valery Gorbunov');
-    addWindowControls(flappyWindow, 'flappy-title-bar', 'flappy-taskbar-button', 'Flappy Game');
+    addWindowControls(portfolioWindow, 'portfolio-taskbar-button');
+    addWindowControls(flappyWindow, 'flappy-taskbar-button');
 
     // Taskbar button functionality
     function addTaskbarButton(title, id, windowElement) {
@@ -821,6 +1025,9 @@
           windowElement.style.display = 'block';
           button.classList.add('active');
           windowElement.style.zIndex = ++zIndexCounter;
+          if (windowElement === flappyWindow) {
+            startFlappyGame();
+          }
         } else {
           windowElement.style.display = 'none';
           button.classList.remove('active');
@@ -838,9 +1045,9 @@
       }
     }
 
-    function openWindow(windowElement, title, taskbarId) {
+    function openWindow(windowElement, taskbarId) {
       windowElement.style.display = 'block';
-      addTaskbarButton(title, taskbarId, windowElement);
+      addTaskbarButton(currentLanguage === 'en' ? 'Portfolio' : 'Портфолио', taskbarId, windowElement);
       windowElement.style.zIndex = ++zIndexCounter;
     }
 
@@ -1003,7 +1210,7 @@
       gameActive = false;
       flappyCanvas.style.cursor = 'default';
       restartButton.style.display = 'block';
-      alert(`Game Over! Your Score: ${score}`);
+      alert(currentLanguage === 'en' ? `Game Over! Your Score: ${score}` : `Игра окончена! Ваш счет: ${score}`);
       stopFlappyGame();
     }
 
