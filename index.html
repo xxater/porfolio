@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Valery Gorbunov Portfolio</title>
   <style>
     /* Reset and Basic Styles */
@@ -15,7 +15,7 @@
       font-family: 'MS Sans Serif', Arial, sans-serif;
       font-size: 14px;
       color: black;
-      background-color: #008080; /* Windows 98 Teal */
+      background-color: #008080;
       overflow: hidden;
       position: relative;
       height: 100vh;
@@ -29,14 +29,14 @@
       left: 50%;
       transform: translate(-50%, -50%);
       width: 300px;
-      background-color: #C0C0C0; /* Windows 98 Window Color */
+      background-color: #C0C0C0;
       border: 2px solid #000;
       border-top-color: #fff;
       border-left-color: #fff;
       z-index: 1001;
       border-radius: 4px;
       box-shadow: 4px 4px 10px rgba(0,0,0,0.5);
-      display: none; /* Hidden by default */
+      display: none;
     }
     #language-modal.show {
       display: block;
@@ -60,11 +60,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-    }
-    #language-modal .content h2 {
-      margin-bottom: 20px;
-      text-shadow: 1px 1px black;
-      font-size: 16px;
     }
     .language-button {
       width: 80px;
@@ -174,7 +169,6 @@
     .title-bar-controls button:hover {
       background-color: #A9A9A9;
     }
-    /* Window Control Icons */
     .title-bar-controls button.minimize-button::before {
       content: '';
       position: absolute;
@@ -244,7 +238,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 40px; /* Reduced height for Windows 98 look */
+      height: 40px;
       background-color: #C0C0C0;
       border-top: 2px solid #fff;
       border-left: 2px solid #fff;
@@ -286,11 +280,11 @@
       align-items: center;
       margin-left: 15px;
       overflow-x: auto;
-      scrollbar-width: none; /* Firefox */
+      scrollbar-width: none;
       flex-grow: 1;
     }
     #taskbar-buttons::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera */
+      display: none;
     }
     .taskbar-button {
       background-color: #C0C0C0;
@@ -446,8 +440,8 @@
 
     /* Flappy Game Specific Styles */
     #flappy-canvas {
-      touch-action: manipulation; /* Prevent default touch behaviors */
-      background-color: #87CEEB; /* Sky Blue */
+      touch-action: manipulation;
+      background-color: #87CEEB;
       position: relative;
       width: 100%;
       height: 100%;
@@ -456,7 +450,7 @@
       cursor: pointer;
     }
     #restart-button {
-      display: none; /* Hidden initially */
+      display: none;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -507,14 +501,12 @@
   <!-- Desktop Icons -->
   <div class="desktop-icon unselectable" id="portfolio-icon" style="top: 20%; left: 10%;">
     <div class="icon">
-      <!-- Portfolio Shortcut Icon -->
       <img src="https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs-4.png" alt="Portfolio Icon">
     </div>
     <span data-key="desktop_portfolio">Portfolio</span>
   </div>
   <div class="desktop-icon unselectable" id="flappy-icon" style="top: 20%; left: 30%;">
     <div class="icon">
-      <!-- Flappy Game Shortcut Icon -->
       <img src="https://win98icons.alexmeub.com/icons/png/minesweeper-1.png" alt="Flappy Game Icon">
     </div>
     <span data-key="desktop_flappy">Flappy Game</span>
@@ -527,9 +519,7 @@
       <span data-key="start_button">Start</span>
     </div>
     <div id="taskbar-buttons"></div>
-    <!-- Music Switcher -->
     <div id="music-switcher">Music On</div>
-    <!-- Language Switcher -->
     <div id="language-switcher">EN</div>
   </div>
 
@@ -552,10 +542,8 @@
       </div>
     </div>
     <div class="content">
-      <!-- Profile Photo -->
       <img src="https://media.licdn.com/dms/image/v2/D5603AQFY9qo828EKGA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1683906673729?e=1732752000&v=beta&t=RVMs7Fx5YQSPx5vEroUJTdas9L9MPpzZmigvup7paaU" alt="Profile Photo" class="profile-photo">
 
-      <!-- Portfolio Content -->
       <h1 data-key="portfolio_name">Valery Gorbunov</h1>
       <p data-key="portfolio_description">VFX artist with experience in lighting and cinematics.</p>
       <p><strong data-key="portfolio_location_label">Location:</strong> <span data-key="portfolio_location">Sosenskoye, Moscow City, Russia</span></p>
@@ -580,7 +568,6 @@
       </div>
       <div class="experience">
         <h2 data-key="portfolio_experience_title">Experience</h2>
-        <!-- Experience Items -->
         <div class="experience-item">
           <strong data-key="experience_various">Various</strong><br>
           <span data-key="experience_role_various">VFX Artist</span><br>
@@ -643,14 +630,12 @@
       <div class="portfolio">
         <h2 data-key="portfolio_portfolio_title">Portfolio</h2>
         <p data-key="portfolio_portfolio_description">Replace the images and videos below with your own work.</p>
-        <!-- Placeholder images -->
         <div style="width:100%; height:150px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; margin-bottom:10px; border-radius:4px;">
           <span data-key="portfolio_image1">Image 1 Placeholder</span>
         </div>
         <div style="width:100%; height:150px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; margin-bottom:10px; border-radius:4px;">
           <span data-key="portfolio_image2">Image 2 Placeholder</span>
         </div>
-        <!-- Placeholder video -->
         <div style="width:100%; height:150px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; border-radius:4px;">
           <span data-key="portfolio_video">Video Placeholder</span>
         </div>
@@ -675,7 +660,7 @@
   </div>
 
   <!-- Audio Element for Background Music -->
-  <audio id="background-music" src="https://static.wikia.nocookie.net/sonic/images/2/25/Welcome_to_Station_Square.ogg/revision/latest?cb=20170524160702" autoplay loop></audio>
+  <audio id="background-music" src="https://static.wikia.nocookie.net/sonic/images/2/25/Welcome_to_Station_Square.ogg/revision/latest?cb=20170524160702" autoplay loop playsinline></audio>
 
   <!-- Taskbar Buttons Template (Hidden) -->
   <template id="taskbar-button-template">
@@ -685,7 +670,6 @@
   </template>
 
   <script>
-    // Translations Object
     const translations = {
       en: {
         desktop_portfolio: "Portfolio",
@@ -758,7 +742,9 @@
         portfolio_image2: "Image 2 Placeholder",
         portfolio_video: "Video Placeholder",
         flappy_title: "Flappy Game",
-        flappy_restart: "Restart"
+        flappy_restart: "Restart",
+        music_on: "Music Off",
+        music_off: "Music On"
       },
       ru: {
         desktop_portfolio: "Портфолио",
@@ -831,13 +817,14 @@
         portfolio_image2: "Заглушка изображения 2",
         portfolio_video: "Заглушка видео",
         flappy_title: "Flappy Игра",
-        flappy_restart: "Перезапустить"
+        flappy_restart: "Перезапустить",
+        music_on: "Музыка Выкл",
+        music_off: "Музыка Вкл"
       }
     };
 
     let currentLanguage = 'en';
 
-    // Function to apply translations
     function applyTranslations(lang) {
       currentLanguage = lang;
       const elements = document.querySelectorAll('[data-key]');
@@ -847,13 +834,10 @@
           element.innerHTML = translations[lang][key];
         }
       });
-      // Update Language Switcher Text
       document.getElementById('language-switcher').textContent = lang.toUpperCase();
-      // Update Music Switcher Text based on current state
       updateMusicSwitcher();
     }
 
-    // Language Selection
     const englishButton = document.getElementById('english-button');
     const russianButton = document.getElementById('russian-button');
     const languageModal = document.getElementById('language-modal');
@@ -868,12 +852,10 @@
       languageModal.classList.remove('show');
     });
 
-    // Show Language Modal on Load
     window.addEventListener('load', function() {
       languageModal.classList.add('show');
     });
 
-    // Start button functionality
     const startButton = document.getElementById('start-button');
     const startMenu = document.getElementById('start-menu');
     let isStartMenuOpen = false;
@@ -884,7 +866,6 @@
       startMenu.style.display = isStartMenuOpen ? 'block' : 'none';
     });
 
-    // Start Menu Links
     document.getElementById('portfolio-start-menu').addEventListener('click', function(event) {
       event.preventDefault();
       openWindow(portfolioWindow, 'portfolio-taskbar-button');
@@ -896,7 +877,6 @@
       startFlappyGame();
     });
 
-    // Close the start menu when clicking outside
     document.addEventListener('click', function(event) {
       if (!startButton.contains(event.target) && !startMenu.contains(event.target)) {
         startMenu.style.display = 'none';
@@ -904,7 +884,6 @@
       }
     });
 
-    // Desktop Icons to open windows
     const portfolioIcon = document.getElementById('portfolio-icon');
     const flappyIcon = document.getElementById('flappy-icon');
     const portfolioWindow = document.getElementById('portfolio-window');
@@ -920,7 +899,6 @@
       startFlappyGame();
     });
 
-    // Window controls
     let zIndexCounter = 10;
 
     function addWindowControls(windowElement, taskbarId) {
@@ -971,7 +949,6 @@
         }
       });
 
-      // Make the window draggable
       const titleBar = windowElement.querySelector('.title-bar');
       let isDragging = false;
       let dragOffset = { x: 0, y: 0 };
@@ -995,17 +972,14 @@
         isDragging = false;
       });
 
-      // Bring window to front when clicked
       windowElement.addEventListener('mousedown', function() {
         windowElement.style.zIndex = ++zIndexCounter;
       });
     }
 
-    // Initialize window controls
     addWindowControls(portfolioWindow, 'portfolio-taskbar-button');
     addWindowControls(flappyWindow, 'flappy-taskbar-button');
 
-    // Taskbar button functionality
     function addTaskbarButton(key, id, windowElement) {
       if (document.getElementById(id)) return;
 
@@ -1044,14 +1018,13 @@
       windowElement.style.zIndex = ++zIndexCounter;
     }
 
-    // Helper to get title key based on window ID
     function getTitleKey(windowId) {
       if (windowId === 'portfolio-taskbar-button') return 'desktop_portfolio';
       if (windowId === 'flappy-taskbar-button') return 'desktop_flappy';
       return '';
     }
 
-    /* ------------------- Flappy Game Implementation ------------------- */
+    /* Flappy Game Implementation */
     const flappyCanvas = document.getElementById('flappy-canvas');
     const flappyCtx = flappyCanvas.getContext('2d');
     let flappyAnimationFrame;
@@ -1063,19 +1036,18 @@
       x: 50,
       y: 150,
       radius: 12,
-      gravity: 0.4, // Reduced gravity for easier gameplay
+      gravity: 0.4,
       velocity: 0,
-      lift: -9, // Reduced lift for easier gameplay
-      color: '#FFD700', // Gold
+      lift: -9,
+      color: '#FFD700',
       draw: function() {
         flappyCtx.fillStyle = this.color;
         flappyCtx.beginPath();
-        // Draw a simple bird: circle with a triangle wing
         flappyCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         flappyCtx.fill();
         flappyCtx.closePath();
 
-        flappyCtx.fillStyle = '#FFA500'; // Orange for wing
+        flappyCtx.fillStyle = '#FFA500';
         flappyCtx.beginPath();
         flappyCtx.moveTo(this.x, this.y);
         flappyCtx.lineTo(this.x - this.radius, this.y - this.radius);
@@ -1087,13 +1059,12 @@
 
     const pipes = [];
     const pipeWidth = 60;
-    const pipeGap = 160; // Increased gap for easier gameplay
-    let pipeInterval = 1800; // Increased interval for fewer pipes
+    const pipeGap = 160;
+    let pipeInterval = 1800;
     let lastPipeTime = Date.now();
 
     const restartButton = document.getElementById('restart-button');
 
-    // Touch and Click Events for Flapping
     flappyCanvas.addEventListener('click', flap);
     flappyCanvas.addEventListener('touchstart', function(e) {
       e.preventDefault();
@@ -1137,19 +1108,15 @@
     function updateFlappyGame() {
       flappyCtx.clearRect(0, 0, flappyCanvas.width, flappyCanvas.height);
 
-      // Update Bird
       bird.velocity += bird.gravity;
       bird.y += bird.velocity;
 
-      // Draw Bird
       bird.draw();
 
-      // Draw Score
       flappyCtx.fillStyle = 'black';
       flappyCtx.font = '20px Arial';
       flappyCtx.fillText(`Score: ${score}`, 10, 30);
 
-      // Generate Pipes
       const currentTime = Date.now();
       if (currentTime - lastPipeTime > pipeInterval) {
         const topPipeHeight = Math.floor(Math.random() * (flappyCanvas.height - pipeGap - 100)) + 50;
@@ -1163,39 +1130,32 @@
         lastPipeTime = currentTime;
       }
 
-      // Update and Draw Pipes
       for (let i = pipes.length - 1; i >= 0; i--) {
         const pipe = pipes[i];
-        pipe.x -= 2; // Reduced speed for easier gameplay
+        pipe.x -= 2;
 
-        // Draw Top Pipe
-        flappyCtx.fillStyle = '#228B22'; // Forest Green
+        flappyCtx.fillStyle = '#228B22';
         flappyCtx.fillRect(pipe.x, 0, pipeWidth, pipe.top);
 
-        // Draw Bottom Pipe
-        flappyCtx.fillStyle = '#228B22'; // Forest Green
+        flappyCtx.fillStyle = '#228B22';
         flappyCtx.fillRect(pipe.x, pipe.bottom, pipeWidth, flappyCanvas.height - pipe.bottom);
 
-        // Collision Detection
         if (bird.x + bird.radius > pipe.x && bird.x - bird.radius < pipe.x + pipeWidth) {
           if (bird.y - bird.radius < pipe.top || bird.y + bird.radius > pipe.bottom) {
             endGame();
           }
         }
 
-        // Update Score
         if (!pipe.passed && pipe.x + pipeWidth < bird.x) {
           pipe.passed = true;
           score += 1;
         }
 
-        // Remove off-screen pipes
         if (pipe.x + pipeWidth < 0) {
           pipes.splice(i, 1);
         }
       }
 
-      // Check for collision with ground or ceiling
       if (bird.y + bird.radius > flappyCanvas.height || bird.y - bird.radius < 0) {
         endGame();
       }
@@ -1214,12 +1174,10 @@
       stopFlappyGame();
     }
 
-    /* ------------------- Restart Button Functionality ------------------- */
     restartButton.addEventListener('click', function() {
       startFlappyGame();
     });
 
-    /* ------------------- Language Switcher Functionality ------------------- */
     const languageSwitcher = document.getElementById('language-switcher');
 
     languageSwitcher.addEventListener('click', function() {
@@ -1227,15 +1185,13 @@
       applyTranslations(newLanguage);
     });
 
-    /* ------------------- Music Switcher Functionality ------------------- */
     const musicSwitcher = document.getElementById('music-switcher');
     const backgroundMusic = document.getElementById('background-music');
 
-    // Initialize Music Switcher State
     let musicPlaying = true;
 
     function updateMusicSwitcher() {
-      musicSwitcher.textContent = musicPlaying ? (currentLanguage === 'en' ? 'Music Off' : 'Музыка Выкл') : (currentLanguage === 'en' ? 'Music On' : 'Музыка Вкл');
+      musicSwitcher.textContent = musicPlaying ? translations[currentLanguage].music_on : translations[currentLanguage].music_off;
     }
 
     musicSwitcher.addEventListener('click', function() {
@@ -1249,27 +1205,11 @@
       updateMusicSwitcher();
     });
 
-    // Update Music Switcher Label on Language Change
-    function applyTranslations(lang) {
-      currentLanguage = lang;
-      const elements = document.querySelectorAll('[data-key]');
-      elements.forEach(element => {
-        const key = element.getAttribute('data-key');
-        if (translations[lang][key]) {
-          element.innerHTML = translations[lang][key];
-        }
-      });
-      // Update Language Switcher Text
-      document.getElementById('language-switcher').textContent = lang.toUpperCase();
-      // Update Music Switcher Text based on current state
-      updateMusicSwitcher();
-    }
-
-    // Handle Autoplay Restrictions
     window.addEventListener('load', function() {
-      // Attempt to play the music; if blocked, the user can play via the switcher
-      backgroundMusic.play().catch(function() {
-        // Autoplay was prevented
+      backgroundMusic.play().then(() => {
+        musicPlaying = true;
+        updateMusicSwitcher();
+      }).catch(() => {
         musicPlaying = false;
         updateMusicSwitcher();
       });
