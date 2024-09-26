@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .timer {
+            font-size: 48px;
+            margin: 20px 0;
+            color: #555;
+        }
+
+        .status {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #888;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button#start {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        button#start:hover {
+            background-color: #218838;
+        }
+
+        button#pause {
+            background-color: #ffc107;
+            color: #fff;
+        }
+
+        button#pause:hover {
+            background-color: #e0a800;
+        }
+
+        button#reset {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        button#reset:hover {
+            background-color: #c82333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 500px) {
+            .timer {
+                font-size: 36px;
+            }
+
+            button {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Pomodoro Timer</h1>
+        <div class="status" id="status">Work Session</div>
+        <div class="timer" id="timer">25:00</div>
+        <div class="buttons">
+            <button id="start">Start</button>
+            <button id="pause">Pause</button>
+            <button id="reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- Audio for notification -->
+    <audio id="alarm" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" preload="auto"></audio>
+
+    <script>
+        // Timer settings (in seconds)
+        const WORK_TIME = 25 * 60; // 25 minutes
+        const BREAK_TIME = 5 * 60; // 5 minutes
+
+        let currentTime = WORK_TIME;
+        let isRunning = false;
+        let isWorkSession = true;
+        let timerInterval = null;
+
+        const timerDisplay = document.getElementById('timer');
+        const statusDisplay = document.getElementById('status');
+        const startButton = document.getElementById('start');
+        const pauseButton = document.getElementById('pause');
+        const resetButton = document.getElementById('reset');
+        const alarmSound = document.getElementById('alarm');
+
+        // Update the timer display
+        function updateDisplay() {
+            const minutes = Math.floor(currentTime / 60);
+            const seconds = currentTime % 60;
+            timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // Switch between work and break sessions
+        function switchSession() {
+            alarmSound.play();
+            isWorkSession = !isWorkSession;
+            currentTime = isWorkSession ? WORK_TIME : BREAK_TIME;
+            statusDisplay.textContent = isWorkSession ? 'Work Session' : 'Break Session';
+            updateDisplay();
+        }
+
+        // Start the timer
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                timerInterval = setInterval(() => {
+                    if (currentTime > 0) {
+                        currentTime--;
+                        updateDisplay();
+                    } else {
+                        switchSession();
+                    }
+                }, 1000);
+            }
+        }
+
+        // Pause the timer
+        function pauseTimer() {
+            if (isRunning) {
+                isRunning = false;
+                clearInterval(timerInterval);
+            }
+        }
+
+        // Reset the timer
+        function resetTimer() {
+            pauseTimer();
+            isWorkSession = true;
+            currentTime = WORK_TIME;
+            statusDisplay.textContent = 'Work Session';
+            updateDisplay();
+        }
+
+        // Event listeners
+        startButton.addEventListener('click', startTimer);
+        pauseButton.addEventListener('click', pauseTimer);
+        resetButton.addEventListener('click', resetTimer);
+
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html>
