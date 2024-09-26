@@ -1,1279 +1,230 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Valery Gorbunov Portfolio</title>
-  <style>
-    /* Reset and Basic Styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'MS Sans Serif', Arial, sans-serif;
-      font-size: 14px;
-      color: black;
-      background-color: #008080; /* Windows 98 Teal */
-      overflow: hidden;
-      position: relative;
-      height: 100vh;
-      width: 100vw;
-    }
-
-    /* Language Selection Modal */
-    #language-modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 300px;
-      background-color: #C0C0C0; /* Windows 98 Window Color */
-      border: 2px solid #000;
-      border-top-color: #fff;
-      border-left-color: #fff;
-      z-index: 1001;
-      border-radius: 4px;
-      box-shadow: 4px 4px 10px rgba(0,0,0,0.5);
-      display: none; /* Hidden by default */
-    }
-    #language-modal.show {
-      display: block;
-      animation: fadeIn 0.3s ease-in-out;
-    }
-    #language-modal .title-bar {
-      background: linear-gradient(#000080, #000060);
-      color: white;
-      padding: 4px 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: bold;
-      font-size: 14px;
-      cursor: default;
-      user-select: none;
-      border-bottom: 2px solid #fff;
-    }
-    #language-modal .content {
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    #language-modal .content h2 {
-      margin-bottom: 20px;
-      text-shadow: 1px 1px black;
-      font-size: 16px;
-    }
-    .language-button {
-      width: 80px;
-      padding: 4px 0;
-      margin: 5px;
-      border: 2px outset #fff;
-      background-color: #C0C0C0;
-      color: black;
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.1s;
-    }
-    .language-button:active {
-      border: 2px inset #fff;
-      transform: translateY(2px);
-    }
-
-    /* Desktop Icons */
-    .desktop-icon {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      width: 70px;
-      margin: 15px;
-      cursor: pointer;
-      user-select: none;
-      transition: transform 0.2s;
-    }
-    .desktop-icon:hover {
-      transform: scale(1.1);
-    }
-    .desktop-icon .icon {
-      width: 64px;
-      height: 64px;
-      background-color: #C0C0C0;
-      border: 2px solid #000;
-      border-radius: 8px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 5px;
-      position: relative;
-      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-    }
-    .desktop-icon .icon img {
-      width: 48px;
-      height: 48px;
-    }
-    .desktop-icon span {
-      color: black;
-      font-size: 12px;
-      text-align: center;
-      word-break: break-word;
-      text-shadow: 1px 1px white;
-    }
-
-    /* Window Styles */
-    .window {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border: 2px solid #000;
-      border-top-color: #fff;
-      border-left-color: #fff;
-      width: 90%;
-      max-width: 600px;
-      background-color: #C0C0C0;
-      cursor: default;
-      z-index: 10;
-      display: none;
-      overflow: hidden;
-      border-radius: 4px;
-      box-shadow: 4px 4px 10px rgba(0,0,0,0.5);
-      transition: all 0.3s ease;
-    }
-    .title-bar {
-      background: linear-gradient(#000080, #000060);
-      color: white;
-      padding: 8px 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: move;
-      user-select: none;
-      font-weight: bold;
-      font-size: 16px;
-      border-bottom: 2px solid #fff;
-    }
-    .title-bar-controls {
-      display: flex;
-    }
-    .title-bar-controls button {
-      background-color: #C0C0C0;
-      border: 1px solid #fff;
-      width: 20px;
-      height: 20px;
-      margin-left: 4px;
-      padding: 0;
-      position: relative;
-      cursor: pointer;
-      border-radius: 2px;
-      transition: background-color 0.2s;
-    }
-    .title-bar-controls button:hover {
-      background-color: #A9A9A9;
-    }
-    /* Window Control Icons */
-    .title-bar-controls button.minimize-button::before {
-      content: '';
-      position: absolute;
-      top: 8px;
-      left: 4px;
-      width: 12px;
-      height: 2px;
-      background-color: black;
-    }
-    .title-bar-controls button.maximize-button::before {
-      content: '';
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      width: 12px;
-      height: 12px;
-      border: 1px solid black;
-    }
-    .title-bar-controls button.close-button::before,
-    .title-bar-controls button.close-button::after {
-      content: '';
-      position: absolute;
-      top: 4px;
-      left: 8px;
-      width: 2px;
-      height: 12px;
-      background-color: black;
-    }
-    .title-bar-controls button.close-button::before {
-      transform: rotate(45deg);
-    }
-    .title-bar-controls button.close-button::after {
-      transform: rotate(-45deg);
-    }
-    .content {
-      padding: 15px;
-      overflow: auto;
-      max-height: calc(100vh - 80px);
-      background-color: #D3D3D3;
-      position: relative;
-    }
-    h1, h2, h3 {
-      margin: 10px 0;
-    }
-    ul {
-      list-style-type: none;
-      padding-left: 0;
-    }
-    .skills, .experience, .education, .portfolio {
-      margin-bottom: 20px;
-    }
-    .experience-item {
-      margin-bottom: 15px;
-      background-color: #FFFFFF;
-      padding: 10px;
-      border-radius: 4px;
-      box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-    }
-    a {
-      color: blue;
-      text-decoration: underline;
-    }
-
-    /* Taskbar */
-    #taskbar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 40px; /* Reduced height for Windows 98 look */
-      background-color: #C0C0C0;
-      border-top: 2px solid #fff;
-      border-left: 2px solid #fff;
-      display: flex;
-      align-items: center;
-      z-index: 20;
-      box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
-    }
-    #start-button {
-      background-color: #C0C0C0;
-      border: 2px solid #fff;
-      border-top-color: #000;
-      border-left-color: #000;
-      padding: 8px 12px;
-      cursor: pointer;
-      margin-left: 10px;
-      display: flex;
-      align-items: center;
-      position: relative;
-      border-radius: 2px;
-      user-select: none;
-      transition: background-color 0.2s;
-    }
-    #start-button:hover {
-      background-color: #A9A9A9;
-    }
-    #start-button img {
-      width: 20px;
-      height: 20px;
-      margin-right: 8px;
-    }
-    #start-button span {
-      font-size: 16px;
-      color: white;
-      text-shadow: 1px 1px black;
-    }
-    #taskbar-buttons {
-      display: flex;
-      align-items: center;
-      margin-left: 15px;
-      overflow-x: auto;
-      scrollbar-width: none; /* Firefox */
-      flex-grow: 1;
-    }
-    #taskbar-buttons::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera */
-    }
-    .taskbar-button {
-      background-color: #C0C0C0;
-      border: 2px solid #fff;
-      border-top-color: #000;
-      border-left-color: #000;
-      padding: 8px 14px;
-      cursor: pointer;
-      margin-right: 8px;
-      display: flex;
-      align-items: center;
-      border-radius: 2px;
-      user-select: none;
-      white-space: nowrap;
-      font-size: 14px;
-      transition: background-color 0.2s, transform 0.2s;
-    }
-    .taskbar-button:hover {
-      background-color: #A9A9A9;
-      transform: scale(1.05);
-    }
-    .taskbar-button.active {
-      border-top-color: #fff;
-      border-left-color: #fff;
-      border-bottom-color: #000;
-      border-right-color: #000;
-      background-color: #696969;
-      color: white;
-    }
-
-    /* Language Switcher */
-    #language-switcher {
-      background-color: #C0C0C0;
-      border: 2px solid #fff;
-      border-top-color: #000;
-      border-left-color: #000;
-      padding: 8px 12px;
-      cursor: pointer;
-      margin-right: 10px;
-      display: flex;
-      align-items: center;
-      position: relative;
-      border-radius: 2px;
-      user-select: none;
-      transition: background-color 0.2s;
-      font-size: 14px;
-    }
-    #language-switcher:hover {
-      background-color: #A9A9A9;
-    }
-
-    /* Music Switcher */
-    #music-switcher {
-      background-color: #C0C0C0;
-      border: 2px solid #fff;
-      border-top-color: #000;
-      border-left-color: #000;
-      padding: 8px 12px;
-      cursor: pointer;
-      margin-right: 10px;
-      display: flex;
-      align-items: center;
-      position: relative;
-      border-radius: 2px;
-      user-select: none;
-      transition: background-color 0.2s;
-      font-size: 14px;
-    }
-    #music-switcher:hover {
-      background-color: #A9A9A9;
-    }
-
-    /* Start Menu */
-    #start-menu {
-      position: fixed;
-      bottom: 50px;
-      left: 10px;
-      background-color: #C0C0C0;
-      border: 2px solid #000;
-      border-top-color: #fff;
-      border-left-color: #fff;
-      width: 240px;
-      display: none;
-      padding: 15px;
-      z-index: 25;
-      border-radius: 4px;
-      box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-    }
-    #start-menu p {
-      margin: 0 0 15px 0;
-      font-size: 14px;
-      color: black;
-      text-shadow: 1px 1px white;
-    }
-    #start-menu a {
-      display: block;
-      margin: 8px 0;
-      color: blue;
-      text-decoration: underline;
-      font-size: 14px;
-      transition: color 0.2s;
-    }
-    #start-menu a:hover {
-      color: darkblue;
-    }
-
-    /* Prevent selection */
-    .unselectable {
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-      .desktop-icon {
-        width: 60px;
-        margin: 10px;
-      }
-      .desktop-icon .icon img {
-        width: 36px;
-        height: 36px;
-      }
-      .desktop-icon span {
-        font-size: 11px;
-      }
-      .window {
-        width: 95%;
-        height: 90%;
-      }
-      #taskbar {
-        height: 40px;
-      }
-      #start-button {
-        padding: 10px 14px;
-      }
-      .taskbar-button, #language-switcher, #music-switcher {
-        padding: 8px 14px;
-        font-size: 14px;
-      }
-    }
-
-    /* Smooth Window Transitions */
-    .window.show {
-      display: block;
-      animation: fadeIn 0.3s ease-in-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translate(-50%, -60%); }
-      to { opacity: 1; transform: translate(-50%, -50%); }
-    }
-
-    /* Flappy Game Specific Styles */
-    #flappy-canvas {
-      touch-action: manipulation; /* Prevent default touch behaviors */
-      background-color: #87CEEB; /* Sky Blue */
-      position: relative;
-      width: 100%;
-      height: 100%;
-      border-radius: 4px;
-      box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-      cursor: pointer;
-    }
-    #restart-button {
-      display: none; /* Hidden initially */
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      background-color: #4CAF50;
-      color: white;
-      cursor: pointer;
-      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-      transition: background-color 0.2s, transform 0.2s;
-    }
-    #restart-button:hover {
-      background-color: #45a049;
-      transform: scale(1.05);
-    }
-
-    /* Profile Photo Retro Styling */
-    .profile-photo {
-      width: 150px;
-      height: 150px;
-      border: 2px solid #000;
-      border-radius: 4px;
-      object-fit: cover;
-      filter: sepia(0.5) contrast(1.2) brightness(0.9);
-      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-      margin-bottom: 15px;
-    }
-  </style>
+    <title>Two Player Flappy Bird - Windows 98 Style</title>
+    <style>
+        body {
+            background-color: #C0C0C0;
+            font-family: 'MS Sans Serif', Geneva, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .window {
+            width: 640px;
+            margin: 50px auto;
+            border: 2px solid #000;
+            background-color: #FFF;
+            box-shadow: 5px 5px 0px #888;
+        }
+        .title-bar {
+            background: linear-gradient(to right, #000080, #0000FF);
+            color: #FFF;
+            padding: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+        .title-bar .title {
+            margin-left: 5px;
+        }
+        .title-bar .buttons {
+            margin-right: 5px;
+        }
+        .title-bar .buttons span {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-color: #C0C0C0;
+            border: 2px solid #FFF;
+            margin-left: 2px;
+            cursor: pointer;
+        }
+        .content {
+            padding: 10px;
+        }
+        #gameCanvas {
+            background-color: #00FFFF;
+            display: block;
+            margin: 0 auto;
+            border: 2px solid #000;
+        }
+        .button {
+            background-color: #C0C0C0;
+            border: 2px solid #000;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .button:active {
+            border-style: inset;
+        }
+        .status {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-  <!-- Language Selection Modal -->
-  <div id="language-modal" class="window">
-    <div class="title-bar">
-      <div class="title-bar-text">Select Language / Выберите язык</div>
-      <div class="title-bar-controls">
-        <!-- No controls needed -->
-      </div>
+    <div class="window">
+        <div class="title-bar">
+            <div class="title">Two Player Flappy Bird</div>
+            <div class="buttons">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="content">
+            <canvas id="gameCanvas" width="600" height="400"></canvas>
+            <div style="text-align: center;">
+                <div class="button" onclick="startGame()">Start Game</div>
+            </div>
+            <div class="status" id="status">Press 'W' for Player 1 and '↑' for Player 2 to flap!</div>
+        </div>
     </div>
-    <div class="content">
-      <button class="language-button" id="english-button">English</button>
-      <button class="language-button" id="russian-button">Русский</button>
-    </div>
-  </div>
 
-  <!-- Desktop Icons -->
-  <div class="desktop-icon unselectable" id="portfolio-icon" style="top: 20%; left: 10%;">
-    <div class="icon">
-      <!-- Portfolio Shortcut Icon -->
-      <img src="https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs-4.png" alt="Portfolio Icon">
-    </div>
-    <span data-key="desktop_portfolio">Portfolio</span>
-  </div>
-  <div class="desktop-icon unselectable" id="flappy-icon" style="top: 20%; left: 30%;">
-    <div class="icon">
-      <!-- Flappy Game Shortcut Icon -->
-      <img src="https://win98icons.alexmeub.com/icons/png/minesweeper-1.png" alt="Flappy Game Icon">
-    </div>
-    <span data-key="desktop_flappy">Flappy Game</span>
-  </div>
+    <script>
+        var canvas = document.getElementById("gameCanvas");
+        var ctx = canvas.getContext("2d");
 
-  <!-- Taskbar -->
-  <div id="taskbar">
-    <div id="start-button">
-      <img src="https://win98icons.alexmeub.com/icons/png/windows-0.png" alt="Start Icon">
-      <span data-key="start_button">Start</span>
-    </div>
-    <div id="taskbar-buttons"></div>
-    <!-- Music Switcher -->
-    <div id="music-switcher">Music On</div>
-    <!-- Language Switcher -->
-    <div id="language-switcher">EN</div>
-  </div>
+        var bird1 = {
+            x: 150,
+            y: 200,
+            width: 20,
+            height: 20,
+            gravity: 0.6,
+            lift: -10,
+            velocity: 0,
+            color: 'yellow',
+            score: 0
+        };
 
-  <!-- Start Menu -->
-  <div id="start-menu">
-    <p data-key="start_menu_intro">Hello! I'm Valery, passionate about creating stunning visual effects and immersive environments. Thanks for visiting my portfolio!</p>
-    <a href="#" id="portfolio-start-menu" data-key="start_menu_open_portfolio">Open Portfolio</a>
-    <a href="#" id="flappy-start-menu" data-key="start_menu_play_flappy">Play Flappy Game</a>
-    <a href="mailto:xxater@gmail.com" data-key="start_menu_contact">Contact Me</a>
-  </div>
+        var bird2 = {
+            x: 100,
+            y: 200,
+            width: 20,
+            height: 20,
+            gravity: 0.6,
+            lift: -10,
+            velocity: 0,
+            color: 'red',
+            score: 0
+        };
 
-  <!-- Portfolio Window -->
-  <div class="window" id="portfolio-window">
-    <div class="title-bar" id="portfolio-title-bar">
-      <div class="title-bar-text" data-key="portfolio_title">Portfolio - Valery Gorbunov</div>
-      <div class="title-bar-controls">
-        <button class="minimize-button" aria-label="Minimize"></button>
-        <button class="maximize-button" aria-label="Maximize"></button>
-        <button class="close-button" aria-label="Close"></button>
-      </div>
-    </div>
-    <div class="content">
-      <!-- Profile Photo -->
-      <img src="https://media.licdn.com/dms/image/v2/D5603AQFY9qo828EKGA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1683906673729?e=1732752000&v=beta&t=RVMs7Fx5YQSPx5vEroUJTdas9L9MPpzZmigvup7paaU" alt="Profile Photo" class="profile-photo">
+        var pipes = [];
+        var frameCount = 0;
+        var gameOver = false;
 
-      <!-- Portfolio Content -->
-      <h1 data-key="portfolio_name">Valery Gorbunov</h1>
-      <p data-key="portfolio_description">VFX artist with experience in lighting and cinematics.</p>
-      <p><strong data-key="portfolio_location_label">Location:</strong> <span data-key="portfolio_location">Sosenskoye, Moscow City, Russia</span></p>
-      <p><strong data-key="portfolio_contact_label">Contact:</strong> Telegram: <a href="https://t.me/VGFOR">@VGFOR</a>, Email: <a href="mailto:xxater@gmail.com">xxater@gmail.com</a></p>
-      <div class="summary">
-        <h2 data-key="portfolio_summary_title">Summary</h2>
-        <p data-key="portfolio_summary">Unreal Engine artist experienced in environment art, lighting, VFX, and cinematics.</p>
-      </div>
-      <div class="skills">
-        <h2 data-key="portfolio_skills_title">Skills</h2>
-        <ul>
-          <li data-key="skill_unreal">Unreal Engine</li>
-          <li data-key="skill_zbrush">ZBrush</li>
-          <li data-key="skill_maya">Maya</li>
-          <li data-key="skill_blender">Blender</li>
-          <li data-key="skill_substance">Substance Designer/Painter</li>
-          <li data-key="skill_houdini">Houdini</li>
-          <li data-key="skill_embergen">Embergen</li>
-          <li data-key="skill_photoshop">Photoshop</li>
-          <li data-key="skill_after_effects">After Effects</li>
-        </ul>
-      </div>
-      <div class="experience">
-        <h2 data-key="portfolio_experience_title">Experience</h2>
-        <!-- Experience Items -->
-        <div class="experience-item">
-          <strong data-key="experience_various">Various</strong><br>
-          <span data-key="experience_role_various">VFX Artist</span><br>
-          <span data-key="experience_duration_various">February 2023 - Present (1 year 8 months)</span><br>
-          <span data-key="experience_description_various">VFX work. Creating VFX for UE5 projects.</span>
-        </div>
-        <div class="experience-item">
-          <strong data-key="experience_qorpo">QORPO - Game Studio</strong><br>
-          <span data-key="experience_role_qorpo">VFX Artist/Lighting Artist</span><br>
-          <span data-key="experience_duration_qorpo">November 2022 - February 2023 (4 months)</span><br>
-          <span data-key="experience_description_qorpo">Created VFX in Embergen, Houdini, and UE5.</span>
-        </div>
-        <div class="experience-item">
-          <strong data-key="experience_girand">Girand</strong><br>
-          <span data-key="experience_role_girand">Producer/Team Lead</span><br>
-          <span data-key="experience_duration_girand">April 2022 - October 2022 (7 months)</span><br>
-          <span data-key="experience_description_girand">GIRAND: IN THE LOST CITY. NFT game. I was responsible for VFX, producing, cinematics, and team guidance.</span>
-        </div>
-        <div class="experience-item">
-          <strong data-key="experience_stage23">Stage 23</strong><br>
-          <span data-key="experience_role_stage23">Lead VFX Artist, Technical Artist</span><br>
-          <span data-key="experience_duration_stage23">January 2021 - June 2022 (1 year 6 months)</span><br>
-          <span data-key="experience_description_stage23">Moscow, Moscow City, Russia.</span>
-        </div>
-        <div class="experience-item">
-          <strong data-key="experience_mundfish">Mundfish</strong><br>
-          <span data-key="experience_role_mundfish">VFX Artist/Cinematic Artist</span><br>
-          <span data-key="experience_duration_mundfish">October 2020 - January 2021 (4 months)</span><br>
-          <span data-key="experience_description_mundfish">Moscow, Moscow City, Russia.<br>Responsibilities included camera work and VFX creation.</span>
-        </div>
-        <div class="experience-item">
-          <strong data-key="experience_qte">QTE</strong><br>
-          <span data-key="experience_role_qte">Cinematic Artist</span><br>
-          <span data-key="experience_duration_qte">March 2019 - September 2020 (1 year 7 months)</span><br>
-          <span data-key="experience_description_qte">Moscow, Moscow City, Russia.<br>Worked with Unreal Engine and CryEngine.<br>- Cinematography<br>- VFX<br>- Modeling<br>- Texturing<br>- Animation</span>
-        </div>
-        <div class="experience-item">
-          <strong data-key="experience_coderaptor">Coderaptor</strong><br>
-          <span data-key="experience_role_coderaptor">Environment Artist, Technical Artist, VFX Artist</span><br>
-          <span data-key="experience_duration_coderaptor">May 2018 - February 2019 (10 months)</span><br>
-          <span data-key="experience_description_coderaptor">Moscow, Moscow City, Russia.<br>Technical art pipeline. VFX, environment art. Materials, lighting, blueprints.</span>
-        </div>
-        <div class="experience-item">
-          <strong data-key="experience_codeclass">CodeClass School</strong><br>
-          <span data-key="experience_role_codeclass">Teaching Unreal Engine/Unity</span><br>
-          <span data-key="experience_duration_codeclass">December 2017 - January 2019 (1 year 2 months)</span><br>
-          <span data-key="experience_description_codeclass">Moscow, Moscow City, Russia.<br>Interactive technologies.</span>
-        </div>
-        <div class="experience-item">
-          <strong data-key="experience_leveldesigner">Level Designer</strong><br>
-          <span data-key="experience_duration_leveldesigner">December 2017 - May 2018 (6 months)</span><br>
-          <span data-key="experience_description_leveldesigner">Москва, Россия.</span>
-        </div>
-      </div>
-      <div class="education">
-        <h2 data-key="portfolio_education_title">Education</h2>
-        <p><strong data-key="education_hse">Higher School of Economics</strong></p>
-        <p data-key="education_degree">Bachelor's degree in Game Design and Interactive Applications (2016 - 2021)</p>
-      </div>
-      <div class="portfolio">
-        <h2 data-key="portfolio_portfolio_title">Portfolio</h2>
-        <p data-key="portfolio_portfolio_description">Replace the images and videos below with your own work.</p>
-        <!-- Placeholder images -->
-        <div style="width:100%; height:150px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; margin-bottom:10px; border-radius:4px;">
-          <span data-key="portfolio_image1">Image 1 Placeholder</span>
-        </div>
-        <div style="width:100%; height:150px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; margin-bottom:10px; border-radius:4px;">
-          <span data-key="portfolio_image2">Image 2 Placeholder</span>
-        </div>
-        <!-- Placeholder video -->
-        <div style="width:100%; height:150px; background-color:#eee; display:flex; align-items:center; justify-content:center; border:1px solid #000; border-radius:4px;">
-          <span data-key="portfolio_video">Video Placeholder</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Flappy Game Window -->
-  <div class="window" id="flappy-window">
-    <div class="title-bar" id="flappy-title-bar">
-      <div class="title-bar-text" data-key="flappy_title">Flappy Game</div>
-      <div class="title-bar-controls">
-        <button class="minimize-button" aria-label="Minimize"></button>
-        <button class="maximize-button" aria-label="Maximize"></button>
-        <button class="close-button" aria-label="Close"></button>
-      </div>
-    </div>
-    <div class="content">
-      <canvas id="flappy-canvas" width="400" height="600"></canvas>
-      <button id="restart-button" data-key="flappy_restart">Restart</button>
-    </div>
-  </div>
-
-  <!-- Audio Element for Background Music -->
-  <audio id="background-music" src="https://static.wikia.nocookie.net/sonic/images/2/25/Welcome_to_Station_Square.ogg/revision/latest?cb=20170524160702" autoplay loop></audio>
-
-  <!-- Taskbar Buttons Template (Hidden) -->
-  <template id="taskbar-button-template">
-    <div class="taskbar-button" data-window-id="">
-      <span></span>
-    </div>
-  </template>
-
-  <script>
-    // Translations Object
-    const translations = {
-      en: {
-        desktop_portfolio: "Portfolio",
-        desktop_flappy: "Flappy Game",
-        start_button: "Start",
-        start_menu_intro: "Hello! I'm Valery, passionate about creating stunning visual effects and immersive environments. Thanks for visiting my portfolio!",
-        start_menu_open_portfolio: "Open Portfolio",
-        start_menu_play_flappy: "Play Flappy Game",
-        start_menu_contact: "Contact Me",
-        portfolio_title: "Portfolio - Valery Gorbunov",
-        portfolio_name: "Valery Gorbunov",
-        portfolio_description: "VFX artist with experience in lighting and cinematics.",
-        portfolio_location_label: "Location:",
-        portfolio_location: "Sosenskoye, Moscow City, Russia",
-        portfolio_contact_label: "Contact:",
-        portfolio_summary_title: "Summary",
-        portfolio_summary: "Unreal Engine artist experienced in environment art, lighting, VFX, and cinematics.",
-        portfolio_skills_title: "Skills",
-        skill_unreal: "Unreal Engine",
-        skill_zbrush: "ZBrush",
-        skill_maya: "Maya",
-        skill_blender: "Blender",
-        skill_substance: "Substance Designer/Painter",
-        skill_houdini: "Houdini",
-        skill_embergen: "Embergen",
-        skill_photoshop: "Photoshop",
-        skill_after_effects: "After Effects",
-        portfolio_experience_title: "Experience",
-        experience_various: "Various",
-        experience_role_various: "VFX Artist",
-        experience_duration_various: "February 2023 - Present (1 year 8 months)",
-        experience_description_various: "VFX work. Creating VFX for UE5 projects.",
-        experience_qorpo: "QORPO - Game Studio",
-        experience_role_qorpo: "VFX Artist/Lighting Artist",
-        experience_duration_qorpo: "November 2022 - February 2023 (4 months)",
-        experience_description_qorpo: "Created VFX in Embergen, Houdini, and UE5.",
-        experience_girand: "Girand",
-        experience_role_girand: "Producer/Team Lead",
-        experience_duration_girand: "April 2022 - October 2022 (7 months)",
-        experience_description_girand: "GIRAND: IN THE LOST CITY. NFT game. I was responsible for VFX, producing, cinematics, and team guidance.",
-        experience_stage23: "Stage 23",
-        experience_role_stage23: "Lead VFX Artist, Technical Artist",
-        experience_duration_stage23: "January 2021 - June 2022 (1 year 6 months)",
-        experience_description_stage23: "Moscow, Moscow City, Russia.",
-        experience_mundfish: "Mundfish",
-        experience_role_mundfish: "VFX Artist/Cinematic Artist",
-        experience_duration_mundfish: "October 2020 - January 2021 (4 months)",
-        experience_description_mundfish: "Moscow, Moscow City, Russia.<br>Responsibilities included camera work and VFX creation.",
-        experience_qte: "QTE",
-        experience_role_qte: "Cinematic Artist",
-        experience_duration_qte: "March 2019 - September 2020 (1 year 7 months)",
-        experience_description_qte: "Moscow, Moscow City, Russia.<br>Worked with Unreal Engine and CryEngine.<br>- Cinematography<br>- VFX<br>- Modeling<br>- Texturing<br>- Animation",
-        experience_coderaptor: "Coderaptor",
-        experience_role_coderaptor: "Environment Artist, Technical Artist, VFX Artist",
-        experience_duration_coderaptor: "May 2018 - February 2019 (10 months)",
-        experience_description_coderaptor: "Moscow, Moscow City, Russia.<br>Technical art pipeline. VFX, environment art. Materials, lighting, blueprints.",
-        experience_codeclass: "CodeClass School",
-        experience_role_codeclass: "Teaching Unreal Engine/Unity",
-        experience_duration_codeclass: "December 2017 - January 2019 (1 year 2 months)",
-        experience_description_codeclass: "Moscow, Moscow City, Russia.<br>Interactive technologies.",
-        experience_leveldesigner: "Level Designer",
-        experience_duration_leveldesigner: "December 2017 - May 2018 (6 months)",
-        experience_description_leveldesigner: "Москва, Россия.",
-        portfolio_education_title: "Education",
-        education_hse: "Higher School of Economics",
-        education_degree: "Bachelor's degree in Game Design and Interactive Applications (2016 - 2021)",
-        portfolio_portfolio_title: "Portfolio",
-        portfolio_portfolio_description: "Replace the images and videos below with your own work.",
-        portfolio_image1: "Image 1 Placeholder",
-        portfolio_image2: "Image 2 Placeholder",
-        portfolio_video: "Video Placeholder",
-        flappy_title: "Flappy Game",
-        flappy_restart: "Restart"
-      },
-      ru: {
-        desktop_portfolio: "Портфолио",
-        desktop_flappy: "Flappy Игра",
-        start_button: "Пуск",
-        start_menu_intro: "Здравствуйте! Я Валерий, увлеченный созданием потрясающих визуальных эффектов и захватывающих окружений. Спасибо за посещение моего портфолио!",
-        start_menu_open_portfolio: "Открыть Портфолио",
-        start_menu_play_flappy: "Играть в Flappy",
-        start_menu_contact: "Связаться со мной",
-        portfolio_title: "Портфолио - Валерий Горбунов",
-        portfolio_name: "Валерий Горбунов",
-        portfolio_description: "Художник VFX с опытом работы в области освещения и кинематографики.",
-        portfolio_location_label: "Местоположение:",
-        portfolio_location: "Сосенское, Москва, Россия",
-        portfolio_contact_label: "Контакты:",
-        portfolio_summary_title: "Резюме",
-        portfolio_summary: "Художник Unreal Engine с опытом работы в области окружения, освещения, VFX и кинематографики.",
-        portfolio_skills_title: "Навыки",
-        skill_unreal: "Unreal Engine",
-        skill_zbrush: "ZBrush",
-        skill_maya: "Maya",
-        skill_blender: "Blender",
-        skill_substance: "Substance Designer/Painter",
-        skill_houdini: "Houdini",
-        skill_embergen: "Embergen",
-        skill_photoshop: "Photoshop",
-        skill_after_effects: "After Effects",
-        portfolio_experience_title: "Опыт работы",
-        experience_various: "Различные",
-        experience_role_various: "Художник VFX",
-        experience_duration_various: "Февраль 2023 - настоящее время (1 год 8 месяцев)",
-        experience_description_various: "Работа над VFX. Создание VFX для проектов UE5.",
-        experience_qorpo: "QORPO - Game Studio",
-        experience_role_qorpo: "Художник VFX/Художник по освещению",
-        experience_duration_qorpo: "Ноябрь 2022 - Февраль 2023 (4 месяца)",
-        experience_description_qorpo: "Создание VFX в Embergen, Houdini и UE5.",
-        experience_girand: "Girand",
-        experience_role_girand: "Продюсер/Руководитель команды",
-        experience_duration_girand: "Апрель 2022 - Октябрь 2022 (7 месяцев)",
-        experience_description_girand: "GIRAND: В ПОТЕРЯННОМ ГОРОДЕ. NFT игра. Отвечал за VFX, продюсирование, кинематографику и руководство командой.",
-        experience_stage23: "Stage 23",
-        experience_role_stage23: "Ведущий художник VFX, Технический художник",
-        experience_duration_stage23: "Январь 2021 - Июнь 2022 (1 год 6 месяцев)",
-        experience_description_stage23: "Москва, Москва, Россия.",
-        experience_mundfish: "Mundfish",
-        experience_role_mundfish: "Художник VFX/Кинематографический художник",
-        experience_duration_mundfish: "Октябрь 2020 - Январь 2021 (4 месяца)",
-        experience_description_mundfish: "Москва, Москва, Россия.<br>Обязанности включали работу с камерой и создание VFX.",
-        experience_qte: "QTE",
-        experience_role_qte: "Кинематографический художник",
-        experience_duration_qte: "Март 2019 - Сентябрь 2020 (1 год 7 месяцев)",
-        experience_description_qte: "Москва, Москва, Россия.<br>Работал с Unreal Engine и CryEngine.<br>- Кинематография<br>- VFX<br>- Моделирование<br>- Текстурирование<br>- Анимация",
-        experience_coderaptor: "Coderaptor",
-        experience_role_coderaptor: "Художник окружения, Технический художник, Художник VFX",
-        experience_duration_coderaptor: "Май 2018 - Февраль 2019 (10 месяцев)",
-        experience_description_coderaptor: "Москва, Москва, Россия.<br>Технический арт-пайплайн. VFX, окружение. Материалы, освещение, блюпринты.",
-        experience_codeclass: "CodeClass School",
-        experience_role_codeclass: "Преподавание Unreal Engine/Unity",
-        experience_duration_codeclass: "Декабрь 2017 - Январь 2019 (1 год 2 месяца)",
-        experience_description_codeclass: "Москва, Москва, Россия.<br>Интерактивные технологии.",
-        experience_leveldesigner: "Уровневый дизайнер",
-        experience_duration_leveldesigner: "Декабрь 2017 - Май 2018 (6 месяцев)",
-        experience_description_leveldesigner: "Москва, Россия.",
-        portfolio_education_title: "Образование",
-        education_hse: "Высшая школа экономики",
-        education_degree: "Бакалавр в области дизайна игр и интерактивных приложений (2016 - 2021)",
-        portfolio_portfolio_title: "Портфолио",
-        portfolio_portfolio_description: "Замените изображения и видео ниже на свои работы.",
-        portfolio_image1: "Заглушка изображения 1",
-        portfolio_image2: "Заглушка изображения 2",
-        portfolio_video: "Заглушка видео",
-        flappy_title: "Flappy Игра",
-        flappy_restart: "Перезапустить"
-      }
-    };
-
-    let currentLanguage = 'en';
-
-    // Function to apply translations
-    function applyTranslations(lang) {
-      currentLanguage = lang;
-      const elements = document.querySelectorAll('[data-key]');
-      elements.forEach(element => {
-        const key = element.getAttribute('data-key');
-        if (translations[lang][key]) {
-          element.innerHTML = translations[lang][key];
+        function startGame() {
+            bird1.y = 200;
+            bird1.velocity = 0;
+            bird1.score = 0;
+            bird2.y = 200;
+            bird2.velocity = 0;
+            bird2.score = 0;
+            pipes = [];
+            frameCount = 0;
+            gameOver = false;
+            document.getElementById('status').innerText = '';
+            requestAnimationFrame(draw);
         }
-      });
-      // Update Language Switcher Text
-      document.getElementById('language-switcher').textContent = lang.toUpperCase();
-      // Update Music Switcher Text based on current state
-      updateMusicSwitcher();
-    }
 
-    // Language Selection
-    const englishButton = document.getElementById('english-button');
-    const russianButton = document.getElementById('russian-button');
-    const languageModal = document.getElementById('language-modal');
-
-    englishButton.addEventListener('click', function() {
-      applyTranslations('en');
-      languageModal.classList.remove('show');
-    });
-
-    russianButton.addEventListener('click', function() {
-      applyTranslations('ru');
-      languageModal.classList.remove('show');
-    });
-
-    // Show Language Modal on Load
-    window.addEventListener('load', function() {
-      languageModal.classList.add('show');
-    });
-
-    // Start button functionality
-    const startButton = document.getElementById('start-button');
-    const startMenu = document.getElementById('start-menu');
-    let isStartMenuOpen = false;
-
-    startButton.addEventListener('click', function(event) {
-      event.stopPropagation();
-      isStartMenuOpen = !isStartMenuOpen;
-      startMenu.style.display = isStartMenuOpen ? 'block' : 'none';
-    });
-
-    // Start Menu Links
-    document.getElementById('portfolio-start-menu').addEventListener('click', function(event) {
-      event.preventDefault();
-      openWindow(portfolioWindow, 'portfolio-taskbar-button');
-    });
-
-    document.getElementById('flappy-start-menu').addEventListener('click', function(event) {
-      event.preventDefault();
-      openWindow(flappyWindow, 'flappy-taskbar-button');
-      startFlappyGame();
-    });
-
-    // Close the start menu when clicking outside
-    document.addEventListener('click', function(event) {
-      if (!startButton.contains(event.target) && !startMenu.contains(event.target)) {
-        startMenu.style.display = 'none';
-        isStartMenuOpen = false;
-      }
-    });
-
-    // Desktop Icons to open windows
-    const portfolioIcon = document.getElementById('portfolio-icon');
-    const flappyIcon = document.getElementById('flappy-icon');
-    const portfolioWindow = document.getElementById('portfolio-window');
-    const flappyWindow = document.getElementById('flappy-window');
-    const taskbarButtons = document.getElementById('taskbar-buttons');
-
-    portfolioIcon.addEventListener('dblclick', function() {
-      openWindow(portfolioWindow, 'portfolio-taskbar-button');
-    });
-
-    flappyIcon.addEventListener('dblclick', function() {
-      openWindow(flappyWindow, 'flappy-taskbar-button');
-      startFlappyGame();
-    });
-
-    // Window controls
-    let zIndexCounter = 10;
-
-    function addWindowControls(windowElement, taskbarId) {
-      const minimizeButton = windowElement.querySelector('.minimize-button');
-      const maximizeButton = windowElement.querySelector('.maximize-button');
-      const closeButton = windowElement.querySelector('.close-button');
-      let isMaximized = false;
-      let prevPosition = {};
-      let prevSize = {};
-
-      minimizeButton.addEventListener('click', function() {
-        windowElement.style.display = 'none';
-        removeTaskbarButton(taskbarId);
-      });
-
-      maximizeButton.addEventListener('click', function() {
-        if (!isMaximized) {
-          prevPosition = {
-            top: windowElement.style.top,
-            left: windowElement.style.left,
-            transform: windowElement.style.transform
-          };
-          prevSize = {
-            width: windowElement.style.width,
-            height: windowElement.style.height
-          };
-          windowElement.style.top = '0';
-          windowElement.style.left = '0';
-          windowElement.style.transform = 'none';
-          windowElement.style.width = '100%';
-          windowElement.style.height = '100%';
-          isMaximized = true;
-        } else {
-          windowElement.style.top = prevPosition.top;
-          windowElement.style.left = prevPosition.left;
-          windowElement.style.transform = prevPosition.transform;
-          windowElement.style.width = prevSize.width;
-          windowElement.style.height = prevSize.height;
-          isMaximized = false;
-        }
-      });
-
-      closeButton.addEventListener('click', function() {
-        windowElement.style.display = 'none';
-        removeTaskbarButton(taskbarId);
-        if (windowElement === flappyWindow) {
-          stopFlappyGame();
-        }
-      });
-
-      // Make the window draggable
-      const titleBar = windowElement.querySelector('.title-bar');
-      let isDragging = false;
-      let dragOffset = { x: 0, y: 0 };
-
-      titleBar.addEventListener('mousedown', function(e) {
-        isDragging = true;
-        dragOffset.x = e.clientX - windowElement.offsetLeft;
-        dragOffset.y = e.clientY - windowElement.offsetTop;
-        windowElement.style.zIndex = ++zIndexCounter;
-      });
-
-      document.addEventListener('mousemove', function(e) {
-        if (isDragging) {
-          windowElement.style.left = (e.clientX - dragOffset.x) + 'px';
-          windowElement.style.top = (e.clientY - dragOffset.y) + 'px';
-          windowElement.style.transform = 'none';
-        }
-      });
-
-      document.addEventListener('mouseup', function() {
-        isDragging = false;
-      });
-
-      // Bring window to front when clicked
-      windowElement.addEventListener('mousedown', function() {
-        windowElement.style.zIndex = ++zIndexCounter;
-      });
-    }
-
-    // Initialize window controls
-    addWindowControls(portfolioWindow, 'portfolio-taskbar-button');
-    addWindowControls(flappyWindow, 'flappy-taskbar-button');
-
-    // Taskbar button functionality
-    function addTaskbarButton(key, id, windowElement) {
-      if (document.getElementById(id)) return;
-
-      const template = document.getElementById('taskbar-button-template').content.cloneNode(true);
-      const button = template.querySelector('.taskbar-button');
-      button.setAttribute('id', id);
-      button.dataset.windowId = id;
-      button.querySelector('span').textContent = translations[currentLanguage][key];
-      taskbarButtons.appendChild(button);
-
-      button.addEventListener('click', function() {
-        if (windowElement.style.display === 'none') {
-          windowElement.style.display = 'block';
-          button.classList.add('active');
-          windowElement.style.zIndex = ++zIndexCounter;
-        } else {
-          windowElement.style.display = 'none';
-          button.classList.remove('active');
-          if (windowElement === flappyWindow) {
-            stopFlappyGame();
-          }
-        }
-      });
-    }
-
-    function removeTaskbarButton(id) {
-      const button = document.getElementById(id);
-      if (button) {
-        taskbarButtons.removeChild(button);
-      }
-    }
-
-    function openWindow(windowElement, taskbarId) {
-      windowElement.style.display = 'block';
-      addTaskbarButton(getTitleKey(taskbarId), taskbarId, windowElement);
-      windowElement.style.zIndex = ++zIndexCounter;
-    }
-
-    // Helper to get title key based on window ID
-    function getTitleKey(windowId) {
-      if (windowId === 'portfolio-taskbar-button') return 'desktop_portfolio';
-      if (windowId === 'flappy-taskbar-button') return 'desktop_flappy';
-      return '';
-    }
-
-    /* ------------------- Flappy Game Implementation ------------------- */
-    const flappyCanvas = document.getElementById('flappy-canvas');
-    const flappyCtx = flappyCanvas.getContext('2d');
-    let flappyAnimationFrame;
-    let gameActive = false;
-    let gameOver = false;
-    let score = 0;
-
-    const bird = {
-      x: 50,
-      y: 150,
-      radius: 12,
-      gravity: 0.4, // Reduced gravity for easier gameplay
-      velocity: 0,
-      lift: -9, // Reduced lift for easier gameplay
-      color: '#FFD700', // Gold
-      draw: function() {
-        flappyCtx.fillStyle = this.color;
-        flappyCtx.beginPath();
-        // Draw a simple bird: circle with a triangle wing
-        flappyCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        flappyCtx.fill();
-        flappyCtx.closePath();
-
-        flappyCtx.fillStyle = '#FFA500'; // Orange for wing
-        flappyCtx.beginPath();
-        flappyCtx.moveTo(this.x, this.y);
-        flappyCtx.lineTo(this.x - this.radius, this.y - this.radius);
-        flappyCtx.lineTo(this.x, this.y - this.radius / 2);
-        flappyCtx.fill();
-        flappyCtx.closePath();
-      }
-    };
-
-    const pipes = [];
-    const pipeWidth = 60;
-    const pipeGap = 160; // Increased gap for easier gameplay
-    let pipeInterval = 1800; // Increased interval for fewer pipes
-    let lastPipeTime = Date.now();
-
-    const restartButton = document.getElementById('restart-button');
-
-    // Touch and Click Events for Flapping
-    flappyCanvas.addEventListener('click', flap);
-    flappyCanvas.addEventListener('touchstart', function(e) {
-      e.preventDefault();
-      flap();
-    });
-    document.addEventListener('keydown', function(e) {
-      if (e.code === 'Space') {
-        flap();
-      }
-    });
-
-    function flap() {
-      if (gameActive && !gameOver) {
-        bird.velocity = bird.lift;
-      }
-    }
-
-    function startFlappyGame() {
-      resetGame();
-      gameActive = true;
-      gameOver = false;
-      flappyAnimationFrame = requestAnimationFrame(updateFlappyGame);
-    }
-
-    function stopFlappyGame() {
-      gameActive = false;
-      cancelAnimationFrame(flappyAnimationFrame);
-    }
-
-    function resetGame() {
-      bird.y = 150;
-      bird.velocity = 0;
-      pipes.length = 0;
-      lastPipeTime = Date.now();
-      gameOver = false;
-      score = 0;
-      restartButton.style.display = 'none';
-      flappyCanvas.style.cursor = 'pointer';
-    }
-
-    function updateFlappyGame() {
-      flappyCtx.clearRect(0, 0, flappyCanvas.width, flappyCanvas.height);
-
-      // Update Bird
-      bird.velocity += bird.gravity;
-      bird.y += bird.velocity;
-
-      // Draw Bird
-      bird.draw();
-
-      // Draw Score
-      flappyCtx.fillStyle = 'black';
-      flappyCtx.font = '20px Arial';
-      flappyCtx.fillText(`Score: ${score}`, 10, 30);
-
-      // Generate Pipes
-      const currentTime = Date.now();
-      if (currentTime - lastPipeTime > pipeInterval) {
-        const topPipeHeight = Math.floor(Math.random() * (flappyCanvas.height - pipeGap - 100)) + 50;
-        const bottomPipeY = topPipeHeight + pipeGap;
-        pipes.push({
-          x: flappyCanvas.width,
-          top: topPipeHeight,
-          bottom: bottomPipeY,
-          passed: false
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'w' || e.key === 'W') {
+                bird1.velocity += bird1.lift;
+            }
+            if (e.key === 'ArrowUp') {
+                bird2.velocity += bird2.lift;
+            }
         });
-        lastPipeTime = currentTime;
-      }
 
-      // Update and Draw Pipes
-      for (let i = pipes.length - 1; i >= 0; i--) {
-        const pipe = pipes[i];
-        pipe.x -= 2; // Reduced speed for easier gameplay
+        function draw() {
+            if (gameOver) {
+                ctx.fillStyle = '#000';
+                ctx.font = '30px Arial';
+                ctx.fillText('Game Over', 220, 200);
+                document.getElementById('status').innerText = 'Player 1 Score: ' + bird1.score + ' | Player 2 Score: ' + bird2.score;
+                return;
+            }
 
-        // Draw Top Pipe
-        flappyCtx.fillStyle = '#228B22'; // Forest Green
-        flappyCtx.fillRect(pipe.x, 0, pipeWidth, pipe.top);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw Bottom Pipe
-        flappyCtx.fillStyle = '#228B22'; // Forest Green
-        flappyCtx.fillRect(pipe.x, pipe.bottom, pipeWidth, flappyCanvas.height - pipe.bottom);
+            // Draw birds
+            updateBird(bird1);
+            updateBird(bird2);
 
-        // Collision Detection
-        if (bird.x + bird.radius > pipe.x && bird.x - bird.radius < pipe.x + pipeWidth) {
-          if (bird.y - bird.radius < pipe.top || bird.y + bird.radius > pipe.bottom) {
-            endGame();
-          }
+            // Handle pipes
+            if (frameCount % 90 === 0) {
+                var pipeHeight = Math.floor(Math.random() * (canvas.height - 200)) + 50;
+                var gap = 100;
+                pipes.push({
+                    x: canvas.width,
+                    y: 0,
+                    width: 40,
+                    height: pipeHeight
+                });
+                pipes.push({
+                    x: canvas.width,
+                    y: pipeHeight + gap,
+                    width: 40,
+                    height: canvas.height - pipeHeight - gap
+                });
+            }
+
+            for (var i = pipes.length - 1; i >= 0; i--) {
+                ctx.fillStyle = 'green';
+                ctx.fillRect(pipes[i].x, pipes[i].y, pipes[i].width, pipes[i].height);
+                pipes[i].x -= 2;
+
+                // Check collision for bird1
+                if (collision(bird1, pipes[i])) {
+                    gameOver = true;
+                }
+
+                // Check collision for bird2
+                if (collision(bird2, pipes[i])) {
+                    gameOver = true;
+                }
+
+                if (pipes[i].x + pipes[i].width < 0) {
+                    pipes.splice(i, 1);
+                    bird1.score++;
+                    bird2.score++;
+                }
+            }
+
+            frameCount++;
+            requestAnimationFrame(draw);
         }
 
-        // Update Score
-        if (!pipe.passed && pipe.x + pipeWidth < bird.x) {
-          pipe.passed = true;
-          score += 1;
+        function updateBird(bird) {
+            bird.velocity += bird.gravity;
+            bird.y += bird.velocity;
+
+            if (bird.y + bird.height > canvas.height) {
+                bird.y = canvas.height - bird.height;
+                bird.velocity = 0;
+                gameOver = true;
+            }
+
+            if (bird.y < 0) {
+                bird.y = 0;
+                bird.velocity = 0;
+                gameOver = true;
+            }
+
+            ctx.fillStyle = bird.color;
+            ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
         }
 
-        // Remove off-screen pipes
-        if (pipe.x + pipeWidth < 0) {
-          pipes.splice(i, 1);
+        function collision(bird, pipe) {
+            return bird.x < pipe.x + pipe.width &&
+                   bird.x + bird.width > pipe.x &&
+                   bird.y < pipe.y + pipe.height &&
+                   bird.y + bird.height > pipe.y;
         }
-      }
-
-      // Check for collision with ground or ceiling
-      if (bird.y + bird.radius > flappyCanvas.height || bird.y - bird.radius < 0) {
-        endGame();
-      }
-
-      if (!gameOver) {
-        flappyAnimationFrame = requestAnimationFrame(updateFlappyGame);
-      }
-    }
-
-    function endGame() {
-      gameOver = true;
-      gameActive = false;
-      flappyCanvas.style.cursor = 'default';
-      restartButton.style.display = 'block';
-      alert(currentLanguage === 'en' ? `Game Over! Your Score: ${score}` : `Игра окончена! Ваш счет: ${score}`);
-      stopFlappyGame();
-    }
-
-    /* ------------------- Restart Button Functionality ------------------- */
-    restartButton.addEventListener('click', function() {
-      startFlappyGame();
-    });
-
-    /* ------------------- Language Switcher Functionality ------------------- */
-    const languageSwitcher = document.getElementById('language-switcher');
-
-    languageSwitcher.addEventListener('click', function() {
-      const newLanguage = currentLanguage === 'en' ? 'ru' : 'en';
-      applyTranslations(newLanguage);
-    });
-
-    /* ------------------- Music Switcher Functionality ------------------- */
-    const musicSwitcher = document.getElementById('music-switcher');
-    const backgroundMusic = document.getElementById('background-music');
-
-    // Initialize Music Switcher State
-    let musicPlaying = true;
-
-    function updateMusicSwitcher() {
-      musicSwitcher.textContent = musicPlaying ? (currentLanguage === 'en' ? 'Music Off' : 'Музыка Выкл') : (currentLanguage === 'en' ? 'Music On' : 'Музыка Вкл');
-    }
-
-    musicSwitcher.addEventListener('click', function() {
-      if (musicPlaying) {
-        backgroundMusic.pause();
-        musicPlaying = false;
-      } else {
-        backgroundMusic.play();
-        musicPlaying = true;
-      }
-      updateMusicSwitcher();
-    });
-
-    // Update Music Switcher Label on Language Change
-    function applyTranslations(lang) {
-      currentLanguage = lang;
-      const elements = document.querySelectorAll('[data-key]');
-      elements.forEach(element => {
-        const key = element.getAttribute('data-key');
-        if (translations[lang][key]) {
-          element.innerHTML = translations[lang][key];
-        }
-      });
-      // Update Language Switcher Text
-      document.getElementById('language-switcher').textContent = lang.toUpperCase();
-      // Update Music Switcher Text based on current state
-      updateMusicSwitcher();
-    }
-
-    // Handle Autoplay Restrictions
-    window.addEventListener('load', function() {
-      // Attempt to play the music; if blocked, the user can play via the switcher
-      backgroundMusic.play().catch(function() {
-        // Autoplay was prevented
-        musicPlaying = false;
-        updateMusicSwitcher();
-      });
-    });
-  </script>
+    </script>
 </body>
 </html>
