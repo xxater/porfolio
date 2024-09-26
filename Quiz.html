@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Забавная викторина</title>
+    <style>
+        body {
+            font-family: 'MS Sans Serif', Arial, sans-serif;
+            background-color: #C0C0C0;
+            margin: 0;
+            padding: 20px;
+        }
+        .window {
+            border: 2px solid #000080;
+            background-color: #FFFFFF;
+            padding: 10px;
+            width: 500px;
+            margin: 50px auto;
+            box-shadow: 2px 2px #808080;
+        }
+        .title-bar {
+            background-color: #000080;
+            color: #FFFFFF;
+            padding: 2px 5px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .title-bar .buttons {
+            display: flex;
+        }
+        .title-bar .buttons div {
+            width: 15px;
+            height: 15px;
+            margin-left: 2px;
+            background-color: #C0C0C0;
+            border: 1px solid #FFFFFF;
+            box-shadow: inset 1px 1px #808080;
+        }
+        .content {
+            margin-top: 10px;
+        }
+        .question {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .answers button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 5px;
+            padding: 5px;
+            background-color: #C0C0C0;
+            border: 2px solid #FFFFFF;
+            box-shadow: 1px 1px #808080;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .answers button:hover {
+            background-color: #808080;
+        }
+        .result {
+            font-size: 16px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <div>Забавная викторина</div>
+            <div class="buttons">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="question" id="question"></div>
+            <div class="answers" id="answers"></div>
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const quiz = [
+            {
+                question: "Какое из этих животных является самым быстрым?",
+                answers: [
+                    "Гепард",
+                    "Сокол-сапсан",
+                    "Антилопа гну",
+                    "Лев"
+                ],
+                correct: 1
+            },
+            {
+                question: "Как называется теория, что Земля является полой внутри?",
+                answers: [
+                    "Теория плоской Земли",
+                    "Теория полой Земли",
+                    "Теория выпуклой Земли",
+                    "Теория земного ядра"
+                ],
+                correct: 1
+            },
+            {
+                question: "Кто написал произведение 'Алиса в стране чудес'?",
+                answers: [
+                    "Льюис Кэрролл",
+                    "Марк Твен",
+                    "Дж. К. Роулинг",
+                    "Чарльз Диккенс"
+                ],
+                correct: 0
+            },
+            {
+                question: "Как называется явление, когда наблюдаемый объект кажется смещенным из-за движения наблюдателя?",
+                answers: [
+                    "Доплеровский эффект",
+                    "Парадокс близнецов",
+                    "Эффект Доплера",
+                    "Параллакс"
+                ],
+                correct: 3
+            },
+            {
+                question: "Какое из этих чисел является простым?",
+                answers: [
+                    "15",
+                    "21",
+                    "31",
+                    "33"
+                ],
+                correct: 2
+            },
+            {
+                question: "Какой газ преобладает в атмосфере Земли?",
+                answers: [
+                    "Кислород",
+                    "Азот",
+                    "Углекислый газ",
+                    "Водород"
+                ],
+                correct: 1
+            },
+            {
+                question: "Кто является автором теории относительности?",
+                answers: [
+                    "Исаак Ньютон",
+                    "Никола Тесла",
+                    "Альберт Эйнштейн",
+                    "Галилео Галилей"
+                ],
+                correct: 2
+            },
+            {
+                question: "Как называется самый большой спутник Солнечной системы?",
+                answers: [
+                    "Ганимед",
+                    "Титан",
+                    "Луна",
+                    "Европа"
+                ],
+                correct: 0
+            },
+            {
+                question: "Какой элемент обозначается символом 'Fe'?",
+                answers: [
+                    "Фтор",
+                    "Железо",
+                    "Фермий",
+                    "Фосфор"
+                ],
+                correct: 1
+            },
+            {
+                question: "Кто написал симфонию №9 'Из нового света'?",
+                answers: [
+                    "Антонин Дворжак",
+                    "Людвиг ван Бетховен",
+                    "Пётр Чайковский",
+                    "Йоханнес Брамс"
+                ],
+                correct: 0
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        const questionEl = document.getElementById('question');
+        const answersEl = document.getElementById('answers');
+        const resultEl = document.getElementById('result');
+
+        function loadQuestion() {
+            if (currentQuestion < quiz.length) {
+                questionEl.textContent = quiz[currentQuestion].question;
+                answersEl.innerHTML = '';
+                resultEl.textContent = '';
+
+                quiz[currentQuestion].answers.forEach((answer, index) => {
+                    const button = document.createElement('button');
+                    button.textContent = answer;
+                    button.addEventListener('click', () => selectAnswer(index));
+                    answersEl.appendChild(button);
+                });
+            } else {
+                showResult();
+            }
+        }
+
+        function selectAnswer(index) {
+            if (index === quiz[currentQuestion].correct) {
+                score++;
+            }
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function showResult() {
+            questionEl.textContent = '';
+            answersEl.innerHTML = '';
+
+            let message = '';
+            if (score === 10) {
+                message = "Гений! Вы ответили на все вопросы правильно!";
+            } else if (score >= 7) {
+                message = "Отлично! Вы знаете многое.";
+            } else if (score >= 4) {
+                message = "Неплохо! Но есть куда стремиться.";
+            } else {
+                message = "Ну... попытка была засчитана!";
+            }
+
+            resultEl.textContent = `${message} Ваш результат: ${score} из 10.`;
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
