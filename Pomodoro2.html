@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 98 Pomodoro Timer</title>
+    <style>
+        /* Windows 98 Color Palette */
+        body {
+            background-color: #008080; /* Teal background */
+            font-family: 'MS Sans Serif', 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Window Frame */
+        .window {
+            width: 300px;
+            border: 2px solid #000080; /* Dark Blue border */
+            background-color: #C0C0C0; /* Light gray background */
+            box-shadow: 2px 2px #000;
+            position: relative;
+        }
+
+        /* Title Bar */
+        .title-bar {
+            background: linear-gradient(to bottom, #000080, #0000A0);
+            color: white;
+            padding: 2px 5px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: default;
+            user-select: none;
+        }
+
+        .title-bar .title {
+            font-size: 12px;
+        }
+
+        .title-bar .window-controls {
+            display: flex;
+            gap: 2px;
+        }
+
+        .title-bar .window-controls div {
+            width: 16px;
+            height: 14px;
+            text-align: center;
+            line-height: 14px;
+            background-color: #C0C0C0;
+            border: 1px solid #808080;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .title-bar .window-controls div:hover {
+            background-color: #0000A0;
+            color: white;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 10px;
+            background-color: #C0C0C0;
+        }
+
+        /* Timer Display */
+        .status {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #000;
+        }
+
+        .timer {
+            font-size: 32px;
+            margin: 10px 0;
+            color: #000;
+            text-align: center;
+        }
+
+        /* Buttons */
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+
+        .buttons button {
+            width: 60px;
+            height: 25px;
+            background-color: #C0C0C0;
+            border: 2px outset #FFFFFF;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .buttons button:active {
+            border: 2px inset #FFFFFF;
+        }
+
+        /* Beveled Effect for Container */
+        .window:before, .window:after {
+            content: '';
+            position: absolute;
+            z-index: -1;
+        }
+
+        .window:before {
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            border: 2px solid #FFFFFF;
+        }
+
+        .window:after {
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            border: 2px solid #808080;
+        }
+
+        /* Audio Notification Hidden */
+        audio {
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 400px) {
+            .window {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="window">
+        <div class="title-bar">
+            <div class="title">Pomodoro Timer</div>
+            <div class="window-controls">
+                <div>&#95;</div> <!-- Minimize -->
+                <div>&#10005;</div> <!-- Close -->
+            </div>
+        </div>
+        <div class="content">
+            <div class="status" id="status">Work Session</div>
+            <div class="timer" id="timer">25:00</div>
+            <div class="buttons">
+                <button id="start">Start</button>
+                <button id="pause">Pause</button>
+                <button id="reset">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio for notification -->
+    <audio id="alarm" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" preload="auto"></audio>
+
+    <script>
+        // Timer settings (in seconds)
+        const WORK_TIME = 25 * 60; // 25 minutes
+        const BREAK_TIME = 5 * 60; // 5 minutes
+
+        let currentTime = WORK_TIME;
+        let isRunning = false;
+        let isWorkSession = true;
+        let timerInterval = null;
+
+        const timerDisplay = document.getElementById('timer');
+        const statusDisplay = document.getElementById('status');
+        const startButton = document.getElementById('start');
+        const pauseButton = document.getElementById('pause');
+        const resetButton = document.getElementById('reset');
+        const alarmSound = document.getElementById('alarm');
+
+        // Update the timer display
+        function updateDisplay() {
+            const minutes = Math.floor(currentTime / 60);
+            const seconds = currentTime % 60;
+            timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // Switch between work and break sessions
+        function switchSession() {
+            alarmSound.play();
+            isWorkSession = !isWorkSession;
+            currentTime = isWorkSession ? WORK_TIME : BREAK_TIME;
+            statusDisplay.textContent = isWorkSession ? 'Work Session' : 'Break Session';
+            updateDisplay();
+        }
+
+        // Start the timer
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                timerInterval = setInterval(() => {
+                    if (currentTime > 0) {
+                        currentTime--;
+                        updateDisplay();
+                    } else {
+                        switchSession();
+                    }
+                }, 1000);
+            }
+        }
+
+        // Pause the timer
+        function pauseTimer() {
+            if (isRunning) {
+                isRunning = false;
+                clearInterval(timerInterval);
+            }
+        }
+
+        // Reset the timer
+        function resetTimer() {
+            pauseTimer();
+            isWorkSession = true;
+            currentTime = WORK_TIME;
+            statusDisplay.textContent = 'Work Session';
+            updateDisplay();
+        }
+
+        // Event listeners
+        startButton.addEventListener('click', startTimer);
+        pauseButton.addEventListener('click', pauseTimer);
+        resetButton.addEventListener('click', resetTimer);
+
+        // Initialize display
+        updateDisplay();
+
+        // Optional: Make window draggable (Basic Implementation)
+        const titleBar = document.querySelector('.title-bar');
+        const windowElement = document.querySelector('.window');
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        titleBar.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            offsetX = e.clientX - windowElement.offsetLeft;
+            offsetY = e.clientY - windowElement.offsetTop;
+            windowElement.style.position = 'absolute';
+            windowElement.style.zIndex = 1000;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                windowElement.style.left = `${e.clientX - offsetX}px`;
+                windowElement.style.top = `${e.clientY - offsetY}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        // Optional: Close Button Functionality
+        const closeButton = document.querySelector('.window-controls div:last-child');
+        closeButton.addEventListener('click', () => {
+            windowElement.style.display = 'none';
+        });
+
+        // Optional: Minimize Button Functionality
+        const minimizeButton = document.querySelector('.window-controls div:first-child');
+        minimizeButton.addEventListener('click', () => {
+            const content = document.querySelector('.content');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+            } else {
+                content.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
