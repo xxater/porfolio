@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Наруто Приключение Валеры и Маши</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('https://i.imgur.com/6QK4V7I.jpg'); /* Фон деревни Коноха */
+            background-size: cover;
+            color: #fff;
+            text-align: center;
+        }
+        .overlay {
+            background: rgba(0, 0, 0, 0.7);
+            position: absolute;
+            top:0;
+            left:0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .container {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-top: 20px;
+            text-shadow: 2px 2px #000;
+        }
+        button {
+            padding: 15px 30px;
+            margin: 20px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: #ff4500;
+            color: #fff;
+            box-shadow: 2px 2px #000;
+        }
+        button:hover {
+            background-color: #ff6347;
+        }
+        .hidden {
+            display: none;
+        }
+        .character-selection img {
+            width: 150px;
+            margin: 20px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            border-radius: 10px;
+        }
+        .character-selection img.selected {
+            border-color: #ff4500;
+        }
+        .mission {
+            margin: 20px;
+        }
+        .dialogue {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 90%;
+        }
+        .final-scene {
+            background-image: url('https://i.imgur.com/4AI6T2K.jpg'); /* Фон заката */
+            background-size: cover;
+            height: 100vh;
+            position: relative;
+        }
+        .final-scene .overlay {
+            background: rgba(0, 0, 0, 0.5);
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+            .character-selection img {
+                width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="container" id="main-page">
+        <h1>Добро пожаловать в деревню скрытого листа, Валера и Маша!</h1>
+        <button onclick="startGame()">Начать миссию</button>
+        <button onclick="showRules()">Правила игры</button>
+    </div>
+
+    <div class="container hidden" id="rules-page">
+        <h2>Правила Игры</h2>
+        <p>Выполняйте задания, проходите миссии и вместе создавайте романтические моменты в стиле ниндзя!</p>
+        <button onclick="backToMain()">Назад</button>
+    </div>
+
+    <div class="container hidden" id="character-page">
+        <h2>Выберите ваших персонажей</h2>
+        <div class="character-selection">
+            <div>
+                <h3>Маша выбирает:</h3>
+                <img src="https://i.imgur.com/3R7L3kM.png" alt="Сакура" onclick="selectCharacter('masha', 'Sakura')">
+                <img src="https://i.imgur.com/1d3W8Gm.png" alt="Хината" onclick="selectCharacter('masha', 'Hinata')">
+            </div>
+            <div>
+                <h3>Валера выбирает:</h3>
+                <img src="https://i.imgur.com/4Z6l8Fq.png" alt="Наруто" onclick="selectCharacter('valera', 'Naruto')">
+                <img src="https://i.imgur.com/a3V5kL8.png" alt="Саске" onclick="selectCharacter('valera', 'Sasuke')">
+            </div>
+        </div>
+        <button onclick="startMissions()">Начать задания</button>
+    </div>
+
+    <div class="container hidden" id="mission-page">
+        <h2>Миссия 1: Поиск свитков</h2>
+        <div class="mission">
+            <div class="dialogue">
+                <p><strong>Маша:</strong> Нужно найти свиток с подсказкой для Валеры. Где ты думаешь его спрятать?</p>
+                <button onclick="completeMission1()">Найти место</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container hidden" id="mission2-page">
+        <h2>Миссия 2: Сражение с теневыми клонами</h2>
+        <div class="mission">
+            <div class="dialogue">
+                <p><strong>Валера:</strong> Теневые клоны атакуют! Что будем делать?</p>
+                <button onclick="chooseAction('hug')">Объятия побеждают всё</button>
+                <button onclick="chooseAction('jutsu')">Использовать ниндзя-технику</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="hidden" id="final-page">
+        <div class="final-scene">
+            <div class="overlay">
+                <h2>Вместе мы сильнее, как настоящие ниндзя!</h2>
+                <p>Ваши персонажи наслаждаются закатом в деревне Коноха.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let characters = {
+            masha: '',
+            valera: ''
+        };
+
+        function startGame() {
+            document.getElementById('main-page').classList.add('hidden');
+            document.getElementById('character-page').classList.remove('hidden');
+        }
+
+        function showRules() {
+            document.getElementById('main-page').classList.add('hidden');
+            document.getElementById('rules-page').classList.remove('hidden');
+        }
+
+        function backToMain() {
+            document.getElementById('rules-page').classList.add('hidden');
+            document.getElementById('main-page').classList.remove('hidden');
+        }
+
+        function selectCharacter(role, character) {
+            characters[role] = character;
+            // Highlight selected character
+            let imgs = document.querySelectorAll('.character-selection img');
+            imgs.forEach(img => {
+                if(img.alt.includes(character)) {
+                    img.classList.add('selected');
+                } else {
+                    img.classList.remove('selected');
+                }
+            });
+        }
+
+        function startMissions() {
+            if(characters.masha === '' || characters.valera === '') {
+                alert('Пожалуйста, выберите персонажей для обоих игроков!');
+                return;
+            }
+            document.getElementById('character-page').classList.add('hidden');
+            document.getElementById('mission-page').classList.remove('hidden');
+        }
+
+        function completeMission1() {
+            alert('Валера нашел свиток с подсказкой! Маша подготовила романтический сюрприз.');
+            document.getElementById('mission-page').classList.add('hidden');
+            document.getElementById('mission2-page').classList.remove('hidden');
+        }
+
+        function chooseAction(action) {
+            if(action === 'hug') {
+                alert('Вы выбрали объятия! Теневые клоны растворяются в любви.');
+            } else {
+                alert('Вы использовали ниндзя-технику! Теневые клоны побеждены.');
+            }
+            document.getElementById('mission2-page').classList.add('hidden');
+            document.getElementById('final-page').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
