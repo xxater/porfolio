@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crossy Road - Windows 98 Style</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style>
+        /* Reset and Full-Screen Setup */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #008080; /* Teal background common in Windows 98 */
+            font-family: 'MS Sans Serif', Geneva, sans-serif;
+        }
+
+        /* Canvas Styling */
+        #gameCanvas {
+            display: block;
+            background-color: #C0C0C0; /* Light gray resembling Windows 98 window */
+            border: 4px solid #000080; /* Dark blue border */
+            box-shadow: 5px 5px #808080; /* Gray shadow for depth */
+            margin: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Score Display */
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #000080;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 1px 1px #FFFFFF;
+            z-index: 1;
+        }
+
+        /* Start Screen */
+        #startScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(192, 192, 192, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 2;
+            font-size: 28px;
+            color: #000080;
+            text-shadow: 1px 1px #FFFFFF;
+        }
+
+        #startButton {
+            margin-top: 30px;
+            padding: 15px 30px;
+            background-color: #C0C0C0;
+            border: 3px outset #FFFFFF;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        #startButton:active {
+            border: 3px inset #FFFFFF;
+        }
+
+        /* Game Over Screen */
+        #gameOverScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(192, 192, 192, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 3;
+            font-size: 28px;
+            color: #000080;
+            text-shadow: 1px 1px #FFFFFF;
+        }
+
+        #restartButton {
+            margin-top: 30px;
+            padding: 15px 30px;
+            background-color: #C0C0C0;
+            border: 3px outset #FFFFFF;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        #restartButton:active {
+            border: 3px inset #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+    <div id="score">Score: 0</div>
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="startScreen">
+        <div>Crossy Road - Windows 98 Style</div>
+        <button id="startButton">Start Game</button>
+    </div>
+
+    <div id="gameOverScreen">
+        <div>Game Over!</div>
+        <div id="finalScore">Your Score: 0</div>
+        <button id="restartButton">Restart Game</button>
+    </div>
+
+    <script>
+        // Get Elements
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const startScreen = document.getElementById('startScreen');
+        const startButton = document.getElementById('startButton');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const finalScoreElement = document.getElementById('finalScore');
+        const restartButton = document.getElementById('restartButton');
+
+        // Set Canvas Size to Full Screen
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas(); // Initial call
+
+        // Game Constants
+        const PLAYER_SIZE = Math.max(30, canvas.width * 0.03);
+        const MOVE_DISTANCE = PLAYER_SIZE + 5;
+        const LANE_HEIGHT = PLAYER_SIZE * 2;
+        const OBSTACLE_WIDTH = PLAYER_SIZE * 2;
+        const OBSTACLE_HEIGHT = PLAYER_SIZE;
+        const OBSTACLE_SPEED = 4;
+
+        // Game Variables
+        let player = { x: canvas.width / 2 - PLAYER_SIZE / 2, y: canvas.height - PLAYER_SIZE - 20 };
+        let lanes = [];
+        let score = 0;
+        let gameOver = false;
+        let animationId;
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        // Initialize Lanes
+        function initLanes() {
+            lanes = [];
+            const numLanes = Math.ceil(canvas.height / LANE_HEIGHT) + 2;
+            for (let i = 0; i < numLanes; i++) {
+                let y = canvas.height - i * LANE_HEIGHT;
+                let type = Math.random() < 0.5 ? 'road' : 'river';
+                lanes.push({ y: y, type: type, obstacles: [] });
+            }
+        }
+
+        // Generate Obstacles
+        function generateObstacles() {
+            lanes.forEach(lane => {
+                if (lane.type === 'road') {
+                    if (Math.random() < 0.02 && lane.obstacles.length < 3) {
+                        let direction = Math.random() < 0.5 ? -1 : 1;
+                        let x = direction === 1 ? -OBSTACLE_WIDTH : canvas.width;
+                        lane.obstacles.push({ x: x, y: lane.y + LANE_HEIGHT / 2 - OBSTACLE_HEIGHT / 2, direction: direction });
+                    }
+                }
+            });
+        }
+
+        // Update Obstacles
+        function updateObstacles() {
+            lanes.forEach(lane => {
+                if (lane.type === 'road') {
+                    lane.obstacles.forEach(obstacle => {
+                        obstacle.x += obstacle.direction * OBSTACLE_SPEED;
+                    });
+                    // Remove obstacles that are out of canvas
+                    lane.obstacles = lane.obstacles.filter(obstacle => obstacle.x > -OBSTACLE_WIDTH && obstacle.x < canvas.width + OBSTACLE_WIDTH);
+                }
+            });
+        }
+
+        // Draw Lanes
+        function drawLanes() {
+            lanes.forEach(lane => {
+                if (lane.type === 'road') {
+                    ctx.fillStyle = '#808080'; // Gray for roads
+                    ctx.fillRect(0, lane.y, canvas.width, LANE_HEIGHT);
+                    // Draw road lines
+                    ctx.strokeStyle = '#FFFFFF';
+                    ctx.setLineDash([40, 20]);
+                    ctx.beginPath();
+                    ctx.moveTo(0, lane.y + LANE_HEIGHT / 2);
+                    ctx.lineTo(canvas.width, lane.y + LANE_HEIGHT / 2);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                } else {
+                    ctx.fillStyle = '#0000FF'; // Blue for rivers
+                    ctx.fillRect(0, lane.y, canvas.width, LANE_HEIGHT);
+                    // Optional: Add simple river decorations
+                    ctx.fillStyle = '#FFFFFF';
+                    for (let i = 0; i < canvas.width; i += 60) {
+                        ctx.fillRect(i + 10, lane.y + LANE_HEIGHT / 2 - 5, 20, 10);
+                    }
+                }
+            });
+        }
+
+        // Draw Obstacles
+        function drawObstacles() {
+            ctx.fillStyle = '#FF0000'; // Red cars
+            lanes.forEach(lane => {
+                if (lane.type === 'road') {
+                    lane.obstacles.forEach(obstacle => {
+                        ctx.fillRect(obstacle.x, obstacle.y, OBSTACLE_WIDTH, OBSTACLE_HEIGHT);
+                    });
+                }
+            });
+        }
+
+        // Draw Player
+        function drawPlayer() {
+            ctx.fillStyle = '#00FF00'; // Green player
+            ctx.fillRect(player.x, player.y, PLAYER_SIZE, PLAYER_SIZE);
+        }
+
+        // Update Player Position
+        function movePlayer(dx, dy) {
+            let newX = player.x + dx;
+            let newY = player.y + dy;
+
+            // Boundary Checks
+            if (newX >= 0 && newX + PLAYER_SIZE <= canvas.width) {
+                player.x = newX;
+            }
+            if (newY >= 0 && newY + PLAYER_SIZE <= canvas.height) {
+                player.y = newY;
+                // Update score based on upward movement
+                if (dy < 0) {
+                    score += 1;
+                    scoreElement.textContent = `Score: ${score}`;
+                }
+            }
+        }
+
+        // Handle Keyboard Input (for desktop)
+        const keys = {};
+        window.addEventListener('keydown', function(e) {
+            keys[e.key] = true;
+        });
+
+        window.addEventListener('keyup', function(e) {
+            keys[e.key] = false;
+        });
+
+        // Handle Touch Input (for mobile)
+        function handleTouchStart(e) {
+            if (e.touches.length === 1) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            }
+        }
+
+        function handleTouchMove(e) {
+            if (e.touches.length === 1) {
+                const touchEndX = e.touches[0].clientX;
+                const touchEndY = e.touches[0].clientY;
+
+                const dx = touchEndX - touchStartX;
+                const dy = touchEndY - touchStartY;
+
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    // Horizontal Swipe
+                    if (dx > 30) {
+                        movePlayer(MOVE_DISTANCE, 0); // Swipe Right
+                    } else if (dx < -30) {
+                        movePlayer(-MOVE_DISTANCE, 0); // Swipe Left
+                    }
+                } else {
+                    // Vertical Swipe
+                    if (dy > 30) {
+                        movePlayer(0, MOVE_DISTANCE); // Swipe Down
+                    } else if (dy < -30) {
+                        movePlayer(0, -MOVE_DISTANCE); // Swipe Up
+                    }
+                }
+
+                // Prevent default scrolling
+                e.preventDefault();
+            }
+        }
+
+        window.addEventListener('touchstart', handleTouchStart, { passive: false });
+        window.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+        // Collision Detection
+        function checkCollision() {
+            // Determine which lane the player is on
+            let laneIndex = Math.floor((canvas.height - player.y) / LANE_HEIGHT);
+            if (laneIndex >= 0 && laneIndex < lanes.length) {
+                let lane = lanes[laneIndex];
+                if (lane.type === 'road') {
+                    // Check collision with obstacles
+                    for (let obstacle of lane.obstacles) {
+                        if (player.x < obstacle.x + OBSTACLE_WIDTH &&
+                            player.x + PLAYER_SIZE > obstacle.x &&
+                            player.y < obstacle.y + OBSTACLE_HEIGHT &&
+                            player.y + PLAYER_SIZE > obstacle.y) {
+                            gameOver = true;
+                            cancelAnimationFrame(animationId);
+                            showGameOver();
+                        }
+                    }
+                }
+            }
+        }
+
+        // Show Game Over Screen
+        function showGameOver() {
+            finalScoreElement.textContent = `Your Score: ${score}`;
+            gameOverScreen.style.display = 'flex';
+        }
+
+        // Reset Game
+        function resetGame() {
+            player = { x: canvas.width / 2 - PLAYER_SIZE / 2, y: canvas.height - PLAYER_SIZE - 20 };
+            score = 0;
+            scoreElement.textContent = `Score: ${score}`;
+            initLanes();
+            gameOver = false;
+            gameOverScreen.style.display = 'none';
+            animate();
+        }
+
+        // Game Loop
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Move lanes downward to simulate player moving upward
+            lanes.forEach(lane => {
+                lane.y += 1;
+            });
+
+            // Remove lanes that are out of view and add new ones
+            if (lanes[lanes.length - 1].y < 0) {
+                let y = lanes[0].y - LANE_HEIGHT;
+                let type = Math.random() < 0.5 ? 'road' : 'river';
+                lanes.unshift({ y: y, type: type, obstacles: [] });
+                lanes.pop();
+            }
+
+            generateObstacles();
+            updateObstacles();
+
+            drawLanes();
+            drawObstacles();
+            drawPlayer();
+            checkCollision();
+
+            // Handle Player Movement (for desktop)
+            if (keys['ArrowUp']) {
+                movePlayer(0, -MOVE_DISTANCE);
+                keys['ArrowUp'] = false; // Prevent continuous movement
+            }
+            if (keys['ArrowDown']) {
+                movePlayer(0, MOVE_DISTANCE);
+                keys['ArrowDown'] = false;
+            }
+            if (keys['ArrowLeft']) {
+                movePlayer(-MOVE_DISTANCE, 0);
+                keys['ArrowLeft'] = false;
+            }
+            if (keys['ArrowRight']) {
+                movePlayer(MOVE_DISTANCE, 0);
+                keys['ArrowRight'] = false;
+            }
+
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Start Game on Button Click
+        startButton.addEventListener('click', () => {
+            startScreen.style.display = 'none';
+            initLanes();
+            animate();
+        });
+
+        // Restart Game on Button Click
+        restartButton.addEventListener('click', () => {
+            resetGame();
+        });
+
+        // Prevent scrolling on arrow keys (for mobile)
+        window.addEventListener("keydown", function(e) {
+            if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.key) > -1) {
+                e.preventDefault();
+            }
+        }, false);
+    </script>
+</body>
+</html>
