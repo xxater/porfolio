@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2048 Windows 98 Style with Animations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Reset and base styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tahoma', sans-serif;
+        }
+
+        body {
+            background-color: #C0C0C0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 10px;
+        }
+
+        /* Container with Windows 98 look */
+        .window {
+            border: 2px solid #000080;
+            background-color: #C0C0C0;
+            width: 100%;
+            max-width: 500px;
+            padding: 10px;
+            box-shadow: 5px 5px #808080;
+        }
+
+        .title-bar {
+            background-color: #000080;
+            color: white;
+            padding: 5px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            user-select: none;
+        }
+
+        .title-bar-buttons {
+            display: flex;
+            gap: 2px;
+        }
+
+        .title-bar-button {
+            width: 16px;
+            height: 16px;
+            background-color: #C0C0C0;
+            border: 1px solid #808080;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .title-bar-button:hover {
+            background-color: #FFFFFF;
+        }
+
+        /* Score and Reset */
+        .score-container {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .score {
+            background-color: #FFFFFF;
+            border: 2px inset #808080;
+            padding: 5px 10px;
+            min-width: 60px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .reset-button {
+            background-color: #C0C0C0;
+            border: 2px outset #FFFFFF;
+            padding: 5px 10px;
+            cursor: pointer;
+            user-select: none;
+            transition: border 0.1s ease;
+        }
+
+        .reset-button:active {
+            border: 2px inset #FFFFFF;
+        }
+
+        /* Game Grid */
+        .grid-container {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            background-color: #808080;
+            padding: 5px;
+            border: 2px inset #FFFFFF;
+            height: 400px;
+            max-height: 80vw; /* Responsive height */
+        }
+
+        .grid-cell {
+            width: 100%;
+            padding-top: 100%; /* 1:1 Aspect Ratio */
+            position: relative;
+            background-color: #C0C0C0;
+            border: 2px inset #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: #000000;
+            user-select: none;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .grid-cell span {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        /* Tile Colors */
+        .grid-cell.number-2 { background-color: #EEE4DA; }
+        .grid-cell.number-4 { background-color: #EDE0C8; }
+        .grid-cell.number-8 { background-color: #F2B179; }
+        .grid-cell.number-16 { background-color: #F59563; }
+        .grid-cell.number-32 { background-color: #F67C5F; }
+        .grid-cell.number-64 { background-color: #F65E3B; }
+        .grid-cell.number-128 { background-color: #EDCF72; }
+        .grid-cell.number-256 { background-color: #EDCC61; }
+        .grid-cell.number-512 { background-color: #EDC850; }
+        .grid-cell.number-1024 { background-color: #EDC53F; }
+        .grid-cell.number-2048 { background-color: #EDC22E; }
+        /* Add more colors as needed for higher numbers */
+
+        /* Animation Classes */
+        .tile-new {
+            transform: scale(0);
+            opacity: 0;
+            animation: tile-pop 0.2s forwards;
+        }
+
+        .tile-merge {
+            animation: tile-merge 0.2s forwards;
+        }
+
+        @keyframes tile-pop {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes tile-merge {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Prevent text selection highlighting on touch */
+        .window, .title-bar, .title-bar-button, .reset-button, .score-container, .grid-container, .grid-cell {
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            2048
+            <div class="title-bar-buttons">
+                <div class="title-bar-button">_</div>
+                <div class="title-bar-button">□</div>
+                <div class="title-bar-button">X</div>
+            </div>
+        </div>
+        <div class="score-container">
+            <div>Score:</div>
+            <div class="score" id="score">0</div>
+            <div class="reset-button" id="reset">Reset</div>
+        </div>
+        <div class="grid-container" id="grid-container">
+            <!-- 16 cells -->
+            <!-- Cells will be generated by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for 2048 Game with Animations
+        (function() {
+            const gridContainer = document.getElementById('grid-container');
+            const scoreElement = document.getElementById('score');
+            const resetButton = document.getElementById('reset');
+            const size = 4;
+            let grid = [];
+            let score = 0;
+            let tileId = 0; // Unique ID for tiles
+
+            // Initialize grid
+            function init() {
+                grid = [];
+                for (let i = 0; i < size; i++) {
+                    grid[i] = [];
+                    for (let j = 0; j < size; j++) {
+                        grid[i][j] = 0;
+                    }
+                }
+                score = 0;
+                updateScore();
+                gridContainer.innerHTML = '';
+                for (let i = 0; i < size * size; i++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('grid-cell');
+                    gridContainer.appendChild(cell);
+                }
+                addRandomTile(true);
+                addRandomTile(true);
+            }
+
+            // Add a random tile (2 or 4)
+            function addRandomTile(isNew = false) {
+                let empty = [];
+                for (let i = 0; i < size; i++) {
+                    for (let j = 0; j < size; j++) {
+                        if (grid[i][j] === 0) {
+                            empty.push({i, j});
+                        }
+                    }
+                }
+                if (empty.length === 0) return;
+                let {i, j} = empty[Math.floor(Math.random() * empty.length)];
+                grid[i][j] = Math.random() < 0.9 ? 2 : 4;
+                renderCell(i, j, isNew ? 'tile-new' : '');
+            }
+
+            // Render a specific cell
+            function renderCell(i, j, animationClass = '') {
+                const index = i * size + j;
+                const cell = gridContainer.children[index];
+                cell.className = 'grid-cell';
+                if (grid[i][j] !== 0) {
+                    cell.classList.add('number-' + grid[i][j]);
+                    const span = document.createElement('span');
+                    span.textContent = grid[i][j];
+                    if (animationClass) {
+                        span.classList.add(animationClass);
+                    }
+                    cell.appendChild(span);
+                }
+            }
+
+            // Render the entire grid
+            function render() {
+                for (let i = 0; i < size; i++) {
+                    for (let j = 0; j < size; j++) {
+                        renderCell(i, j);
+                    }
+                }
+            }
+
+            // Update score display
+            function updateScore() {
+                scoreElement.textContent = score;
+            }
+
+            // Move tiles
+            function move(direction) {
+                let moved = false;
+                let mergedThisTurn = Array.from({length: size}, () => Array(size).fill(false));
+
+                // Define traversal order based on direction
+                let traversalOrder;
+                switch(direction) {
+                    case 'left':
+                        traversalOrder = {i: [0, size], j: [0, size], di: 0, dj: 1};
+                        break;
+                    case 'right':
+                        traversalOrder = {i: [0, size], j: [size - 1, -1], di: 0, dj: -1};
+                        break;
+                    case 'up':
+                        traversalOrder = {i: [0, size], j: [0, size], di: 1, dj: 0};
+                        break;
+                    case 'down':
+                        traversalOrder = {i: [size - 1, -1], j: [0, size], di: -1, dj: 0};
+                        break;
+                }
+
+                for (let i = traversalOrder.i[0]; i !== traversalOrder.i[1]; i += traversalOrder.di) {
+                    for (let j = traversalOrder.j[0]; j !== traversalOrder.j[1]; j += traversalOrder.dj) {
+                        if (grid[i][j] === 0) continue;
+                        let ni = i;
+                        let nj = j;
+                        while (true) {
+                            let ti = ni + traversalOrder.di;
+                            let tj = nj + traversalOrder.dj;
+                            if (ti < 0 || ti >= size || tj < 0 || tj >= size) break;
+                            if (grid[ti][tj] === 0) {
+                                grid[ti][tj] = grid[ni][nj];
+                                grid[ni][nj] = 0;
+                                ni = ti;
+                                nj = tj;
+                                moved = true;
+                            } else if (grid[ti][tj] === grid[ni][nj] && !mergedThisTurn[ti][tj]) {
+                                grid[ti][tj] *= 2;
+                                grid[ni][nj] = 0;
+                                score += grid[ti][tj];
+                                updateScore();
+                                mergedThisTurn[ti][tj] = true;
+                                moved = true;
+                                break;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (moved) {
+                    render();
+                    addRandomTile(true);
+                    if (isGameOver()) {
+                        setTimeout(() => alert('Game Over!'), 100);
+                    }
+                }
+            }
+
+            // Check if no moves left
+            function isGameOver() {
+                for (let i = 0; i < size; i++) {
+                    for (let j = 0; j < size; j++) {
+                        if (grid[i][j] === 0) return false;
+                        if (i < size -1 && grid[i][j] === grid[i+1][j]) return false;
+                        if (j < size -1 && grid[i][j] === grid[i][j+1]) return false;
+                    }
+                }
+                return true;
+            }
+
+            // Handle keyboard input
+            function handleKey(e) {
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        move('left');
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        move('right');
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        move('up');
+                        break;
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        move('down');
+                        break;
+                }
+            }
+
+            // Handle touch input
+            let touchStartX = 0;
+            let touchStartY = 0;
+            const threshold = 50; // Minimum swipe distance
+
+            function handleTouchStart(e) {
+                const touch = e.touches[0];
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+            }
+
+            function handleTouchEnd(e) {
+                if (!touchStartX || !touchStartY) return;
+                const touch = e.changedTouches[0];
+                const deltaX = touch.clientX - touchStartX;
+                const deltaY = touch.clientY - touchStartY;
+
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    if (deltaX > threshold) {
+                        move('right');
+                    } else if (deltaX < -threshold) {
+                        move('left');
+                    }
+                } else {
+                    if (deltaY > threshold) {
+                        move('down');
+                    } else if (deltaY < -threshold) {
+                        move('up');
+                    }
+                }
+
+                touchStartX = 0;
+                touchStartY = 0;
+            }
+
+            // Event listeners
+            document.addEventListener('keydown', handleKey);
+            gridContainer.addEventListener('touchstart', handleTouchStart, {passive: true});
+            gridContainer.addEventListener('touchend', handleTouchEnd, {passive: true});
+            resetButton.addEventListener('click', init);
+
+            // Initialize the game on load
+            init();
+        })();
+    </script>
+</body>
+</html>
