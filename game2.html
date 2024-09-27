@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Temple Run 98</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Windows 98 Styling */
+        body {
+            background-color: #008080;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background-color: #C0C0C0;
+            border: 2px solid #000;
+            box-sizing: border-box;
+        }
+
+        #scoreBoard {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #000080;
+            color: white;
+            padding: 5px 10px;
+            border: 2px outset #FFFFFF;
+            font-size: 16px;
+        }
+
+        canvas {
+            display: block;
+            background-color: #87CEEB; /* Sky Blue */
+        }
+
+        /* Retro Button Style (if needed for future enhancements) */
+        .button {
+            background-color: #C0C0C0;
+            border: 2px outset #FFFFFF;
+            padding: 5px 10px;
+            cursor: pointer;
+            user-select: none;
+            font-size: 14px;
+        }
+
+        .button:active {
+            border: 2px inset #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="scoreBoard">Score: 0</div>
+        <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <script>
+        // Get canvas and context
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size to fill the container
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Game Variables
+        let score = 0;
+        let gameSpeed = 5;
+        let gravity = 1.5;
+
+        // Player Object
+        const player = {
+            x: 50,
+            y: 0,
+            width: 50,
+            height: 50,
+            dy: 0,
+            jumping: false,
+            color: '#FF0000',
+            draw: function() {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+            },
+            update: function() {
+                if (this.jumping) {
+                    this.dy += gravity;
+                    this.y += this.dy;
+
+                    if (this.y + this.height >= canvas.height - 20) { // Ground level
+                        this.y = canvas.height - this.height - 20;
+                        this.jumping = false;
+                        this.dy = 0;
+                    }
+                }
+            },
+            jump: function() {
+                if (!this.jumping) {
+                    this.dy = -20;
+                    this.jumping = true;
+                }
+            }
+        };
+
+        // Obstacle Object
+        const obstacles = [];
+        const obstacleWidth = 50;
+        const obstacleHeight = 50;
+
+        function createObstacle() {
+            const obstacle = {
+                x: canvas.width,
+                y: canvas.height - obstacleHeight - 20,
+                width: obstacleWidth,
+                height: obstacleHeight,
+                color: '#000000',
+                draw: function() {
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(this.x, this.y, this.width, this.height);
+                },
+                update: function() {
+                    this.x -= gameSpeed;
+                }
+            };
+            obstacles.push(obstacle);
+        }
+
+        // Spawn obstacles at intervals
+        setInterval(createObstacle, 1500);
+
+        // Handle Input
+        function handleInput(e) {
+            if (e.type === 'keydown') {
+                if (e.code === 'Space') {
+                    player.jump();
+                }
+            } else if (e.type === 'touchstart') {
+                player.jump();
+            }
+        }
+
+        window.addEventListener('keydown', handleInput);
+        window.addEventListener('touchstart', handleInput);
+
+        // Collision Detection
+        function detectCollision(rect1, rect2) {
+            return rect1.x < rect2.x + rect2.width &&
+                   rect1.x + rect1.width > rect2.x &&
+                   rect1.y < rect2.y + rect2.height &&
+                   rect1.y + rect1.height > rect2.y;
+        }
+
+        // Update Score
+        function updateScore() {
+            score += 1;
+            document.getElementById('scoreBoard').innerText = 'Score: ' + score;
+        }
+
+        // Game Over
+        function gameOver() {
+            alert('Game Over! Your Score: ' + score);
+            // Reset game
+            score = 0;
+            obstacles.length = 0;
+            player.y = canvas.height - player.height - 20;
+            player.jumping = false;
+            player.dy = 0;
+            gameSpeed = 5;
+        }
+
+        // Game Loop
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Ground
+            ctx.fillStyle = '#654321'; // Brown color
+            ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+
+            // Update and Draw Player
+            player.update();
+            player.draw();
+
+            // Update and Draw Obstacles
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                obstacles[i].update();
+                obstacles[i].draw();
+
+                // Check for collision
+                if (detectCollision(player, obstacles[i])) {
+                    gameOver();
+                    return;
+                }
+
+                // Remove off-screen obstacles
+                if (obstacles[i].x + obstacles[i].width < 0) {
+                    obstacles.splice(i, 1);
+                }
+            }
+
+            // Update Score
+            updateScore();
+
+            // Increase game speed gradually
+            gameSpeed += 0.001;
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start Game
+        gameLoop();
+    </script>
+</body>
+</html>
