@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Battle City - Enhanced Version</title>
+<style>
+    /* Windows 98 Style */
+    body {
+        background-color: #008080;
+        color: #000000;
+        font-family: 'MS Sans Serif', Arial, sans-serif;
+        margin: 0;
+        overflow: hidden;
+    }
+    #gameCanvas {
+        background-color: #C0C0C0;
+        display: block;
+        margin: 20px auto;
+        border: 2px solid #000000;
+    }
+    #header {
+        background-color: #000080;
+        color: #FFFFFF;
+        padding: 5px;
+        text-align: center;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<div id="header">Battle City - Enhanced Version</div>
+<canvas id="gameCanvas" width="1000" height="800"></canvas>
+
+<script>
+    // Game Variables
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const playerSize = 40;
+    const bulletSize = 10;
+    const moveSpeed = 5;
+    const bulletSpeed = 7;
+
+    const keysPressed = {};
+
+    // Map Variables
+    const tileSize = 40;
+    const mapWidth = canvas.width / tileSize;
+    const mapHeight = canvas.height / tileSize;
+    const bricks = [];
+
+    // Player Objects
+    class Player {
+        constructor(x, y, color, controls) {
+            this.x = x;
+            this.y = y;
+            this.color = color;
+            this.bullets = [];
+            this.controls = controls;
+            this.canShoot = true;
+            this.direction = 'up'; // 'up', 'down', 'left', 'right'
+        }
+    }
+
+    const player1 = new Player(100, 400, 'green', {
+        left: 'a',
+        up: 'w',
+        right: 'd',
+        down: 's',
+        shoot: 'Control'
+    });
+
+    const player2 = new Player(860, 400, 'red', {
+        left: 'ArrowLeft',
+        up: 'ArrowUp',
+        right: 'ArrowRight',
+        down: 'ArrowDown',
+        shoot: 'Control'
+    });
+
+    // Brick Class
+    class Brick {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+            this.width = tileSize;
+            this.height = tileSize;
+            this.destroyed = false;
+        }
+
+        draw() {
+            if (!this.destroyed) {
+                ctx.fillStyle = '#B22222';
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                ctx.strokeStyle = '#000000';
+                ctx.strokeRect(this.x, this.y, this.width, this.height);
+            }
+        }
+    }
+
+    // Create Bricks to Spell "ILI LOH"
+    function createBricks() {
+        const pattern = [
+            // I
+            { x: 2, y: 2 }, { x: 2, y: 3 }, { x: 2, y: 4 }, { x: 2, y: 5 }, { x: 2, y: 6 },
+            // L
+            { x: 4, y: 2 }, { x: 4, y: 3 }, { x: 4, y: 4 }, { x: 4, y: 5 }, { x: 5, y: 6 }, { x: 6, y: 6 },
+            // I
+            { x: 8, y: 2 }, { x: 8, y: 3 }, { x: 8, y: 4 }, { x: 8, y: 5 }, { x: 8, y: 6 },
+            // Space
+            // L
+            { x: 10, y: 2 }, { x: 10, y: 3 }, { x: 10, y: 4 }, { x: 10, y: 5 }, { x: 11, y: 6 }, { x: 12, y: 6 },
+            // O
+            { x: 14, y: 2 }, { x: 15, y: 2 }, { x: 16, y: 2 },
+            { x: 14, y: 3 }, { x: 16, y: 3 },
+            { x: 14, y: 4 }, { x: 16, y: 4 },
+            { x: 14, y: 5 }, { x: 16, y: 5 },
+            { x: 14, y: 6 }, { x: 15, y: 6 }, { x: 16, y: 6 },
+            // H
+            { x: 18, y: 2 }, { x: 18, y: 3 }, { x: 18, y: 4 }, { x: 18, y: 5 }, { x: 18, y: 6 },
+            { x: 19, y: 4 },
+            { x: 20, y: 2 }, { x: 20, y: 3 }, { x: 20, y: 4 }, { x: 20, y: 5 }, { x: 20, y: 6 },
+        ];
+
+        pattern.forEach(p => {
+            const brick = new Brick(p.x * tileSize, p.y * tileSize);
+            bricks.push(brick);
+        });
+    }
+
+    createBricks();
+
+    // Prevent default action for Ctrl keys to allow shooting
+    window.addEventListener('keydown', function(e) {
+        if (e.key === 'Control') {
+            e.preventDefault();
+        }
+    });
+
+    // Key Listeners
+    window.addEventListener('keydown', (e) => {
+        keysPressed[e.key] = true;
+    });
+
+    window.addEventListener('keyup', (e) => {
+        keysPressed[e.key] = false;
+    });
+
+    // Game Loop
+    function gameLoop() {
+        update();
+        draw();
+        requestAnimationFrame(gameLoop);
+    }
+
+    // Update Game State
+    function update() {
+        movePlayer(player1);
+        movePlayer(player2);
+        updateBullets(player1);
+        updateBullets(player2);
+        checkCollisions();
+    }
+
+    // Move Player
+    function movePlayer(player) {
+        let moved = false;
+        if (keysPressed[player.controls.left]) {
+            player.x -= moveSpeed;
+            player.direction = 'left';
+            moved = true;
+        }
+        if (keysPressed[player.controls.right]) {
+            player.x += moveSpeed;
+            player.direction = 'right';
+            moved = true;
+        }
+        if (keysPressed[player.controls.up]) {
+            player.y -= moveSpeed;
+            player.direction = 'up';
+            moved = true;
+        }
+        if (keysPressed[player.controls.down]) {
+            player.y += moveSpeed;
+            player.direction = 'down';
+            moved = true;
+        }
+        if (keysPressed[player.controls.shoot]) {
+            shootBullet(player);
+        }
+        // Keep player within canvas
+        player.x = Math.max(0, Math.min(canvas.width - playerSize, player.x));
+        player.y = Math.max(0, Math.min(canvas.height - playerSize, player.y));
+
+        // Collision with bricks
+        bricks.forEach(brick => {
+            if (!brick.destroyed && isColliding(player, brick)) {
+                // Undo movement
+                if (moved) {
+                    if (player.direction === 'left') player.x += moveSpeed;
+                    if (player.direction === 'right') player.x -= moveSpeed;
+                    if (player.direction === 'up') player.y += moveSpeed;
+                    if (player.direction === 'down') player.y -= moveSpeed;
+                }
+            }
+        });
+    }
+
+    // Shoot Bullet
+    function shootBullet(player) {
+        if (!player.canShoot) return;
+        player.canShoot = false;
+        setTimeout(() => { player.canShoot = true; }, 300); // Fire rate
+
+        const bullet = {
+            x: player.x + playerSize / 2 - bulletSize / 2,
+            y: player.y + playerSize / 2 - bulletSize / 2,
+            vx: 0,
+            vy: 0,
+            color: player.color
+        };
+
+        // Bullet Direction
+        if (player.direction === 'up') {
+            bullet.vy = -bulletSpeed;
+        } else if (player.direction === 'down') {
+            bullet.vy = bulletSpeed;
+        } else if (player.direction === 'left') {
+            bullet.vx = -bulletSpeed;
+        } else if (player.direction === 'right') {
+            bullet.vx = bulletSpeed;
+        }
+
+        player.bullets.push(bullet);
+    }
+
+    // Update Bullets
+    function updateBullets(player) {
+        player.bullets.forEach((bullet, index) => {
+            bullet.x += bullet.vx;
+            bullet.y += bullet.vy;
+            // Remove bullet if it goes off-screen
+            if (bullet.x < 0 || bullet.x > canvas.width || bullet.y < 0 || bullet.y > canvas.height) {
+                player.bullets.splice(index, 1);
+            }
+
+            // Bullet collision with bricks
+            bricks.forEach(brick => {
+                if (!brick.destroyed && isColliding(bullet, brick)) {
+                    brick.destroyed = true;
+                    player.bullets.splice(index, 1);
+                }
+            });
+        });
+    }
+
+    // Check Collisions
+    function checkCollisions() {
+        player1.bullets.forEach((bullet, bIndex) => {
+            if (isColliding(bullet, player2)) {
+                player1.bullets.splice(bIndex, 1);
+                alert('Player 1 Wins!');
+                resetGame();
+            }
+        });
+
+        player2.bullets.forEach((bullet, bIndex) => {
+            if (isColliding(bullet, player1)) {
+                player2.bullets.splice(bIndex, 1);
+                alert('Player 2 Wins!');
+                resetGame();
+            }
+        });
+    }
+
+    // Collision Detection
+    function isColliding(obj1, obj2) {
+        return obj1.x < obj2.x + playerSize &&
+               obj1.x + bulletSize > obj2.x &&
+               obj1.y < obj2.y + playerSize &&
+               obj1.y + bulletSize > obj2.y;
+    }
+
+    // Reset Game
+    function resetGame() {
+        player1.x = 100;
+        player1.y = 400;
+        player1.bullets = [];
+        player1.direction = 'up';
+
+        player2.x = 860;
+        player2.y = 400;
+        player2.bullets = [];
+        player2.direction = 'up';
+
+        // Reset bricks
+        bricks.forEach(brick => {
+            brick.destroyed = false;
+        });
+    }
+
+    // Draw Game
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw Bricks
+        bricks.forEach(brick => brick.draw());
+
+        // Draw Players
+        drawPlayer(player1);
+        drawPlayer(player2);
+
+        // Draw Bullets
+        drawBullets(player1);
+        drawBullets(player2);
+    }
+
+    // Draw Player with Turret
+    function drawPlayer(player) {
+        // Draw tank body
+        ctx.fillStyle = player.color;
+        ctx.fillRect(player.x, player.y, playerSize, playerSize);
+
+        // Draw turret
+        ctx.fillStyle = '#000000';
+        let turretWidth = 10;
+        let turretHeight = 20;
+        let turretX = player.x + playerSize / 2 - turretWidth / 2;
+        let turretY = player.y + playerSize / 2 - turretHeight / 2;
+
+        if (player.direction === 'up') {
+            turretWidth = 10;
+            turretHeight = 20;
+            turretX = player.x + playerSize / 2 - turretWidth / 2;
+            turretY = player.y - turretHeight / 2;
+        } else if (player.direction === 'down') {
+            turretWidth = 10;
+            turretHeight = 20;
+            turretX = player.x + playerSize / 2 - turretWidth / 2;
+            turretY = player.y + playerSize - turretHeight / 2;
+        } else if (player.direction === 'left') {
+            turretWidth = 20;
+            turretHeight = 10;
+            turretX = player.x - turretWidth / 2;
+            turretY = player.y + playerSize / 2 - turretHeight / 2;
+        } else if (player.direction === 'right') {
+            turretWidth = 20;
+            turretHeight = 10;
+            turretX = player.x + playerSize - turretWidth / 2;
+            turretY = player.y + playerSize / 2 - turretHeight / 2;
+        }
+
+        ctx.fillRect(turretX, turretY, turretWidth, turretHeight);
+    }
+
+    // Draw Bullets
+    function drawBullets(player) {
+        player.bullets.forEach(bullet => {
+            ctx.fillStyle = bullet.color;
+            ctx.fillRect(bullet.x, bullet.y, bulletSize, bulletSize);
+        });
+    }
+
+    // Start Game
+    gameLoop();
+</script>
+
+</body>
+</html>
