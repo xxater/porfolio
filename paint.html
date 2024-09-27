@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Windows 98 Paint Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Windows 98 Styles */
+        body {
+            background-color: #008080;
+            font-family: 'Tahoma', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .window {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            border: 2px solid #000080;
+            background-color: #c0c0c0;
+            box-shadow: 5px 5px #808080;
+            position: relative;
+            border-radius: 0;
+        }
+        .title-bar {
+            background: #000080;
+            color: white;
+            padding: 2px 5px;
+            cursor: move;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .title-bar .buttons {
+            display: flex;
+        }
+        .title-bar .button {
+            width: 16px;
+            height: 16px;
+            margin-left: 2px;
+            text-align: center;
+            line-height: 16px;
+            background-color: #c0c0c0;
+            border: 1px solid #808080;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .content {
+            padding: 10px;
+            background-color: #ffffff;
+        }
+        /* Canvas Styles */
+        #paintCanvas {
+            border: 2px solid #000080;
+            touch-action: none;
+            display: block;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        /* Toolbar Styles */
+        .toolbar {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .colors, .brushes {
+            display: flex;
+            align-items: center;
+        }
+        .color {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            border: 1px solid #000;
+            cursor: pointer;
+        }
+        .brush-size {
+            margin-left: 5px;
+        }
+        /* Score and Task */
+        .status {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        /* Responsive */
+        @media (max-width: 600px) {
+            .window {
+                width: 100%;
+                margin: 0;
+                box-shadow: none;
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="window" id="paintWindow">
+        <div class="title-bar" id="titleBar">
+            <span>Windows Paint Game</span>
+            <div class="buttons">
+                <div class="button" onclick="minimize()">_</div>
+                <div class="button" onclick="closeWindow()">X</div>
+            </div>
+        </div>
+        <div class="content" id="content">
+            <div class="toolbar">
+                <div class="colors">
+                    <div class="color" style="background-color: black;" onclick="selectColor('#000000')"></div>
+                    <div class="color" style="background-color: red;" onclick="selectColor('#FF0000')"></div>
+                    <div class="color" style="background-color: green;" onclick="selectColor('#00FF00')"></div>
+                    <div class="color" style="background-color: blue;" onclick="selectColor('#0000FF')"></div>
+                    <div class="color" style="background-color: yellow;" onclick="selectColor('#FFFF00')"></div>
+                    <div class="color" style="background-color: purple;" onclick="selectColor('#800080')"></div>
+                </div>
+                <div class="brushes">
+                    <label for="brushSize">Brush:</label>
+                    <input type="range" id="brushSize" min="1" max="20" value="5" onchange="changeBrushSize(this.value)">
+                </div>
+            </div>
+            <canvas id="paintCanvas" width="500" height="400"></canvas>
+            <div class="status">
+                <div>Score: <span id="score">0</span></div>
+                <div>Task: <span id="task">Draw a circle</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Window Dragging
+        const paintWindow = document.getElementById('paintWindow');
+        const titleBar = document.getElementById('titleBar');
+
+        titleBar.onmousedown = function(event) {
+            event.preventDefault();
+            let shiftX = event.clientX - paintWindow.getBoundingClientRect().left;
+            let shiftY = event.clientY - paintWindow.getBoundingClientRect().top;
+
+            function moveAt(pageX, pageY) {
+                paintWindow.style.position = 'absolute';
+                paintWindow.style.left = pageX - shiftX + 'px';
+                paintWindow.style.top = pageY - shiftY + 'px';
+            }
+
+            moveAt(event.pageX, event.pageY);
+
+            function onMouseMove(event) {
+                moveAt(event.pageX, event.pageY);
+            }
+
+            document.addEventListener('mousemove', onMouseMove);
+
+            titleBar.onmouseup = function() {
+                document.removeEventListener('mousemove', onMouseMove);
+                titleBar.onmouseup = null;
+            };
+        };
+
+        titleBar.ondragstart = function() {
+            return false;
+        };
+
+        // Minimize and Close Functions
+        function minimize() {
+            const content = document.getElementById('content');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+            } else {
+                content.style.display = 'none';
+            }
+        }
+
+        function closeWindow() {
+            paintWindow.style.display = 'none';
+        }
+
+        // Paint Functionality
+        const canvas = document.getElementById('paintCanvas');
+        const ctx = canvas.getContext('2d');
+        let painting = false;
+        let color = '#000000';
+        let brushSize = 5;
+
+        function startPosition(e) {
+            painting = true;
+            draw(e);
+        }
+
+        function endPosition() {
+            painting = false;
+            ctx.beginPath();
+        }
+
+        function draw(e) {
+            if (!painting) return;
+            e.preventDefault();
+            let x, y;
+            if (e.touches) {
+                const rect = canvas.getBoundingClientRect();
+                x = e.touches[0].clientX - rect.left;
+                y = e.touches[0].clientY - rect.top;
+            } else {
+                x = e.offsetX;
+                y = e.offsetY;
+            }
+            ctx.lineWidth = brushSize;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = color;
+
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+
+        canvas.addEventListener('mousedown', startPosition);
+        canvas.addEventListener('mouseup', endPosition);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('touchstart', startPosition);
+        canvas.addEventListener('touchend', endPosition);
+        canvas.addEventListener('touchmove', draw);
+
+        // Color and Brush Size
+        function selectColor(selectedColor) {
+            color = selectedColor;
+        }
+
+        function changeBrushSize(size) {
+            brushSize = size;
+        }
+
+        // Game Mechanics
+        let score = 0;
+        const scoreElement = document.getElementById('score');
+        const taskElement = document.getElementById('task');
+        const tasks = [
+            'Draw a circle',
+            'Draw a square',
+            'Draw a triangle',
+            'Draw a smiley face',
+            'Draw a house',
+            'Draw a tree',
+            'Draw a star',
+            'Draw a car',
+            'Draw a heart',
+            'Draw a sun'
+        ];
+        let currentTask = '';
+
+        function newTask() {
+            const randomIndex = Math.floor(Math.random() * tasks.length);
+            currentTask = tasks[randomIndex];
+            taskElement.textContent = currentTask;
+            // Clear Canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function checkCompletion() {
+            // Simple heuristic: after a fixed time, assume task is completed
+            // In a real game, you'd need image recognition or user confirmation
+            score += 10;
+            scoreElement.textContent = score;
+            newTask();
+        }
+
+        // Automatically check task completion every 30 seconds
+        setInterval(checkCompletion, 30000);
+
+        // Initialize Game
+        newTask();
+    </script>
+</body>
+</html>
