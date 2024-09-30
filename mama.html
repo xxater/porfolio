@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Портфолио Горбуновой Людмилы Сергеевны</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #fff;
+            color: #000;
+        }
+
+        header {
+            background-color: #0033A0; /* Russian Flag Blue */
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        header img {
+            width: 100px;
+            position: absolute;
+            left: 20px;
+            top: 20px;
+        }
+
+        .flag {
+            width: 100%;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flag div {
+            flex: 1;
+        }
+
+        .white {
+            background-color: #fff;
+        }
+
+        .blue {
+            background-color: #0033A0;
+        }
+
+        .red {
+            background-color: #D52B1E;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        h1, h2 {
+            border-bottom: 2px solid #D52B1E;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            margin-right: 20px;
+            border: 5px solid #0033A0;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        ul {
+            list-style-type: square;
+            padding-left: 20px;
+        }
+
+        footer {
+            background-color: #0033A0;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Ироничные стили */
+        .ironic {
+            font-style: italic;
+            color: #D52B1E;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .profile {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .profile img {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+    <script>
+        // Простая ироничная интерактивность
+        document.addEventListener("DOMContentLoaded", function() {
+            const header = document.querySelector('header');
+            header.addEventListener('click', function() {
+                alert('Вы кликнули по патриотичному заголовку!');
+            });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Coat_of_Arms_of_the_Russian_Federation.svg/800px-Coat_of_Arms_of_the_Russian_Federation.svg.png" alt="Герб России">
+        <h1>Портфолио Горбуновой Людмилы Сергеевны</h1>
+    </header>
+
+    <div class="flag">
+        <div class="white"></div>
+        <div class="blue"></div>
+        <div class="red"></div>
+    </div>
+
+    <div class="container">
+        <div class="profile">
+            <img src="https://xxater.github.io/porfolio/ZxZ.jpg" alt="Людмила Горбунова">
+            <div>
+                <h2>Добро пожаловать!</h2>
+                <p>Добро пожаловать на сайт-портфолио Горбуновой Людмилы Сергеевны - истинного патриота России и выдающегося учителя музыки!</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Обо мне</h2>
+            <p>Я, Горбунова Людмила Сергеевна, посвятила свою жизнь великому делу - музыкальному образованию подрастающего поколения нашей великой Родины. Мой путь начался в славном городе Почепе Брянской области, продолжился в Одинцово Московской области, где я и сейчас несу свет русской культуры юным дарованиям.</p>
+        </div>
+
+        <div class="section">
+            <h2>Образование</h2>
+            <ul>
+                <li>Брянский государственный университет, факультет музыкального искусства</li>
+                <li>Московская государственная консерватория им. П.И. Чайковского, аспирантура</li>
+                <li>Российская академия народного хозяйства и государственной службы, факультет государственного управления</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Опыт работы</h2>
+            <p>За годы преподавания я воспитала сотни талантливых музыкантов, которые прославляют нашу великую державу на международных конкурсах. Мои ученики не раз становились лауреатами престижных музыкальных премий, но главное - они выросли настоящими патриотами России.</p>
+            <p>Особую гордость вызывает созданный мной ансамбль "Веселая гамма", покоривший сердца слушателей исполнением народных песен и классических произведений русских композиторов.</p>
+        </div>
+
+        <div class="section">
+            <h2>Моя философия</h2>
+            <p>Я глубоко убеждена, что только через приобщение к великой русской культуре можно воспитать достойных граждан нашей страны. Западная псевдокультура разлагает неокрепшие умы, поэтому я всеми силами борюсь с ее тлетворным влиянием на своих уроках.</p>
+            <p>Горжусь тем, что благодаря моим усилиям дети начинают понимать величие России, ее особый путь и духовные скрепы, объединяющие наш народ. Музыка - это мощное оружие в борьбе за умы и сердца подрастающего поколения!</p>
+        </div>
+
+        <div class="section">
+            <h2>Достижения</h2>
+            <ul>
+                <li>Почетный работник общего образования РФ</li>
+                <li>Заслуженный учитель Московской области</li>
+                <li>Лауреат конкурса "Учитель года России"</li>
+                <li>Награждена медалью ордена "За заслуги перед Отечеством" II степени</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Контакты</h2>
+            <p>Если вы разделяете мои взгляды и хотите приобщить своего ребенка к настоящему искусству, а не западной попсе, буду рада видеть вас на своих занятиях!</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2024 Горбунова Людмила Сергеевна. Все права защищены.
+    </footer>
+</body>
+</html>
