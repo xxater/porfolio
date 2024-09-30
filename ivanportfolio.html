@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Иван Вялков - Мастер VFX</title>
+    <style>
+        /* Общие стили */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            color: #ffffff;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Фоновое изображение без оверлея */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('http://flag.kremlin.ru/static/img/svg/flag.svg?e6efb77a91');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            z-index: -2;
+        }
+
+        /* Header */
+        header {
+            background-color: rgba(0, 51, 160, 0.9); /* Полупрозрачный синий фон */
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        header img {
+            width: 80px;
+            vertical-align: middle;
+        }
+
+        header h1 {
+            display: inline;
+            margin-left: 20px;
+            font-size: 2.5em;
+            color: #ff0000;
+        }
+
+        nav {
+            margin-top: 10px;
+        }
+
+        nav a {
+            color: #ffffff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #ff0000;
+            transition: width .3s;
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Контейнер и секции */
+        .container {
+            padding: 40px 20px;
+            max-width: 1000px;
+            margin: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            margin-bottom: 60px;
+            background-color: rgba(26, 26, 26, 0.8); /* Полупрозрачный тёмный фон для секций */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .section h2 {
+            border-bottom: 2px solid #ff0000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 2em;
+            position: relative;
+        }
+
+        .section h2::before {
+            content: '☭';
+            position: absolute;
+            left: -40px;
+            top: 0;
+            font-size: 1.5em;
+            color: #ff0000;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            background: url('data:image/svg+xml;base64,PHN2ZyBmaWxsPSJyZ2IoMjU1LDAsMCkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2Ij48cGF0aCBkPSJNOCwweiIvPjwvc3ZnPg==') left center no-repeat;
+            padding-left: 25px;
+            margin-bottom: 10px;
+        }
+
+        .skills, .tools {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .skills div, .tools div {
+            background-color: #2a2a2a;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            flex: 1 1 200px;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            background-color: rgba(0, 51, 160, 0.9); /* Полупрозрачный синий фон */
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        footer a {
+            color: #ff0000;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 600px) {
+            header h1 {
+                display: block;
+                margin: 10px 0 0 0;
+            }
+            nav {
+                margin-top: 20px;
+            }
+            nav a {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Coat_of_Arms_of_the_Russian_Federation.svg/800px-Coat_of_Arms_of_the_Russian_Federation.svg.png" alt="Герб России">
+        <h1>Иван Вялков - Мастер VFX</h1>
+        <nav>
+            <a href="#about">О художнике</a>
+            <a href="#experience">Опыт работы</a>
+            <a href="#achievements">Достижения</a>
+            <a href="#skills">Навыки</a>
+            <a href="#contact">Связь</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section id="about" class="section">
+            <h2>О художнике ✪</h2>
+            <p>Иван Вялков - московский кудесник визуальных эффектов, вдохновленный мощью российского триколора ☦. Специализируется на создании поражающих воображение спецэффектов в Unreal Engine, достойных великой державы ☭.</p>
+        </section>
+
+        <section id="experience" class="section">
+            <h2>Опыт работы</h2>
+            <h3>Stage 23 ✯</h3>
+            <p><strong>Волшебник VFX</strong> | Декабрь 2023 – Октябрь 2024</p>
+            <p>В Stage 23 Иван ковал визуальную мощь Родины, создавая эффекты, от которых захватывает дух у врагов Отечества ☠.</p>
+        </section>
+
+        <section id="achievements" class="section">
+            <h2>Достижения</h2>
+            <ul>
+                <li>Разработка систем частиц силы огня русского оружия ☄</li>
+                <li>Симуляции великой русской природы ❄</li>
+                <li>Эффекты разрушения, демонстрирующие мощь армии ⚔</li>
+            </ul>
+        </section>
+
+        <section id="skills" class="section">
+            <h2>Навыки ☭</h2>
+            <div class="skills">
+                <div>Создание VFX в реальном времени: мастерское владение Niagara и Cascade</div>
+                <div>3D-моделирование: Maya, Blender, Houdini</div>
+                <div>Скриптинг: Blueprint и Python</div>
+                <div>Оптимизация: LOD, шейдеры, настройка производительности</div>
+            </div>
+        </section>
+
+        <section id="tools" class="section">
+            <h2>Инструменты ⚒</h2>
+            <div class="tools">
+                <div>Unreal Engine</div>
+                <div>Embergen</div>
+                <div>Maya</div>
+                <div>Blender</div>
+                <div>Houdini</div>
+                <div>Photoshop</div>
+                <div>ZBrush</div>
+                <div>After Effects</div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>☎ Email: <a href="mailto:ivan.vyalkov.vfx@gmail.com">ivan.vyalkov.vfx@gmail.com</a></p>
+        <p>📍 Местоположение: Москва, Россия ☭</p>
+        <p>Сайт защищен от происков западных спецслужб. <strong>Слава России! ✯</strong></p>
+    </footer>
+
+    <script>
+        // Добавим ироничный всплывающий алерт при загрузке страницы
+        window.onload = function() {
+            setTimeout(function() {
+                alert("Добро пожаловать на сайт истинного патриота! Будьте готовы к визуальной мощи!");
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
