@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Тест: Структура бессознательного и стремление к сакральному</title>
+    <style>
+        body {
+            background-color: #dbc6b4;
+            color: #544a40;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* CRT Noise Overlay */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(transparent 90%, rgba(0,0,0,0.05) 100%),
+                linear-gradient(90deg, transparent 90%, rgba(0,0,0,0.05) 100%);
+            background-size: 100% 2px, 2px 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.2;
+        }
+
+        /* Additional CRT Effect: Scan Lines and Noise */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAABkCAYAAAB/N9+IAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAANSURBVHgB7cExAQAAAMKg909tDjegAAAAAAAAAAAAAAAADgF8AABpG/6gAAAAASUVORK5CYII=');
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 80%;
+        }
+
+        .headline {
+            font-size: 2em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .welcome-container, .question-container, #result {
+            display: none; /* Initially hidden */
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .buttons button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #8B5E3C; /* Brown color */
+            color: #ffffff;
+            transition: background-color 0.3s;
+            min-width: 100px;
+        }
+
+        .buttons button:hover {
+            background-color: #6f4e37;
+        }
+
+        #result {
+            font-size: 1.8em;
+            display: none;
+            max-width: 80%;
+            margin: 0 auto;
+        }
+
+        #result-headline {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .headline {
+                font-size: 1.5em;
+            }
+
+            .question {
+                font-size: 2.5em; /* Increased from 1.5em to 2.5em */
+            }
+
+            .buttons button {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+
+            #result {
+                font-size: 1.5em;
+            }
+
+            #result-headline {
+                font-size: 1.2em;
+            }
+
+            .welcome-container .headline {
+                font-size: 1.8em;
+            }
+
+            .welcome-container button {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .headline {
+                font-size: 1.2em;
+            }
+
+            .question {
+                font-size: 2em; /* Increased from 1.2em to 2em */
+            }
+
+            .buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .buttons button {
+                width: 100%;
+                padding: 10px 0;
+                font-size: 1em;
+            }
+
+            #result {
+                font-size: 1.2em;
+            }
+
+            #result-headline {
+                font-size: 1em;
+            }
+
+            .welcome-container .headline {
+                font-size: 1.5em;
+            }
+
+            .welcome-container button {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+        }
+
+        /* Enhanced Question Text Size */
+        .question {
+            font-size: 3em; /* Increased from 2em to 3em for larger text */
+            margin-bottom: 30px;
+            min-height: 100px; /* Adjusted to accommodate larger text */
+        }
+
+        /* Blinking Cursor Effect */
+        .question::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .question.typing::after {
+            content: '|';
+        }
+
+        /* Welcome Button Styling */
+        .welcome-container button {
+            padding: 15px 30px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #8B5E3C; /* Brown color */
+            color: #ffffff;
+            transition: background-color 0.3s;
+            min-width: 150px;
+        }
+
+        .welcome-container button:hover {
+            background-color: #6f4e37;
+        }
+
+        @media (max-width: 768px) {
+            .welcome-container button {
+                padding: 12px 25px;
+                font-size: 1em;
+                min-width: 120px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .welcome-container button {
+                padding: 10px 20px;
+                font-size: 0.9em;
+                min-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <!-- Welcome Screen -->
+        <div class="welcome-container" id="welcome-container">
+            <div class="headline">Тест: Структура бессознательного и стремление к сакральному.</div>
+            <div class="buttons">
+                <button onclick="startTest()">Начать</button>
+            </div>
+        </div>
+
+        <!-- Question Screen -->
+        <div class="question-container" id="question-container">
+            <div class="headline" id="question-headline">Вопрос 1/3</div>
+            <div class="question" id="question-text">
+                <!-- Question text will be inserted here -->
+            </div>
+            <div class="buttons">
+                <button onclick="nextQuestion('да')">Да</button>
+                <button onclick="nextQuestion('нет')">Нет</button>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result">
+            <div class="headline" id="result-headline">Результат:</div>
+            <p>По-видимому, дорога ведёт вас к встрече за карточным столом, где среди блефа и риска, откроется истина. Каждая карта — это не просто случайность, а шаг к ответам, которых вы ждали... или боялись. Вам нужно сыграть в покер с Ильёй.</p>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            "Ещё один холодный день под меркнущим солнцем на умирающей планете. Он был наполнен жизнью?",
+            "Готовы ли вы познать истину при условии, что с вероятностью 50% истина отнимет у вас разум?",
+            "Когда придёт время вспомнить всё, что вы забыли, захотите ли вы это вспоминать?"
+        ];
+
+        let currentQuestion = 0;
+        const typingSpeed = 25; // Increased speed: milliseconds per character
+        const userAnswers = [];
+
+        function typeText(text, element, callback) {
+            let index = 0;
+            element.textContent = '';
+            element.classList.add('typing');
+            const timer = setInterval(() => {
+                if (index < text.length) {
+                    element.textContent += text.charAt(index);
+                    index++;
+                } else {
+                    clearInterval(timer);
+                    element.classList.remove('typing');
+                    if (callback) callback();
+                }
+            }, typingSpeed);
+        }
+
+        function showNextQuestion() {
+            if (currentQuestion < questions.length) {
+                const questionElement = document.getElementById('question-text');
+                typeText(questions[currentQuestion], questionElement, () => {
+                    enableButtons();
+                });
+            } else {
+                document.getElementById('question-container').style.display = 'none';
+                document.getElementById('result').style.display = 'block';
+            }
+        }
+
+        function nextQuestion(answer) {
+            disableButtons();
+            userAnswers.push(answer);
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                document.getElementById('question-headline').textContent = `Вопрос ${currentQuestion + 1}/3`;
+            }
+            showNextQuestion();
+        }
+
+        function disableButtons() {
+            const buttons = document.querySelectorAll('.buttons button');
+            buttons.forEach(button => {
+                button.disabled = true;
+                button.style.opacity = '0.6';
+                button.style.cursor = 'not-allowed';
+            });
+        }
+
+        function enableButtons() {
+            const buttons = document.querySelectorAll('.buttons button');
+            buttons.forEach(button => {
+                button.disabled = false;
+                button.style.opacity = '1';
+                button.style.cursor = 'pointer';
+            });
+        }
+
+        function startTest() {
+            document.getElementById('welcome-container').style.display = 'none';
+            document.getElementById('question-container').style.display = 'block';
+            showNextQuestion();
+        }
+
+        // Initialize the welcome screen on page load
+        window.onload = () => {
+            document.getElementById('welcome-container').style.display = 'block';
+        };
+    </script>
+</body>
+</html>
